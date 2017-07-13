@@ -1,7 +1,7 @@
 # jun
 JUN - python pandas support for dataframes manipulation over erlang
 
-[![License: MIT](https://img.shields.io/github/license/TheHover/jun.svg)](https://raw.githubusercontent.com/TheHover/jun/master/LICENSE)
+[![License: MIT](https://img.shields.io/github/license/zgbjgg/jun.svg)](https://raw.githubusercontent.com/zgbjgg/jun/master/LICENSE)
 
 JUN is a wrapper written in erlang to execute pandas functions and manipuling dataframes creating an isolated environment, so you can handle multiple environments to treat dataframes in each of one them.
 
