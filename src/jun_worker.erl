@@ -15,7 +15,8 @@
 
 % the values can be override during initialization
 -record(state, {py_pid = undefined :: pid(),
-    data_frame = undefined :: any()}).
+    data_frame = undefined :: any(),
+    mon_ref = undefined :: reference()}).
 
 start_link() ->
     % get priv path
@@ -27,8 +28,9 @@ init([Path]) ->
     % start the py process and initializes its importing modules
     case python:start([{python_path, Path}]) of
         {ok, PyPid} ->
+            MonRef = erlang:monitor(process, PyPid),
             lager:info("initialized default modules for py pid ~p", [PyPid]),
-            {ok, #state{py_pid = PyPid}};
+            {ok, #state{py_pid = PyPid, mon_ref = MonRef}};
         Error      ->
             lager:error("cannot initializes py due to ~p", [Error]),
             {stop, Error}
@@ -70,6 +72,9 @@ handle_call(_Request, _From, State) ->
 handle_cast(_Request, State) ->
     {noreply, State}.
 
+handle_info({'DOWN', MonRef, _Type, _Object, _Info}, State=#state{mon_ref = MonRef}) ->
+    % process py pid is down, which one is the process to restart?
+    {noreply, State};
 handle_info(_Info, State) ->
     {noreply, State}.
 
