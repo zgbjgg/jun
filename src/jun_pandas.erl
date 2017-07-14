@@ -6,36 +6,48 @@
 %%
 -module(jun_pandas).
 
--export([max/2,
-    min/2,
-    count/2,
-    median/2,
-    sum/2]).
+-export([max/3,
+    min/3,
+    count/3,
+    median/3,
+    sum/3]).
 
--export([read_csv/2,
-    to_csv/1]).
+-export([read_csv/2]).
+
+-export(['query'/3]).
+
+-export([to_erl/2]).
+
+%% DataFrames in erlang term
+to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
+    % tries convert to a erlang term, be careful of timeout in large dataframes!
+    gen_server:call(Pid, {'core.jun', to_erl, [OpaqueDataFrame]}, 6000);
+to_erl(_Pid, _) ->
+    {error, no_opaque_dataframe}.
 
 %% Computations / Descriptive Stats
 
-max(Pid, Axis) ->
-    gen_server:call(Pid, {df_stats, max, Axis}).
+max(Pid, DataFrame, Axis) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, max, [], Axis]}).
 
-min(Pid, Axis) ->
-    gen_server:call(Pid, {df_stats, min, Axis}).
+min(Pid, DataFrame, Axis) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, min, [], Axis]}).
 
-count(Pid, Axis) ->
-    gen_server:call(Pid, {df_stats, count, Axis}).
+count(Pid, DataFrame, Axis) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, count, [], Axis]}).
 
-median(Pid, Axis) ->
-    gen_server:call(Pid, {df_stats, median, Axis}).
+median(Pid, DataFrame, Axis) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, median, [], Axis]}).
 
-sum(Pid, Axis) ->
-    gen_server:call(Pid, {df_stats, sum, Axis}).
+sum(Pid, DataFrame, Axis) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, sum, [], Axis]}).
 
 %% Serialization / IO / Conversion
 
 read_csv(Pid, Path) ->
-    gen_server:call(Pid, {read_csv, Path}).
+    gen_server:call(Pid, {'pandas', read_csv, [Path]}).
 
-to_csv(Pid) ->
-    gen_server:call(Pid, to_csv).
+%% Indexing / Iteration
+
+'query'(Pid, DataFrame, Query) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, 'query', [Query]]}).
