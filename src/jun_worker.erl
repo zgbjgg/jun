@@ -13,9 +13,12 @@
     terminate/2,
     code_change/3]).
 
+-define(JUN_PANDAS, jun_pandas).
+-define(JUN_DATAFRAME, jun_dataframe).
+-define(JUN_CORE, jun_core).
+
 % the values can be override during initialization
 -record(state, {py_pid = undefined :: pid(),
-    data_frame = undefined :: any(),
     mon_ref = undefined :: reference()}).
 
 start_link() ->
@@ -30,42 +33,41 @@ init([Path]) ->
         {ok, PyPid} ->
             MonRef = erlang:monitor(process, PyPid),
             lager:info("initialized default modules for py pid ~p", [PyPid]),
+            % load custom encoder & decoder for data frame
+            ok = python:call(PyPid, jun_dataframe, setup_dtype, []),
             {ok, #state{py_pid = PyPid, mon_ref = MonRef}};
         Error      ->
             lager:error("cannot initializes py due to ~p", [Error]),
             {stop, Error}
     end.
 
-handle_call({read_csv, Path}, _From, State) ->
-    % read csv as data frame pandas and hold in state process if success
+handle_call({'core.jun', Fn, Args}, _From, State) ->
     PyPid = State#state.py_pid,
-    case catch python:call(PyPid, pandas, read_csv, [Path]) of
-        {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
-            {reply, {error, {Class, Argument}}, State};
-        OpaqueDataFrame                                  ->
-            NewState = State#state{data_frame = OpaqueDataFrame},
-            {reply, ok, NewState}
-    end;
-handle_call({_JunFn, _Fn, _Axis}, _From, State = #state{data_frame = undefined}) ->
-    {reply, {error, data_frame_is_not_set}, State};
-handle_call(to_csv, _From, State) ->
-    PyPid = State#state.py_pid,
-    DataFrame = State#state.data_frame,
-    case catch python:call(PyPid, jun_pandas, df_to_csv, [DataFrame]) of
-        {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
-            {reply, {error, {Class, Argument}}, State};
-        Csv                                              ->
-            {reply, {ok, Csv}, State}
-    end;
-handle_call({JunFn, Fn, Axis}, _From, State) ->
-    PyPid = State#state.py_pid,
-    DataFrame = State#state.data_frame,
-    case catch python:call(PyPid, jun_pandas, JunFn, [DataFrame, Axis, Fn]) of
+    case catch python:call(PyPid, ?JUN_PANDAS, Fn, Args) of
         {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
             {reply, {error, {Class, Argument}}, State};
         Return                                           ->
             {reply, {ok, Return}, State}
     end;
+
+handle_call({'core.jun.dataframe', Args}, _From, State) ->
+    PyPid = State#state.py_pid,
+    case catch python:call(PyPid, ?JUN_PANDAS, ?JUN_DATAFRAME, Args) of
+        {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
+            {reply, {error, {Class, Argument}}, State};
+        Return                                           ->
+            {reply, {ok, Return}, State}
+    end;
+
+handle_call({'pandas', Fn, Args}, _From, State) ->
+    PyPid = State#state.py_pid,
+    case catch python:call(PyPid, pandas, Fn, Args) of
+        {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
+            {reply, {error, {Class, Argument}}, State};
+        Return                                           ->
+            {reply, {ok, Return}, State}
+    end;
+
 handle_call(_Request, _From, State) ->    
     {reply, ok, State}.
 
