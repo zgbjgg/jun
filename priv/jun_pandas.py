@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib as mpl
 import pandas as pd
 import sklearn as skl
+from erlport.erlterms import Atom
 
 # simple return sys version
 def version():
@@ -13,11 +14,17 @@ def version():
 # this is used with a dynamical assignment since
 # data frame will hold by erlang process and the
 # syntax to apply functions over data will be complex
-def df_stats(df, axis, fn):
+def jun_dataframe(df, fn, args, axis=None):
     if ( isinstance(df, pd.core.frame.DataFrame) ):
-        fun = getattr(df[axis], fn)
+        if axis is not None:
+            fun = getattr(df[axis], fn)
+        else:
+            fun = getattr(df, fn)
         # explicity execute the fun
-        value = fun()
+        if len(args) == 0:
+            value = fun()
+        else:
+            value = fun(*args)
         # check for instance of int64 and return as scalar
         if isinstance(value, np.int64): 
             return np.asscalar(fun())
@@ -26,11 +33,13 @@ def df_stats(df, axis, fn):
     else:
         return 'error_format_data_frame_invalid'
 
-# a single wrapper to render dataframe in a legible
-# format such a csv
-def df_to_csv(df):
-    if ( isinstance(df, pd.core.frame.DataFrame) ):
-        csv = df.to_csv()
-        return csv
+# a common function to decode the pandas dataframe into
+# a readable erlang term
+def to_erl(value):
+    if isinstance(value, pd.core.frame.DataFrame):
+        # fill NaN as default since term cannot back to py
+        jundataframe = value.fillna('NaN').values.tolist()
+        columns = list(value)
+        return (Atom("pandas.core.frame.DataFrame"), columns, jundataframe)
     else:
-        return 'error_format_data_frame_invalid'
+        return 'error_formar_data_frame_invalid'
