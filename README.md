@@ -7,7 +7,7 @@ JUN is a wrapper written in erlang to execute pandas functions and manipuling da
 
 This project is under development and should not be used in production, it's not ready for that.
 
-#### Creating an environment
+### Creating an environment
 
 To create an environment you need start a jun worker:
 
@@ -18,7 +18,7 @@ To create an environment you need start a jun worker:
 
 This will create and hold your environment in the `Pid` so you can start with the pandas usage from there.
 
-#### Loading data frames
+### Loading data frames
 
 For now the only way to load a dataframe into jun is reading a csv (in later version we are planning support all methods of pandas api):
 
@@ -32,7 +32,7 @@ For now the only way to load a dataframe into jun is reading a csv (in later ver
 Ensure that path exists and is in atom data type. The above code should return a dataframe in an `opaque` format, so this object is a serializable of the original in py env,
 this dataframe is stored into `DataFrame` variable, so you can use for other purposes such execute a query, getting max, min etc.
 
-#### Manipulating dataframe
+### Manipulating dataframe
 
 Now it's time to use some functions over our datafrane previously loaded, for example sum all values of _age_ column:
 
@@ -43,7 +43,7 @@ Now it's time to use some functions over our datafrane previously loaded, for ex
 
 As you can see, the functions is executed through our environment and the response is delivered via the wrapper.
 
-#### Handling errors
+### Handling errors
 
 All errors will raise as a python errors, describing the class and arguments:
 
