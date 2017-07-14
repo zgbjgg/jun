@@ -23,30 +23,21 @@ This will create and hold your environment in the `Pid` so you can start with th
 For now the only way to load a dataframe into jun is reading a csv (in later version we are planning support all methods of pandas api):
 
 ```erlang
-(jun@hurakann)2> jun_pandas:read_csv(Pid, '/file.csv').
-ok
+(jun@hurakann)2> {ok, DataFrame} = jun_pandas:read_csv(Pid, '/file.csv').
+{ok,{'$erlport.opaque',python,
+                       <<128,2,99,112,97,110,100,97,115,46,99,111,114,101,46,
+                         102,114,97,109,101,10,68,97,116,...>>}}
 ```
 
-Ensure that path exists and is in atom data type. The above code should store the dataframe in pandas datatype into the environment created before, so if you try send a command such a max, min to the environment without a dataframe loaded an error will raise:
-
-```erlang
-(jun@hurakann)2> jun_pandas:sum(Pid, 'age'). 
-{error,data_frame_is_not_set}
-```
-
-Also is posible read the dataframe as the original csv:
-
-```erlang
-(jun@hurakann)4> jun_pandas:to_csv(Pid).
-{ok,<<",name,age\n0,A,1\n1,B,2\n2,C,3\n3,D,3\n4,R,4\n">>}
-```
+Ensure that path exists and is in atom data type. The above code should return a dataframe in an `opaque` format, so this object is a serializable of the original in py env,
+this dataframe is stored into `DataFrame` variable, so you can use for other purposes such execute a query, getting max, min etc.
 
 #### Manipulating dataframe
 
-Now it's time to use some functions over our datafrane previously loaded, for example sum all values of _age_ axis:
+Now it's time to use some functions over our datafrane previously loaded, for example sum all values of _age_ column:
 
 ```erlang
-(jun@hurakann)11> jun_pandas:sum(Pid, age).   
+(jun@hurakann)11> jun_pandas:sum(Pid, DataFrame, age).
 {ok,13}
 ```
 
@@ -57,24 +48,42 @@ As you can see, the functions is executed through our environment and the respon
 All errors will raise as a python errors, describing the class and arguments:
 
 ```erlang
-(jun@hurakann)3> jun_pandas:sum(Pid, id). 
+(jun@hurakann)3> jun_pandas:sum(Pid, DataFrame, id). 
 {error,{'exceptions.KeyError',"Atom('id')"}}
 ```
+
+### Readable Data Frames into Erlang VM
+
+If you noticed, we are working with `opaque` terms (serialization),, this is because if we design a encoder/decoder for an erlang term to data frame in every execution
+this will be a very expensive task, so we decide use opaque terms, however sometimes you need to know the data frame in a readable syntax, for that purpose we design
+a single encoder:
+
+```erlang
+(jun@hurakann)3> jun_pandas:to_erl(Pid, DataFrame).
+{ok,{'pandas.core.frame.DataFrame',[<<"name">>,<<"age">>],
+                                   [[<<"A">>,1],
+                                    [<<"B">>,2],
+                                    [<<"C">>,3],
+                                    [<<"D">>,3],
+                                    [<<"R">>,4]]}}
+```
+
+In the above snippet you can see how is a pandas dataframe represented in erlang term, the first is an atom with the class of the dataframe, the second are
+a list with the column names, the third is a list of lists with the values of each row.
 
 #### Function Index
 
 | **Serialization / IO / Conversion** |
 |-------------------------------------|
-| **[to_csv/1]()** |
 | **[read_csv/2]()** |
 
 | **Computations / Descriptive Stats** |
 |--------------------------------------|
-| **[max/2]()** |
-| **[min/2]()** |
-| **[count/2]()** |
-| **[median/2]()** |
-| **[sum/2]()** |
+| **[max/3]()** |
+| **[min/3]()** |
+| **[count/3]()** |
+| **[median/3]()** |
+| **[sum/3]()** |
 
 #### Authors
 
