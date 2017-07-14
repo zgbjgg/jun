@@ -1,39 +1,16 @@
-import pandas
-import numpy
+import pandas as pd
+import numpy as np
 from erlport.erlterms import Atom
-from erlport.erlang import set_encoder, set_decoder
+from erlport.erlang import set_encoder
 
-def setup_dict_type():
-    set_decoder(dict_decoder)
-    set_encoder(dict_encoder)
+def setup_dtype():
+    set_encoder(dtype_encoder)
     return Atom("ok")
 
-def dict_encoder(value):
-    if isinstance(value, pandas.core.frame.DataFrame):
-        dt = value.to_dict()        
-        value = ()
-        for key in dt:
-            tkey = Atom(key)
-            tvalue = ()
-            for subkey in dt[key]:
-                tvalue = tvalue + (dtype(dt[key][subkey]),)
-            value = value + ((tkey, tvalue),)                 
-    return value 
-
-def dict_decoder(value):
-    dictionary = {}
-    if isinstance(value, tuple):
-        for item in value:
-            dictionary_value = {}
-            if isinstance(item[1], tuple):
-                for index, valuable in enumerate(item[1]):
-                    dictionary_value[index] = valuable
-            dictionary[item[0]] = dictionary_value
-        return dictionary
+def dtype_encoder(value):
+    if isinstance(value, np.int64):
+        return np.asscalar(value)
+    elif isinstance(value, np.float64):
+        return np.asscalar(value)
     else:
         return value
-
-def dtype(value):
-    if isinstance(value, numpy.int64):
-        value = numpy.asscalar(value) 
-    return value
