@@ -85,6 +85,10 @@ a list with the column names, the third is a list of lists with the values of ea
 | **[median/3]()** |
 | **[sum/3]()** |
 
+| ** Indexing, iteration** |
+|--------------------------|
+| **[query/3]()**          |
+
 #### Authors
 
 @zgbjgg Jorge Garrido <zgbjgg@gmail.com>
