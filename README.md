@@ -1,5 +1,8 @@
 # jun
-JUN - python pandas support for dataframes manipulation over erlang
+
+![Jun](https://user-images.githubusercontent.com/1471055/28333993-51d90ad4-6bbf-11e7-98f2-16a9fd2844df.png)
+
+**JUN** - python pandas support for dataframes manipulation over erlang
 
 [![License: MIT](https://img.shields.io/github/license/zgbjgg/jun.svg)](https://raw.githubusercontent.com/zgbjgg/jun/master/LICENSE)
 
