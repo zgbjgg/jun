@@ -14,20 +14,22 @@ def version():
 # this is used with a dynamical assignment since
 # data frame will hold by erlang process and the
 # syntax to apply functions over data will be complex
-def jun_dataframe(df, fn, args, axis=None):
+def jun_dataframe(df, fn, args, axis='None', keywords=[]):
     if ( isinstance(df, pd.core.frame.DataFrame) ):
-        if axis is not None:
+        if axis != 'None':
             fun = getattr(df[axis], fn)
         else:
             fun = getattr(df, fn)
+        # make dict from keywords even if empty!
+        kwargs = dict(keywords)
         # explicity execute the fun
         if len(args) == 0:
-            value = fun()
+            value = fun(**kwargs)
         else:
-            value = fun(*args)
+            value = fun(*args, **kwargs)
         # check for instance of int64 and return as scalar
         if isinstance(value, np.int64): 
-            return np.asscalar(fun())
+            return np.asscalar(value)
         else:
             return value
     else:
