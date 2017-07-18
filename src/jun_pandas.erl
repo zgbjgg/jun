@@ -6,15 +6,18 @@
 %%
 -module(jun_pandas).
 
--export([max/3,
-    min/3,
-    count/3,
-    median/3,
-    sum/3]).
+-export([max/4,
+    min/4,
+    count/4,
+    median/4,
+    sum/4]).
 
--export([read_csv/2]).
+-export([read_csv/2,
+    to_csv/3,
+    to_html/3,
+    to_json/3]).
 
--export(['query'/3]).
+-export(['query'/4]).
 
 -export([to_erl/2]).
 
@@ -27,27 +30,36 @@ to_erl(_Pid, _) ->
 
 %% Computations / Descriptive Stats
 
-max(Pid, DataFrame, Axis) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, max, [], Axis]}).
+max(Pid, DataFrame, Axis, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, max, [], Axis, Keywords]}).
 
-min(Pid, DataFrame, Axis) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, min, [], Axis]}).
+min(Pid, DataFrame, Axis, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, min, [], Axis, Keywords]}).
 
-count(Pid, DataFrame, Axis) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, count, [], Axis]}).
+count(Pid, DataFrame, Axis, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, count, [], Axis, Keywords]}).
 
-median(Pid, DataFrame, Axis) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, median, [], Axis]}).
+median(Pid, DataFrame, Axis, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, median, [], Axis, Keywords]}).
 
-sum(Pid, DataFrame, Axis) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, sum, [], Axis]}).
+sum(Pid, DataFrame, Axis, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, sum, [], Axis, Keywords]}).
 
 %% Serialization / IO / Conversion
 
 read_csv(Pid, Path) ->
     gen_server:call(Pid, {'pandas', read_csv, [Path]}).
 
+to_csv(Pid, DataFrame, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, to_csv, [], 'None', Keywords]}).
+
+to_html(Pid, DataFrame, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, to_html, [], 'None', Keywords]}).
+
+to_json(Pid, DataFrame, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, to_json, [], 'None', Keywords]}).
+
 %% Indexing / Iteration
 
-'query'(Pid, DataFrame, Query) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, 'query', [Query]]}).
+'query'(Pid, DataFrame, Query, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, 'query', [Query], 'None', Keywords]}).
