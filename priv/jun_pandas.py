@@ -30,6 +30,8 @@ def jun_dataframe(df, fn, args, axis='None', keywords=[]):
         # check for instance of int64 and return as scalar
         if isinstance(value, np.int64): 
             return np.asscalar(value)
+        elif isinstance(value, np.float64):
+            return np.asscalar(value)
         else:
             return value
     else:
