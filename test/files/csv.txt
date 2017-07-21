@@ -1,0 +1,7 @@
+name,age
+Allison,29
+George,29
+Kristen,30
+Debbie,40
+Bjork,40
+Katy,30
