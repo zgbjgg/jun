@@ -1,0 +1,50 @@
+-module(jun_serialization_io_conversion_SUITE).
+
+-include_lib("common_test/include/ct.hrl").
+-include_lib("eunit/include/eunit.hrl").
+
+-export([all/0, init_per_testcase/2, end_per_testcase/2]).
+-export([test_jun_pandas_read_csv/1,
+    test_jun_pandas_to_csv/1,
+    test_jun_pandas_to_html/1,
+    test_jun_pandas_to_json/1]).
+
+all() ->
+    [test_jun_pandas_read_csv,
+     test_jun_pandas_to_csv,
+     test_jun_pandas_to_html,
+     test_jun_pandas_to_json].
+
+init_per_testcase(_, _Config) ->
+    % for each case start a new worker
+    {ok, Pid} = jun_worker:start_link(),
+    % load the default file to execute tests
+    {ok,[[Cwd]]} = init:get_argument(home),
+    Path = list_to_atom(Cwd ++ "/jun/test/files/csv.txt"),
+    [{jun_worker, Pid}, {path, Path}, {cwd, Cwd}].
+
+end_per_testcase(_, _Config) ->
+    % @todo stop the worker
+    ok.
+
+test_jun_pandas_read_csv([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, Opaque} = jun_pandas:read_csv(Pid, Path),
+    ?assertMatch({'$erlport.opaque', python, _}, Opaque).
+
+test_jun_pandas_to_csv([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}]) ->
+    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    {ok, Csv} = jun_pandas:to_csv(Pid, DataFrame, []),
+    {ok, Out} = file:read_file(Cwd ++ "/jun/test/outputs/out.csv"),
+    ?assertEqual(Out, Csv).
+
+test_jun_pandas_to_html([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}]) ->
+    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    {ok, Html} = jun_pandas:to_html(Pid, DataFrame, []),
+    {ok, Out} = file:read_file(Cwd ++ "/jun/test/outputs/out.html"),
+    ?assertEqual(binary_to_list(Out), Html).
+
+test_jun_pandas_to_json([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}]) ->
+    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    {ok, Json} = jun_pandas:to_json(Pid, DataFrame, [{'orient', 'records'}]),
+    {ok, Out} = file:read_file(Cwd ++ "/jun/test/outputs/out.json"),
+    ?assertEqual(Out, Json).
