@@ -36,3 +36,9 @@ live:
 
 stop:
 	@sh $(RELEASE_PATH)/$(JUN) stop
+
+test:
+	$(REBAR3) ct --cover
+
+cover:
+	$(REBAR3) cover
