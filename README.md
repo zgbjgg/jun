@@ -40,7 +40,7 @@ this dataframe is stored into `DataFrame` variable, so you can use for other pur
 Now it's time to use some functions over our datafrane previously loaded, for example sum all values of _age_ column:
 
 ```erlang
-(jun@hurakann)11> jun_pandas:sum(Pid, DataFrame, age, []).
+(jun@hurakann)3> jun_pandas:sum(Pid, DataFrame, age, []).
 {ok,13}
 ```
 
@@ -51,7 +51,7 @@ As you can see, the functions is executed through our environment and the respon
 All errors will raise as a python errors, describing the class and arguments:
 
 ```erlang
-(jun@hurakann)3> jun_pandas:sum(Pid, DataFrame, id, []). 
+(jun@hurakann)4> jun_pandas:sum(Pid, DataFrame, id, []). 
 {error,{'exceptions.KeyError',"Atom('id')"}}
 ```
 
@@ -62,7 +62,7 @@ this will be a very expensive task, so we decide use opaque terms, however somet
 a single encoder:
 
 ```erlang
-(jun@hurakann)3> jun_pandas:to_erl(Pid, DataFrame).
+(jun@hurakann)5> jun_pandas:to_erl(Pid, DataFrame).
 {ok,{'pandas.core.frame.DataFrame',[<<"name">>,<<"age">>],
                                    [[<<"A">>,1],
                                     [<<"B">>,2],
