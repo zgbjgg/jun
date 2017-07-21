@@ -40,7 +40,7 @@ this dataframe is stored into `DataFrame` variable, so you can use for other pur
 Now it's time to use some functions over our datafrane previously loaded, for example sum all values of _age_ column:
 
 ```erlang
-(jun@hurakann)11> jun_pandas:sum(Pid, DataFrame, age).
+(jun@hurakann)11> jun_pandas:sum(Pid, DataFrame, age, []).
 {ok,13}
 ```
 
@@ -51,7 +51,7 @@ As you can see, the functions is executed through our environment and the respon
 All errors will raise as a python errors, describing the class and arguments:
 
 ```erlang
-(jun@hurakann)3> jun_pandas:sum(Pid, DataFrame, id). 
+(jun@hurakann)3> jun_pandas:sum(Pid, DataFrame, id, []). 
 {error,{'exceptions.KeyError',"Atom('id')"}}
 ```
 
@@ -79,18 +79,21 @@ a list with the column names, the third is a list of lists with the values of ea
 | **Serialization / IO / Conversion** |
 |-------------------------------------|
 | **[read_csv/2]()** |
+| **[to_csv/3]()** |
+| **[to_html/3]()** |
+| **[to_json/3]()** |
 
 | **Computations / Descriptive Stats** |
 |--------------------------------------|
-| **[max/3]()** |
-| **[min/3]()** |
-| **[count/3]()** |
-| **[median/3]()** |
-| **[sum/3]()** |
+| **[max/4]()** |
+| **[min/4]()** |
+| **[count/4]()** |
+| **[median/4]()** |
+| **[sum/4]()** |
 
 | **Indexing, iteration** |
 |--------------------------|
-| **[query/3]()**          |
+| **[query/4]()**          |
 
 ### See also
 
