@@ -5,11 +5,17 @@
 
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
 -export([test_jun_worker/1,
-    test_jun_app/1]).
+    test_jun_app/1,
+    test_jun_worker_call/1,
+    test_jun_worker_cast/1,
+    test_jun_app_stop/1]).
 
 all() ->
     [test_jun_app,
-     test_jun_worker].
+     test_jun_app_stop,
+     test_jun_worker,
+     test_jun_worker_call,
+     test_jun_worker_cast].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -30,3 +36,16 @@ test_jun_app(_) ->
 
 test_jun_worker([{jun_worker, Pid}]) ->
     ?assertEqual(is_pid(Pid), true).
+
+test_jun_app_stop(_) ->
+    ?assertEqual(ok, application:stop(jun)).
+
+% just to increment % of coverage
+
+test_jun_worker_call([{jun_worker, Pid}]) ->
+    R = gen_server:call(Pid, hello),
+    ?assertEqual(ok, R).
+
+test_jun_worker_cast([{jun_worker, Pid}]) ->
+    R = gen_server:cast(Pid, hello),
+    ?assertEqual(ok, R).
