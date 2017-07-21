@@ -7,13 +7,15 @@
 -export([test_jun_pandas_read_csv/1,
     test_jun_pandas_to_csv/1,
     test_jun_pandas_to_html/1,
-    test_jun_pandas_to_json/1]).
+    test_jun_pandas_to_json/1,
+    test_jun_pandas_to_erl/1]).
 
 all() ->
     [test_jun_pandas_read_csv,
      test_jun_pandas_to_csv,
      test_jun_pandas_to_html,
-     test_jun_pandas_to_json].
+     test_jun_pandas_to_json,
+     test_jun_pandas_to_erl].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -48,3 +50,11 @@ test_jun_pandas_to_json([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}]) ->
     {ok, Json} = jun_pandas:to_json(Pid, DataFrame, [{'orient', 'records'}]),
     {ok, Out} = file:read_file(Cwd ++ "/jun/test/outputs/out.json"),
     ?assertEqual(Out, Json).
+
+test_jun_pandas_to_erl([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    {ok, Erl} = jun_pandas:to_erl(Pid, DataFrame),
+    Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>],
+        [[<<"Allison">>,29],[<<"George">>,29],[<<"Kristen">>,30],
+         [<<"Debbie">>,40],[<<"Bjork">>,40],[<<"Katy">>,30]]},
+    ?assertEqual(Out, Erl).
