@@ -8,14 +8,16 @@
     test_jun_pandas_min/1,
     test_jun_pandas_count/1,
     test_jun_pandas_median/1,
-    test_jun_pandas_sum/1]).
+    test_jun_pandas_sum/1,
+    test_jun_pandas_bad_axis/1]).
 
 all() ->
     [test_jun_pandas_max,
      test_jun_pandas_min,
      test_jun_pandas_count,
      test_jun_pandas_median,
-     test_jun_pandas_sum].
+     test_jun_pandas_sum,
+     test_jun_pandas_bad_axis].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -53,3 +55,8 @@ test_jun_pandas_sum([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
     Sum = jun_pandas:sum(Pid, DataFrame, age, []),
     ?assertEqual(Sum, {ok, 198}).
+
+test_jun_pandas_bad_axis([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    Error = jun_pandas:max(Pid, DataFrame, unknown, []),
+    ?assertEqual({error, {'exceptions.KeyError', "Atom('unknown')"}}, Error).
