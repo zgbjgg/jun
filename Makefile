@@ -1,4 +1,5 @@
 REBAR3=./rebar3
+COVERTOOL=./covertool
 
 ##
 ## define the default release path in order to
@@ -39,6 +40,8 @@ stop:
 
 test:
 	$(REBAR3) ct --cover
+	$(REBAR3) cover
+	$(COVERTOOL) -cover _build/test/cover/ct.coverdata -appname jun -output cobertura.xml
 
 cover:
 	$(REBAR3) cover
