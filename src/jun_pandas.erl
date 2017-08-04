@@ -24,42 +24,42 @@
 %% DataFrames in erlang term
 to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
     % tries convert to a erlang term, be careful of timeout in large dataframes!
-    gen_server:call(Pid, {'core.jun', to_erl, [OpaqueDataFrame]}, 6000);
+    gen_server:call(Pid, {'core.jun', to_erl, [OpaqueDataFrame]}, infinity);
 to_erl(_Pid, _) ->
     {error, no_opaque_dataframe}.
 
 %% Computations / Descriptive Stats
 
 max(Pid, DataFrame, Axis, Keywords) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, max, [], Axis, Keywords]}).
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, max, [], Axis, Keywords]}, infinity).
 
 min(Pid, DataFrame, Axis, Keywords) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, min, [], Axis, Keywords]}).
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, min, [], Axis, Keywords]}, infinity).
 
 count(Pid, DataFrame, Axis, Keywords) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, count, [], Axis, Keywords]}).
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, count, [], Axis, Keywords]}, infinity).
 
 median(Pid, DataFrame, Axis, Keywords) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, median, [], Axis, Keywords]}).
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, median, [], Axis, Keywords]}, infinity).
 
 sum(Pid, DataFrame, Axis, Keywords) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, sum, [], Axis, Keywords]}).
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, sum, [], Axis, Keywords]}, infinity).
 
 %% Serialization / IO / Conversion
 
 read_csv(Pid, Path) ->
-    gen_server:call(Pid, {'pandas', read_csv, [Path]}).
+    gen_server:call(Pid, {'pandas', read_csv, [Path]}, infinity).
 
 to_csv(Pid, DataFrame, Keywords) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, to_csv, [], 'None', Keywords]}).
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, to_csv, [], 'None', Keywords]}, infinity).
 
 to_html(Pid, DataFrame, Keywords) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, to_html, [], 'None', Keywords]}).
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, to_html, [], 'None', Keywords]}, infinity).
 
 to_json(Pid, DataFrame, Keywords) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, to_json, [], 'None', Keywords]}).
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, to_json, [], 'None', Keywords]}, infinity).
 
 %% Indexing / Iteration
 
 'query'(Pid, DataFrame, Query, Keywords) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, 'query', [Query], 'None', Keywords]}).
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, 'query', [Query], 'None', Keywords]}, infinity).
