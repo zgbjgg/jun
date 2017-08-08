@@ -23,6 +23,6 @@ end_per_testcase(_, _Config) ->
 
 test_jun_pandas_columns([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
-    {ok, Columns} = jun_pandas:columns(Pid, DataFrame),
+    {ok, Columns} = jun_pandas:columns(Pid, DataFrame, []),
     Out = <<"name,age">>,
     ?assertEqual(Out, Columns).

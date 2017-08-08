@@ -21,7 +21,7 @@
 
 -export([to_erl/2]).
 
--export([columns/2]).
+-export([columns/3]).
 
 %% DataFrames in erlang term
 to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
@@ -68,5 +68,5 @@ to_json(Pid, DataFrame, Keywords) ->
 
 %% Helpers
 
-columns(Pid, DataFrame) ->
+columns(Pid, DataFrame, _Keywords) ->
     gen_server:call(Pid, {'core.jun', columns, [DataFrame]}, infinity). 
