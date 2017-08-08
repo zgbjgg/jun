@@ -47,3 +47,13 @@ def to_erl(value):
         return (Atom("pandas.core.frame.DataFrame"), columns, jundataframe)
     else:
         return 'error_formar_data_frame_invalid'
+
+# working with columns are a important feature, but the main
+# function cannot deal with that, so just add a specific fn to that
+def columns(df):
+    if isinstance(df, pd.core.frame.DataFrame):
+        columns = list(df)
+        columns_as_str = ','.join(columns)
+        return columns_as_str
+    else:
+        return 'error_format_data_frame_invalid'
