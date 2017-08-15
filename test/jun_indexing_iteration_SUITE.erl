@@ -4,10 +4,14 @@
 -include_lib("eunit/include/eunit.hrl").
 
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
--export([test_jun_pandas_query/1]).
+-export([test_jun_pandas_query/1,
+    test_jun_pandas_head/1,
+    test_jun_pandas_tail/1]).
 
 all() ->
-    [test_jun_pandas_query].
+    [test_jun_pandas_query,
+     test_jun_pandas_head,
+     test_jun_pandas_tail].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -28,4 +32,20 @@ test_jun_pandas_query([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, Erl} = jun_pandas:to_erl(Pid, NewDataFrame),
     Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>],
         [[<<"Allison">>, 29], [<<"George">>, 29]]},
+    ?assertEqual(Out, Erl).
+
+test_jun_pandas_head([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    {ok, NewDataFrame} = jun_pandas:head(Pid, DataFrame, 1, []),
+    {ok, Erl} = jun_pandas:to_erl(Pid, NewDataFrame),
+    Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>],
+        [[<<"Allison">>, 29]]},
+    ?assertEqual(Out, Erl).
+
+test_jun_pandas_tail([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    {ok, NewDataFrame} = jun_pandas:tail(Pid, DataFrame, 1, []),
+    {ok, Erl} = jun_pandas:to_erl(Pid, NewDataFrame),
+    Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>],
+        [[<<"Katy">>, 30]]},
     ?assertEqual(Out, Erl).
