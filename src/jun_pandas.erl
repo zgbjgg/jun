@@ -17,7 +17,9 @@
     to_html/3,
     to_json/3]).
 
--export(['query'/4]).
+-export(['query'/4,
+    head/4,
+    tail/4]).
 
 -export([to_erl/2]).
 
@@ -65,6 +67,12 @@ to_json(Pid, DataFrame, Keywords) ->
 
 'query'(Pid, DataFrame, Query, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, 'query', [Query], 'None', Keywords]}, infinity).
+
+head(Pid, DataFrame, N, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, head, [N], 'None', Keywords]}, infinity).
+
+tail(Pid, DataFrame, N, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, tail, [N], 'None', Keywords]}, infinity).
 
 %% Helpers
 
