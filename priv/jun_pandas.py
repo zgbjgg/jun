@@ -80,6 +80,19 @@ def memory_usage(df):
     else:
         return 'error_format_data_frame_invalid'
 
+# columns description (in a csv format) helper
+def info_columns(df):
+    if isinstance(df, pd.core.frame.DataFrame):
+        lines = ""
+        counts = df.count() # for non-null values
+        for i, column in enumerate(df.columns):
+            dtype = df.dtypes.iloc[i]
+            nonnull = counts.iloc[i]
+            lines = lines + "%s,%s,%s\n" % (column, dtype, nonnull)
+        return lines
+    else:
+        return 'error_format_data_frame_invalid'
+
 # size into human readable, taken from:
 # https://github.com/pandas-dev/pandas/blob/master/pandas/core/frame.py
 def _sizeof_fmt(num):
