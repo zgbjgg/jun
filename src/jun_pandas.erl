@@ -23,7 +23,10 @@
 
 -export([to_erl/2]).
 
--export([columns/3]).
+-export([columns/3,
+    len_columns/3,
+    len_index/3,
+    memory_usage/3]).
 
 %% DataFrames in erlang term
 to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
@@ -77,4 +80,13 @@ tail(Pid, DataFrame, N, Keywords) ->
 %% Helpers
 
 columns(Pid, DataFrame, _Keywords) ->
-    gen_server:call(Pid, {'core.jun', columns, [DataFrame]}, infinity). 
+    gen_server:call(Pid, {'core.jun', columns, [DataFrame]}, infinity).
+
+len_columns(Pid, DataFrame, _Keywords) ->
+    gen_server:call(Pid, {'core.jun', len_columns, [DataFrame]}, infinity).
+
+len_index(Pid, DataFrame, _Keywords) ->
+    gen_server:call(Pid, {'core.jun', len_index, [DataFrame]}, infinity).
+
+memory_usage(Pid, DataFrame, _Keywords) ->
+    gen_server:call(Pid, {'core.jun', memory_usage, [DataFrame]}, infinity).
