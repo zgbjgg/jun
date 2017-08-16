@@ -57,3 +57,35 @@ def columns(df):
         return columns_as_str
     else:
         return 'error_format_data_frame_invalid'
+
+# len columns helper
+def len_columns(df):
+    if isinstance(df, pd.core.frame.DataFrame):
+        return len(df.columns)                    
+    else:
+        return 'error_format_data_frame_invalid'
+
+# len index helper
+def len_index(df):
+    if isinstance(df, pd.core.frame.DataFrame):
+        return len(df.index)
+    else:
+        return 'error_format_data_frame_invalid'
+
+# memory usage helper
+def memory_usage(df):
+    if isinstance(df, pd.core.frame.DataFrame):
+        num = df.memory_usage(index=True, deep=True).sum()
+        return _sizeof_fmt(num)
+    else:
+        return 'error_format_data_frame_invalid'
+
+# size into human readable, taken from:
+# https://github.com/pandas-dev/pandas/blob/master/pandas/core/frame.py
+def _sizeof_fmt(num):
+    # returns size in human readable format
+    for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
+        if num < 1024.0:
+            return "%3.1f%s %s" % (num, '+', x)
+        num /= 1024.0
+    return "%3.1f%s %s" % (num, '+', 'PB')
