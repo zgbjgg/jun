@@ -97,6 +97,14 @@ a list with the column names, the third is a list of lists with the values of ea
 |--------------------------|
 | **[query/4]()**          |
 
+| **Helpers** |
+|-------------|
+| **[columns/3]()** |
+| **[len_columns/3]()** |
+| **[len_index/3]()** |
+| **[memory_usage/3]()** |
+| **[info_columns/3]()** |
+
 ### See also
 
 [KAA: support to execute jun tasks using protocol buffers](https://github.com/zgbjgg/kaa)
