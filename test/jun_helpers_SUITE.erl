@@ -7,13 +7,15 @@
 -export([test_jun_pandas_columns/1,
     test_jun_pandas_len_columns/1,
     test_jun_pandas_len_index/1,
-    test_jun_pandas_memory_usage/1]).
+    test_jun_pandas_memory_usage/1,
+    test_jun_pandas_info_columns/1]).
 
 all() ->
     [test_jun_pandas_columns,
      test_jun_pandas_len_columns,
      test_jun_pandas_len_index,
-     test_jun_pandas_memory_usage].
+     test_jun_pandas_memory_usage,
+     test_jun_pandas_info_columns].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -50,3 +52,9 @@ test_jun_pandas_memory_usage([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, MemoryUsage} = jun_pandas:memory_usage(Pid, DataFrame, []),
     Out = <<"425.0+ bytes">>,
     ?assertEqual(Out, MemoryUsage).
+
+test_jun_pandas_info_columns([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    {ok, InfoColumns} = jun_pandas:info_columns(Pid, DataFrame, []),
+    Out = <<"name,object,6\nage,int64,6\n">>,
+    ?assertEqual(Out, InfoColumns).
