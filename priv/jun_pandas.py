@@ -102,3 +102,21 @@ def _sizeof_fmt(num):
             return "%3.1f%s %s" % (num, '+', x)
         num /= 1024.0
     return "%3.1f%s %s" % (num, '+', 'PB')
+
+# common helper for plotting functions, wrapped over
+# erlang, declare if outputs goes to a path (image) or
+# only holds into memory as a single py dtype
+def jun_dataframe_plot(df, save='None', keywords=[]):
+    if ( isinstance(df, pd.core.frame.DataFrame) ):
+        # make dict from keywords even if empty!
+        kwargs = dict(keywords)
+        # explicity execute the fun
+        plot = df.plot(**kwargs)
+        if save != 'None':
+            fig = plot.get_figure()
+            fig.savefig(save) # save contains path
+            return 'done'
+        else:
+            return plot # this is correct? because can be confusing with opaque df
+    else:
+        return 'error_format_data_frame_invalid'
