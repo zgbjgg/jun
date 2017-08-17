@@ -5,6 +5,7 @@ import matplotlib as mpl
 import pandas as pd
 import sklearn as skl
 from erlport.erlterms import Atom
+mpl.use('Agg')
 
 # simple return sys version
 def version():
