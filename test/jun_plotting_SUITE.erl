@@ -16,7 +16,7 @@ init_per_testcase(_, _Config) ->
     {ok, Pid} = jun_worker:start_link(),
     % load the default file to execute tests
     {ok, Cwd} = file:get_cwd(), 
-    Path = list_to_atom(Cwd ++ "/../../lib/jun/test/files/csv_plot.txt"),
+    Path = list_to_atom(Cwd ++ "/../../lib/jun/test/files/csv.txt"),
     [{jun_worker, Pid}, {path, Path}, {cwd, Cwd}].
 
 end_per_testcase(_, _Config) ->
