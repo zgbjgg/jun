@@ -16,6 +16,7 @@
 -define(JUN_PANDAS, jun_pandas).
 -define(JUN_DATAFRAME, jun_dataframe).
 -define(JUN_CORE, jun_core).
+-define(JUN_DATAFRAME_PLOT, jun_dataframe_plot).
 
 % the values can be override during initialization
 -record(state, {py_pid = undefined :: pid(),
@@ -62,6 +63,15 @@ handle_call({'core.jun.dataframe', Args}, _From, State) ->
 handle_call({'pandas', Fn, Args}, _From, State) ->
     PyPid = State#state.py_pid,
     case catch python:call(PyPid, pandas, Fn, Args) of
+        {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
+            {reply, {error, {Class, Argument}}, State};
+        Return                                           ->
+            {reply, {ok, Return}, State}
+    end;
+
+handle_call({'core.jun.dataframe.plot', Args}, _From, State) ->
+    PyPid = State#state.py_pid,
+    case catch python:call(PyPid, ?JUN_PANDAS, ?JUN_DATAFRAME_PLOT, Args) of
         {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
             {reply, {error, {Class, Argument}}, State};
         Return                                           ->

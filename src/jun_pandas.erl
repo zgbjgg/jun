@@ -29,6 +29,8 @@
     memory_usage/3,
     info_columns/3]).
 
+-export([plot/4]).
+
 %% DataFrames in erlang term
 to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
     % tries convert to a erlang term, be careful of timeout in large dataframes!
@@ -94,3 +96,8 @@ memory_usage(Pid, DataFrame, _Keywords) ->
 
 info_columns(Pid, DataFrame, _Keywords) ->
     gen_server:call(Pid, {'core.jun', info_columns, [DataFrame]}, infinity).
+
+%% Plotting
+
+plot(Pid, DataFrame, Save, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe.plot', [DataFrame, Save, Keywords]}, infinity).
