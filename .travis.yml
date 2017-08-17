@@ -1,11 +1,13 @@
 language: erlang
 script: "make && make test"
 install:
+  - sudo apt-get install python-tk
   - sudo pip install numpy
   - sudo pip install pandas
   - sudo pip install matplotlib
   - sudo pip install sklearn
   - sudo pip install scipy
+  - sudo pip install python-
   - sudo pip install codecov
 after_success: "codecov"
 otp_release:
