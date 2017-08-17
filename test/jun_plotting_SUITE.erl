@@ -4,10 +4,12 @@
 -include_lib("eunit/include/eunit.hrl").
 
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
--export([test_jun_pandas_plot/1]).
+-export([test_jun_pandas_plot/1,
+    test_jun_pandas_plot_error/1]).
 
 all() ->
-    [test_jun_pandas_plot].
+    [test_jun_pandas_plot,
+     test_jun_pandas_plot_error].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -26,3 +28,9 @@ test_jun_pandas_plot([{jun_worker, Pid}, {path, Path}, _]) ->
     Plot = jun_pandas:plot(Pid, DataFrame, 'fig.png', [{'kind', 'line'},
         {'x', 'name'}, {'y', 'age'}]),
     ?assertEqual(Plot, {ok, <<"done">>}).
+
+test_jun_pandas_plot_error([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    PlotError = jun_pandas:plot(Pid, DataFrame, 'fig.png', [{'kind', 'line'},
+        {'x', 'name'}, {'y', 'unknown'}]),
+    ?assertMatch({error, _}, PlotError).
