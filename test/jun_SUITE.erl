@@ -8,14 +8,16 @@
     test_jun_app/1,
     test_jun_worker_call/1,
     test_jun_worker_cast/1,
-    test_jun_app_stop/1]).
+    test_jun_app_stop/1,
+    test_jun_worker_stop/1]).
 
 all() ->
     [test_jun_app,
      test_jun_app_stop,
      test_jun_worker,
      test_jun_worker_call,
-     test_jun_worker_cast].
+     test_jun_worker_cast,
+     test_jun_worker_stop].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -39,6 +41,10 @@ test_jun_worker([{jun_worker, Pid}]) ->
 
 test_jun_app_stop(_) ->
     ?assertEqual(ok, application:stop(jun)).
+
+test_jun_worker_stop([{jun_worker, Pid}]) ->
+    ok = jun_worker:stop_link(Pid),
+    ?assertEqual(erlang:is_process_alive(Pid), false).
 
 % just to increment % of coverage
 
