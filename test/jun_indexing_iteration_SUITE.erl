@@ -27,7 +27,7 @@ end_per_testcase(_, _Config) ->
 
 test_jun_pandas_query([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
-    {ok, NewDataFrame} = jun_pandas:query(Pid, DataFrame, 'age < 30', []),
+    {ok, {'pandas.core.frame.DataFrame', NewDataFrame}} = jun_pandas:query(Pid, DataFrame, 'age < 30', []),
     % the new dataframe just contains two values, check it!
     {ok, Erl} = jun_pandas:to_erl(Pid, NewDataFrame),
     Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>],
@@ -36,7 +36,7 @@ test_jun_pandas_query([{jun_worker, Pid}, {path, Path}, _]) ->
 
 test_jun_pandas_head([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
-    {ok, NewDataFrame} = jun_pandas:head(Pid, DataFrame, 1, []),
+    {ok, {'pandas.core.frame.DataFrame', NewDataFrame}} = jun_pandas:head(Pid, DataFrame, 1, []),
     {ok, Erl} = jun_pandas:to_erl(Pid, NewDataFrame),
     Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>],
         [[<<"Allison">>, 29]]},
@@ -44,7 +44,7 @@ test_jun_pandas_head([{jun_worker, Pid}, {path, Path}, _]) ->
 
 test_jun_pandas_tail([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
-    {ok, NewDataFrame} = jun_pandas:tail(Pid, DataFrame, 1, []),
+    {ok, {'pandas.core.frame.DataFrame', NewDataFrame}} = jun_pandas:tail(Pid, DataFrame, 1, []),
     {ok, Erl} = jun_pandas:to_erl(Pid, NewDataFrame),
     Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>],
         [[<<"Katy">>, 30]]},
