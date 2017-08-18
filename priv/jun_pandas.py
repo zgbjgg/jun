@@ -33,6 +33,8 @@ def jun_dataframe(df, fn, args, axis='None', keywords=[]):
             return np.asscalar(value)
         elif isinstance(value, np.float64):
             return np.asscalar(value)
+        elif isinstance(value, pd.core.frame.DataFrame):
+            return (Atom("pandas.core.frame.DataFrame"), value)
         else:
             return value
     else:
@@ -116,8 +118,8 @@ def jun_dataframe_plot(df, save='None', keywords=[]):
         if save != 'None':
             fig = plot.get_figure()
             fig.savefig(save) # save contains path
-            return 'done'
+            return 'matplotlib.AxesSubplot'
         else:
-            return plot # this is correct? because can be confusing with opaque df
+            return (Atom("matplotlib.AxesSubplot"), plot) # this is correct? because can be confusing with opaque df
     else:
         return 'error_format_data_frame_invalid'
