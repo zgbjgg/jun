@@ -3,6 +3,8 @@
 -include_lib("common_test/include/ct.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
+-define(DATAFRAME, 'pandas.core.frame.DataFrame').
+
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
 -export([test_jun_pandas_query/1,
     test_jun_pandas_head/1,
@@ -26,8 +28,8 @@ end_per_testcase(_, _Config) ->
     ok.
 
 test_jun_pandas_query([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
-    {ok, {'pandas.core.frame.DataFrame', NewDataFrame}} = jun_pandas:query(Pid, DataFrame, 'age < 30', []),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, NewDataFrame}} = jun_pandas:query(Pid, DataFrame, 'age < 30', []),
     % the new dataframe just contains two values, check it!
     {ok, Erl} = jun_pandas:to_erl(Pid, NewDataFrame),
     Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>],
@@ -35,16 +37,16 @@ test_jun_pandas_query([{jun_worker, Pid}, {path, Path}, _]) ->
     ?assertEqual(Out, Erl).
 
 test_jun_pandas_head([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
-    {ok, {'pandas.core.frame.DataFrame', NewDataFrame}} = jun_pandas:head(Pid, DataFrame, 1, []),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, NewDataFrame}} = jun_pandas:head(Pid, DataFrame, 1, []),
     {ok, Erl} = jun_pandas:to_erl(Pid, NewDataFrame),
     Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>],
         [[<<"Allison">>, 29]]},
     ?assertEqual(Out, Erl).
 
 test_jun_pandas_tail([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
-    {ok, {'pandas.core.frame.DataFrame', NewDataFrame}} = jun_pandas:tail(Pid, DataFrame, 1, []),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, NewDataFrame}} = jun_pandas:tail(Pid, DataFrame, 1, []),
     {ok, Erl} = jun_pandas:to_erl(Pid, NewDataFrame),
     Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>],
         [[<<"Katy">>, 30]]},

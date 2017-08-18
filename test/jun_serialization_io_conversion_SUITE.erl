@@ -3,6 +3,8 @@
 -include_lib("common_test/include/ct.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
+-define(DATAFRAME, 'pandas.core.frame.DataFrame').
+
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
 -export([test_jun_pandas_read_csv/1,
     test_jun_pandas_to_csv/1,
@@ -32,29 +34,29 @@ end_per_testcase(_, _Config) ->
     ok.
 
 test_jun_pandas_read_csv([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, Opaque} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, Opaque}} = jun_pandas:read_csv(Pid, Path),
     ?assertMatch({'$erlport.opaque', python, _}, Opaque).
 
 test_jun_pandas_to_csv([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}]) ->
-    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
     {ok, Csv} = jun_pandas:to_csv(Pid, DataFrame, []),
     {ok, Out} = file:read_file(Cwd ++ "/../../lib/jun/test/outputs/out.csv"),
     ?assertEqual(Out, Csv).
 
 test_jun_pandas_to_html([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}]) ->
-    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
     {ok, Html} = jun_pandas:to_html(Pid, DataFrame, []),
     {ok, Out} = file:read_file(Cwd ++ "/../../lib/jun/test/outputs/out.html"),
     ?assertEqual(binary_to_list(Out), Html).
 
 test_jun_pandas_to_json([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}]) ->
-    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
     {ok, Json} = jun_pandas:to_json(Pid, DataFrame, [{'orient', 'records'}]),
     {ok, Out} = file:read_file(Cwd ++ "/../../lib/jun/test/outputs/out.json"),
     ?assertEqual(Out, Json).
 
 test_jun_pandas_to_erl([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, DataFrame} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
     {ok, Erl} = jun_pandas:to_erl(Pid, DataFrame),
     Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>],
         [[<<"Allison">>,29],[<<"George">>,29],[<<"Kristen">>,30],
