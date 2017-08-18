@@ -3,7 +3,8 @@
 -behaviour(gen_server).
 
 %% API
--export([start_link/0]).
+-export([start_link/0,
+    stop_link/1]).
 
 %% gen_server callbacks
 -export([init/1,
@@ -27,8 +28,10 @@ start_link() ->
     Path = code:priv_dir(jun),
     gen_server:start_link(?MODULE, [Path], []).
 
+stop_link(Pid) ->
+    gen_server:call(Pid, stop_link).
+
 init([Path]) ->
-    process_flag(trap_exit, true),
     % start the py process and initializes its importing modules
     case python:start([{python_path, Path}]) of
         {ok, PyPid} ->
@@ -77,6 +80,9 @@ handle_call({'core.jun.dataframe.plot', Args}, _From, State) ->
         Return                                           ->
             {reply, {ok, Return}, State}
     end;
+
+handle_call(stop_link, _From, State) ->
+    {stop, normal, ok, State};
 
 handle_call(_Request, _From, State) ->    
     {reply, ok, State}.
