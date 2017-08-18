@@ -95,7 +95,9 @@ a list with the column names, the third is a list of lists with the values of ea
 
 | **Indexing, iteration** |
 |--------------------------|
-| **[query/4]()**          |
+| **[query/4]()** |
+| **[head/2]()** |
+| **[tail/2]()** |
 
 | **Helpers** |
 |-------------|
@@ -104,6 +106,10 @@ a list with the column names, the third is a list of lists with the values of ea
 | **[len_index/3]()** |
 | **[memory_usage/3]()** |
 | **[info_columns/3]()** |
+
+| **Plotting** |
+|--------------|
+| **[plot/4]()** |
 
 ### See also
 
