@@ -65,7 +65,7 @@ test_jun_pandas_info_columns([{jun_worker, Pid}, {path, Path}, _]) ->
 
 test_jun_pandas_selection([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
-    {ok, {?DATAFRAME, ColumnAgeDataFrame}} = jun_pandas:selection(Pid, DataFrame, "age"),
+    {ok, {?DATAFRAME, ColumnAgeDataFrame}} = jun_pandas:selection(Pid, DataFrame, 'age', []),
     {ok, Erl} = jun_pandas:to_erl(Pid, ColumnAgeDataFrame),
     Out = {'pandas.core.frame.DataFrame', [<<"age">>],
         [[29], [29], [30], [40], [40], [30]]},
