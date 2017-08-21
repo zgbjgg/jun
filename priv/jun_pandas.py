@@ -123,3 +123,12 @@ def jun_dataframe_plot(df, save='None', keywords=[]):
             return (Atom("matplotlib.AxesSubplot"), plot) # this is correct? because can be confusing with opaque df
     else:
         return 'error_format_data_frame_invalid'
+
+# common selection of columns (slicing)
+# this can be acomplished using loc but it's better
+# using a single syntax such as accesing data from dataframe
+def selection(df, columns):
+    if ( isinstance(df, pd.core.frame.DataFrame) ):
+        return df[list(columns)]
+    else:
+        return 'error_format_data_frame_invalid'
