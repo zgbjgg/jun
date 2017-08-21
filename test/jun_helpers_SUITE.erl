@@ -10,14 +10,16 @@
     test_jun_pandas_len_columns/1,
     test_jun_pandas_len_index/1,
     test_jun_pandas_memory_usage/1,
-    test_jun_pandas_info_columns/1]).
+    test_jun_pandas_info_columns/1,
+    test_jun_pandas_selection/1]).
 
 all() ->
     [test_jun_pandas_columns,
      test_jun_pandas_len_columns,
      test_jun_pandas_len_index,
      test_jun_pandas_memory_usage,
-     test_jun_pandas_info_columns].
+     test_jun_pandas_info_columns,
+     test_jun_pandas_selection].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -60,3 +62,11 @@ test_jun_pandas_info_columns([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, InfoColumns} = jun_pandas:info_columns(Pid, DataFrame, []),
     Out = <<"name,object,6\nage,int64,6\n">>,
     ?assertEqual(Out, InfoColumns).
+
+test_jun_pandas_selection([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, ColumnAgeDataFrame}} = jun_pandas:selection(Pid, DataFrame, "age"),
+    {ok, Erl} = jun_pandas:to_erl(Pid, ColumnAgeDataFrame),
+    Out = {'pandas.core.frame.DataFrame', [<<"age">>],
+        [[29], [29], [30], [40], [40], [30]]},
+    ?assertEqual(Out, Erl).
