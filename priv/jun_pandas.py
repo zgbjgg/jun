@@ -16,7 +16,7 @@ def version():
 # data frame will hold by erlang process and the
 # syntax to apply functions over data will be complex
 def jun_dataframe(df, fn, args, axis='None', keywords=[]):
-    if ( isinstance(df, pd.core.frame.DataFrame) ):
+    if ( isinstance(df, pd.core.frame.DataFrame) | isinstance(df, pd.core.groupby.DataFrameGroupBy) ):
         if axis != 'None':
             fun = getattr(df[axis], fn)
         else:
@@ -35,6 +35,8 @@ def jun_dataframe(df, fn, args, axis='None', keywords=[]):
             return np.asscalar(value)
         elif isinstance(value, pd.core.frame.DataFrame):
             return (Atom("pandas.core.frame.DataFrame"), value)
+        elif isinstance(value, pd.core.groupby.DataFrameGroupBy):
+            return (Atom("pandas.core.groupby.DataFrameGroupBy"), value)
         else:
             return value
     else:
