@@ -32,6 +32,8 @@
 
 -export([plot/4]).
 
+-export([groupby/4]).
+
 %% DataFrames in erlang term
 to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
     % tries convert to a erlang term, be careful of timeout in large dataframes!
@@ -109,3 +111,12 @@ selection(Pid, DataFrame, ColumnsStr, _Keywords) ->
 
 plot(Pid, DataFrame, Save, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe.plot', [DataFrame, Save, Keywords]}, infinity).
+
+%% Function application, GroupBy & Window
+
+groupby(Pid, DataFrame, ColumnsStr, Keywords) when is_atom(ColumnsStr) ->
+    groupby(Pid, DataFrame, atom_to_list(ColumnsStr), Keywords);
+groupby(Pid, DataFrame, ColumnsStr, Keywords) ->
+    ColumnsTokens = string:tokens(ColumnsStr, [$,]),
+    Columns = list_to_tuple([ list_to_binary(C) || C <- ColumnsTokens]),
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, groupby, Columns, 'None', Keywords]}, infinity).
