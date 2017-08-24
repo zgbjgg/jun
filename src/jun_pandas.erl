@@ -121,7 +121,7 @@ groupby(Pid, DataFrame, ColumnsStr, Keywords) when is_atom(ColumnsStr) ->
 groupby(Pid, DataFrame, ColumnsStr, Keywords) ->
     ColumnsTokens = string:tokens(ColumnsStr, [$,]),
     Columns = list_to_tuple([ list_to_binary(C) || C <- ColumnsTokens]),
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, groupby, Columns, 'None', Keywords]}, infinity).
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, groupby, [Columns], 'None', Keywords]}, infinity).
 
 %% Reshaping, Sorting, Transposing
 
