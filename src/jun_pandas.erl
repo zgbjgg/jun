@@ -34,7 +34,8 @@
 
 -export([groupby/4]).
 
--export([sort_values/4]).
+-export([sort_values/4,
+    sort_index/4]).
 
 %% DataFrames in erlang term
 to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
@@ -127,3 +128,6 @@ groupby(Pid, DataFrame, ColumnsStr, Keywords) ->
 
 sort_values(Pid, DataFrame, Axis, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, sort_values, [], Axis, Keywords]}, infinity).
+
+sort_index(Pid, DataFrame, _Axis, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, sort_index, [], 'None', Keywords]}, infinity).
