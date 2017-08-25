@@ -6,10 +6,12 @@
 -define(DATAFRAME, 'pandas.core.frame.DataFrame').
 
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
--export([test_jun_pandas_sort_values/1]).
+-export([test_jun_pandas_sort_values/1,
+    test_jun_pandas_sort_index/1]).
 
 all() ->
-    [test_jun_pandas_sort_values].
+    [test_jun_pandas_sort_values,
+     test_jun_pandas_sort_index].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -30,3 +32,11 @@ test_jun_pandas_sort_values([{jun_worker, Pid}, {path, Path}, _]) ->
     ?assertEqual({'pandas.core.frame.DataFrame', [<<"name">>,<<"age">>], [[<<"Allison">>,29],
         [<<"George">>,29], [<<"Kristen">>,30], [<<"Katy">>,30], [<<"Debbie">>,40],
         [<<"Bjork">>,40]]}, Erl).
+
+test_jun_pandas_sort_index([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, SortedDataFrame}} = jun_pandas:sort_index(Pid, DataFrame, 'None', [{'ascending', 'False'}]),
+    {ok, Erl} = jun_pandas:to_erl(Pid, SortedDataFrame),
+    ?assertEqual({'pandas.core.frame.DataFrame', [<<"name">>,<<"age">>], [[<<"Allison">>,29],
+        [<<"George">>,29], [<<"Kristen">>,30], [<<"Debbie">>,40], [<<"Bjork">>,40],
+        [<<"Katy">>,30]]}, Erl).
