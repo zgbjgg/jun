@@ -143,12 +143,16 @@ def selection(df, columns):
         return 'error_format_data_frame_invalid'
 
 # since query function cannot evaluate columns
-# with spaces in it (or even values) just use the queryv2
-# as a single filter
+# with spaces in it (or even values) just use the legacy query
+# as a single filter, check for strings comparison as contains
 def legacy_query(df, column, operand, value):
     if ( isinstance(df, pd.core.frame.DataFrame) | isinstance(df, pd.core.groupby.DataFrameGroupBy) ):
         operation = opers[operand]
-        newdf = df[operation(df[column], value)]
+        if isinstance(value, str):
+            newdf = df[df[column].str.contains(value)] # since str cannot be evaluated with '=='
+        else:
+            newdf = df[operation(df[column], value)]
+
         if isinstance(newdf, pd.core.frame.DataFrame):
             return (Atom("pandas.core.frame.DataFrame"), newdf)
         elif isinstance(newdf, pd.core.groupby.DataFrameGroupBy):
