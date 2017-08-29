@@ -19,7 +19,8 @@
 
 -export(['query'/4,
     head/4,
-    tail/4]).
+    tail/4,
+    legacy_query/4]).
 
 -export([to_erl/2]).
 
@@ -85,6 +86,10 @@ head(Pid, DataFrame, N, Keywords) ->
 
 tail(Pid, DataFrame, N, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, tail, [N], 'None', Keywords]}, infinity).
+
+legacy_query(Pid, DataFrame, Query, _Keywords) ->
+    [Column, Operator, Value] = jun_parser:query(Query),
+    gen_server:call(Pid, {'core.jun', legacy_query, [DataFrame, Column, Operator, Value]}, infinity).
 
 %% Helpers
 
