@@ -4,8 +4,15 @@ import numpy as np
 import matplotlib as mpl
 import pandas as pd
 import sklearn as skl
+import operator as opt
 from erlport.erlterms import Atom
 mpl.use('Agg')
+opers = {'<': opt.lt,
+         '>': opt.gt,
+         '<=': opt.le,
+         '>=': opt.ge,
+         '==': opt.eq,
+         '!=': opt.ne}
 
 # simple return sys version
 def version():
@@ -132,5 +139,21 @@ def jun_dataframe_plot(df, save='None', keywords=[]):
 def selection(df, columns):
     if ( isinstance(df, pd.core.frame.DataFrame) ):
         return df[list(columns)]
+    else:
+        return 'error_format_data_frame_invalid'
+
+# since query function cannot evaluate columns
+# with spaces in it (or even values) just use the queryv2
+# as a single filter
+def legacy_query(df, column, operand, value):
+    if ( isinstance(df, pd.core.frame.DataFrame) | isinstance(df, pd.core.groupby.DataFrameGroupBy) ):
+        operation = opers[operand]
+        newdf = df[operation(df[column], value)]
+        if isinstance(newdf, pd.core.frame.DataFrame):
+            return (Atom("pandas.core.frame.DataFrame"), newdf)
+        elif isinstance(newdf, pd.core.groupby.DataFrameGroupBy):
+            return (Atom("pandas.core.groupby.DataFrameGroupBy"), newdf)
+        else:
+            return newdf
     else:
         return 'error_format_data_frame_invalid'
