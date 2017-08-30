@@ -98,6 +98,7 @@ a list with the column names, the third is a list of lists with the values of ea
 | **[query/4]()** |
 | **[head/2]()** |
 | **[tail/2]()** |
+| **[legacy_query/4]()** |
 
 | **Helpers** |
 |-------------|
@@ -106,10 +107,20 @@ a list with the column names, the third is a list of lists with the values of ea
 | **[len_index/3]()** |
 | **[memory_usage/3]()** |
 | **[info_columns/3]()** |
+| **[selection/4]()** |
 
 | **Plotting** |
 |--------------|
 | **[plot/4]()** |
+
+| **Function application, GroupBy & Window** |
+|--------------------------------------------|
+| **[groupby/4]()** |
+
+| **Reshaping, Sorting, Transposing** |
+|-------------------------------------|
+| **[sort_values/4]()** |
+| **[sort_index/4]()** |
 
 ### See also
 
