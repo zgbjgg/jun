@@ -134,7 +134,7 @@ def jun_dataframe_plot(df, save='None', keywords=[]):
         plot = df.plot(**kwargs)
         if save != 'None':
             fig = plot.get_figure()
-            fig.savefig(save) # save contains path
+            fig.savefig(save, bbox_inches='tight') # save contains path
             return 'matplotlib.AxesSubplot'
         else:
             return (Atom("matplotlib.AxesSubplot"), plot) # this is correct? because can be confusing with opaque df
