@@ -62,9 +62,13 @@ def to_erl(value):
 
 # working with columns are a important feature, but the main
 # function cannot deal with that, so just add a specific fn to that
+# When using multiIndex ensure index names!
 def columns(df):
     if isinstance(df, pd.core.frame.DataFrame):
-        columns = list(df)
+        if isinstance(df.index, pd.core.index.MultiIndex):
+            columns = list(df) + list(df.index.names)
+        else:
+            columns = list(df)
         columns_as_str = ','.join(columns)
         return columns_as_str
     else:
