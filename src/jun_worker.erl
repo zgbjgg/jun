@@ -20,6 +20,7 @@
 -define(JUN_DATAFRAME_PLOT, jun_dataframe_plot).
 -define(JUN_PLOTLY, jun_plotly).
 -define(JUN_DATAFRAME_IPLOT, jun_dataframe_iplot).
+-define(JUN_SEABORN, jun_seaborn).
 
 % the values can be override during initialization
 -record(state, {py_pid = undefined :: pid(),
@@ -86,6 +87,15 @@ handle_call({'core.jun.dataframe.plot', Args}, _From, State) ->
 handle_call({'core.jun.dataframe.iplot', Args}, _From, State) ->
     PyPid = State#state.py_pid,
     case catch python:call(PyPid, ?JUN_PLOTLY, ?JUN_DATAFRAME_IPLOT, Args) of
+        {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
+            {reply, {error, {Class, Argument}}, State};
+        Return                                           ->
+            {reply, {ok, Return}, State}
+    end;
+
+handle_call({'core.jun.dataframe.seaborn', Args}, _From, State) ->
+    PyPid = State#state.py_pid,
+    case catch python:call(PyPid, ?JUN_SEABORN, ?JUN_DATAFRAME_PLOT, Args) of
         {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
             {reply, {error, {Class, Argument}}, State};
         Return                                           ->
