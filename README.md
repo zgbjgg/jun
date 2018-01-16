@@ -122,6 +122,10 @@ a list with the column names, the third is a list of lists with the values of ea
 | **[sort_values/4]()** |
 | **[sort_index/4]()** |
 
+| **Plotly** |
+|------------|
+| **[iplot/4]()** |
+
 ### See also
 
 [KAA: support to execute jun tasks using protocol buffers](https://github.com/zgbjgg/kaa)
