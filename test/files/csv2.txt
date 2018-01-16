@@ -1,0 +1,13 @@
+month,users,smoker
+1,10,No
+2,20,Yes
+3,40,Yes
+4,5,No
+5,40,Yes
+6,80,Yes
+7,90,Yes
+8,67,Yes
+9,57,Yes
+10,4,No
+11,45,Yes
+12,56,Yes
