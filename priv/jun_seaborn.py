@@ -14,14 +14,6 @@ def jun_dataframe_plot(df, fn, save='None', keywords=[]):
     if ( isinstance(df, pd.core.frame.DataFrame) ):
         # make dict from keywords even if empty!
         kwargs = dict(keywords)
-        # IMPORTANT: check if columns has the x and y, otherwise remove to plot
-        x = kwargs.get('x')
-        y = kwargs.get('y')
-        columns = list(df)
-        if x not in columns:
-          return 'error_format_data_frame_invalid'
-        if y not in columns:
-          return 'error_format_data_frame_invalid'
         # get the fun from seaborn directly since we want a dynamic call
         fun = getattr(sns, fn)
         plot = fun(**kwargs)
