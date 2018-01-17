@@ -4,9 +4,9 @@ import numpy as np
 import matplotlib as mpl
 import pandas as pd
 import sklearn as skl
-import seaborn as sns
 from erlport.erlterms import Atom
 mpl.use('Agg')
+import seaborn as sns
 
 # common helper for dataframe plot using seaborn,
 # trying to return a file instead a raw opaque item
