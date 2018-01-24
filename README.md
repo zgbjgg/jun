@@ -2,13 +2,13 @@
 
 ![Jun](https://user-images.githubusercontent.com/1471055/28333993-51d90ad4-6bbf-11e7-98f2-16a9fd2844df.png)
 
-**JUN** - python pandas support for dataframes manipulation over erlang
+**JUN** - python pandas, plotly, seaborn support & dataframes manipulation over erlang
 
 [![Build Status](https://travis-ci.org/zgbjgg/jun.svg?branch=master)](https://travis-ci.org/zgbjgg/jun)
 [![Codecov](https://img.shields.io/codecov/c/github/zgbjgg/jun.svg)](https://codecov.io/gh/zgbjgg/jun)
 [![License: MIT](https://img.shields.io/github/license/zgbjgg/jun.svg)](https://raw.githubusercontent.com/zgbjgg/jun/master/LICENSE)
 
-JUN is a wrapper written in erlang to execute pandas functions and manipuling dataframes creating an isolated environment, so you can handle multiple environments to treat dataframes in each of one them.
+JUN is a wrapper written in erlang to execute pandas, plotly, seaborn functions and manipuling dataframes creating an isolated environment, so you can handle multiple environments to treat dataframes in each of one them.
 
 This project is under development and should not be used in production, it's not ready for that.
 
@@ -125,6 +125,13 @@ a list with the column names, the third is a list of lists with the values of ea
 | **Plotly** |
 |------------|
 | **[iplot/4]()** |
+
+| **Seaborn** |
+|-------------|
+| **[lmplot/4]()** |
+| **[factorplot/4]()** |
+| **[pairplot/4]()** |
+| **[jointplot/4]()** |
 
 ### See also
 
