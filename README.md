@@ -132,6 +132,14 @@ a list with the column names, the third is a list of lists with the values of ea
 | **[factorplot/4]()** |
 | **[pairplot/4]()** |
 | **[jointplot/4]()** |
+| **[stripplot/4]()** |
+| **[swarmplot/4]()** |
+| **[boxplot/4]()** |
+| **[violinplot/4]()** |
+| **[lvplot/4]()** |
+| **[pointplot/4]()** |
+| **[barplot/4]()** |
+| **[countplot/4]()** |
 
 ### See also
 
