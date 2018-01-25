@@ -12,6 +12,8 @@ import seaborn as sns
 # trying to return a file instead a raw opaque item
 def jun_dataframe_plot(df, fn, save='None', keywords=[]):
     if ( isinstance(df, pd.core.frame.DataFrame) ):
+        # clean before any plot
+        mpl.pyplot.figure()
         # make dict from keywords even if empty!
         kwargs = dict(keywords)
         # get the fun from seaborn directly since we want a dynamic call
