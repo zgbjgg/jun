@@ -189,3 +189,18 @@ def islambda_from_erl(fn):
             raise Exception('err.invalid.jun.Lambda', 'not a lambda valid function from erl instance')
     except:
         return fn # return fn safetly, same as passed
+
+# simple assignment for a serie to a dataframe as column or
+# even other assignments, but do it from here since cannot be evaluated
+# outside due to py syntax
+def legacy_assignment(df, column, value):
+    if ( isinstance(df, pd.core.frame.DataFrame) | isinstance(df, pd.core.groupby.DataFrameGroupBy) ):
+        df[column] = value
+        if isinstance(df, pd.core.frame.DataFrame):
+            return (Atom("pandas.core.frame.DataFrame"), df)
+        elif isinstance(df, pd.core.groupby.DataFrameGroupBy):
+            return (Atom("pandas.core.groupby.DataFrameGroupBy"), df)
+        else:
+            return df
+    else:
+        return 'error_format_data_frame_invalid'
