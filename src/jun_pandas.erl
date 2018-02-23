@@ -33,7 +33,8 @@
 
 -export([plot/4]).
 
--export([groupby/4]).
+-export([groupby/4,
+    'apply'/4]).
 
 -export([sort_values/4,
     sort_index/4]).
@@ -128,6 +129,12 @@ groupby(Pid, DataFrame, ColumnsStr, Keywords) ->
     ColumnsTokens = string:tokens(ColumnsStr, [$,]),
     Columns = list_to_tuple([ list_to_binary(C) || C <- ColumnsTokens]),
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, groupby, [Columns], 'None', Keywords]}, infinity).
+
+'apply'(Pid, DataFrame, Axis, Keywords) ->
+    % lambda must come in keywords!
+    Lambda = proplists:get_value(lambda, Keywords, <<>>),
+    Keywords0 = proplists:delete(lambda, Keywords),
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, 'apply', [Lambda], Axis, Keywords0]}, infinity).
 
 %% Reshaping, Sorting, Transposing
 
