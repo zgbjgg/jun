@@ -24,6 +24,7 @@ def version():
 # syntax to apply functions over data will be complex
 def jun_dataframe(df, fn, args, axis='None', keywords=[]):
     if ( isinstance(df, pd.core.frame.DataFrame) | isinstance(df, pd.core.groupby.DataFrameGroupBy) ):
+        args = [ islambda_from_erl(arg) for arg in args ]
         if axis != 'None':
             fun = getattr(df[axis], fn)
         else:
@@ -44,6 +45,8 @@ def jun_dataframe(df, fn, args, axis='None', keywords=[]):
             return (Atom("pandas.core.frame.DataFrame"), value)
         elif isinstance(value, pd.core.groupby.DataFrameGroupBy):
             return (Atom("pandas.core.groupby.DataFrameGroupBy"), value)
+        elif isinstance(value, pd.core.frame.Series):
+            return (Atom("pandas.core.frame.Series"), value)
         else:
             return value
     else:
@@ -173,3 +176,16 @@ def legacy_query(df, column, operand, value):
             return newdf
     else:
         return 'error_format_data_frame_invalid'
+
+# simple receiver for a lambda in string mode and pass
+# back to opaque term, it means a valid evaluated lambda
+# into py environment
+def islambda_from_erl(fn):
+    try:
+        fn0 = eval(fn)
+        if ( callable(fn0) and fn0.__name__ == '<lambda>' ):
+            return fn0
+        else:
+            raise Exception('err.invalid.jun.Lambda', 'not a lambda valid function from erl instance')
+    except:
+        return fn # return fn safetly, same as passed
