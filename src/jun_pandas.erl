@@ -19,8 +19,7 @@
 
 -export(['query'/4,
     head/4,
-    tail/4,
-    legacy_query/4]).
+    tail/4]).
 
 -export([to_erl/2]).
 
@@ -38,6 +37,9 @@
 
 -export([sort_values/4,
     sort_index/4]).
+
+-export([legacy_query/4,
+    legacy_assignment/4]).
 
 %% DataFrames in erlang term
 to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
@@ -87,10 +89,6 @@ head(Pid, DataFrame, N, Keywords) ->
 
 tail(Pid, DataFrame, N, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, tail, [N], 'None', Keywords]}, infinity).
-
-legacy_query(Pid, DataFrame, Query, _Keywords) ->
-    [Column, Operator, Value] = jun_parser:query(Query),
-    gen_server:call(Pid, {'core.jun', legacy_query, [DataFrame, Column, Operator, Value]}, infinity).
 
 %% Helpers
 
@@ -143,3 +141,18 @@ sort_values(Pid, DataFrame, Axis, Keywords) ->
 
 sort_index(Pid, DataFrame, _Axis, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, sort_index, [], 'None', Keywords]}, infinity).
+
+%% Legacy
+
+legacy_query(Pid, DataFrame, Query, _Keywords) ->
+    [Column, Operator, Value] = jun_parser:query(Query),
+    gen_server:call(Pid, {'core.jun', legacy_query, [DataFrame, Column, Operator, Value]}, infinity).
+
+legacy_assignment(Pid, DataFrame, Value, Keywords) ->
+    % from keywords get the column to assign
+    Column = begin
+        ColumnAtom = proplists:get_value(column, Keywords, <<>>),
+        ColumnList = atom_to_list(ColumnAtom),
+        list_to_binary(ColumnList)
+    end,
+    gen_server:call(Pid, {'core.jun', legacy_assignment, [DataFrame, Column, Value]}, infinity).
