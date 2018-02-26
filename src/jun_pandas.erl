@@ -41,6 +41,8 @@
 -export([legacy_query/4,
     legacy_assignment/4]).
 
+-export([drop/4]).
+
 %% DataFrames in erlang term
 to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
     % tries convert to a erlang term, be careful of timeout in large dataframes!
@@ -156,3 +158,8 @@ legacy_assignment(Pid, DataFrame, Value, Keywords) ->
         list_to_binary(ColumnList)
     end,
     gen_server:call(Pid, {'core.jun', legacy_assignment, [DataFrame, Column, Value]}, infinity).
+
+%% Reindexing, Selection & Label manipulation
+
+drop(Pid, DataFrame, Column, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, drop, [Column], 'None', Keywords]}, infinity). 
