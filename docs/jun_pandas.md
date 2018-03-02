@@ -1,8 +1,8 @@
 # Module jun_pandas #
-* [Description] (#description)
-* [Data Types] (#types)
-* [Function Index] (#index)
-* [Function Details] (#functions)
+* [Description](#description)
+* [Data Types](#types)
+* [Function Index](#index)
+* [Function Details](#functions)
 
 The jun_pandas module implements the methods to a pandas python class using a very easy
 erlang syntax.
@@ -72,6 +72,22 @@ jun_error() = {error, {exception :: atom(), description :: string()}
     <td valign="top"><a href="#max-4">max/4</a></td>
     <td>calculates the max value of a column or in an entire grouped dataframe.</td>
   </tr>
+  <tr>
+    <td valign="top"><a href="#min-4">max/4</a></td>
+    <td>calculates the min value of a column or in an entire grouped dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#count-4">max/4</a></td>
+    <td>calculates the count of a column or in an entire grouped dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#median-4">max/4</a></td>
+    <td>calculates the median value of a column or in an entire grouped dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#sum-4">max/4</a></td>
+    <td>calculates the sum value of a column or in an entire grouped dataframe.</td>
+  </tr>
 </table>
 
 <a name="functions"></a>
@@ -98,3 +114,44 @@ max(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataf
 </code></pre>
 
 calculates the max value of a column or in an entire grouped dataframe.
+
+<a name="min-4"></a>
+
+### min/4 ###
+
+<pre><code>
+min(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords"></a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+calculates the min value of a column or in an entire grouped dataframe.
+
+<a name="count-4"></a>
+
+### count/4 ###
+
+<pre><code>
+count(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords"></a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+calculates the count of a column or in an entire grouped dataframe.
+
+<a name="median-4"></a>
+
+### median/4 ###
+
+<pre><code>
+median(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords"></a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+calculates the median value of a column or in an entire grouped dataframe.
+
+<a name="sum-4"></a>
+
+### sum/4 ###
+
+<pre><code>
+sum(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords"></a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+calculates the sum value of a column or in an entire grouped dataframe.
+
