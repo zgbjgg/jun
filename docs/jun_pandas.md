@@ -119,19 +119,19 @@ series() = {'$erlport.opaque', python, binary()}
     <td>calculates the sum value of a column or in an entire grouped dataframe.</td>
   </tr>
   <tr>
-    <td valign="top"><a href="#read-csv-2">read-csv/2</a></td>
+    <td valign="top"><a href="#read-csv-2">read_csv/2</a></td>
     <td>read a csv and transforms into a valid dataframe.</td>
   </tr>
   <tr>
-    <td valign="top"><a href="#to-csv-3">to-csv/3</a></td>
+    <td valign="top"><a href="#to-csv-3">to_csv/3</a></td>
     <td>transforms a dataframe into a csv format.</td>
   </tr>
   <tr>
-    <td valign="top"><a href="#to-html-3">to-csv/3</a></td>
+    <td valign="top"><a href="#to-html-3">to_html/3</a></td>
     <td>transforms a dataframe into an html format.</td>
   </tr>
   <tr>
-    <td valign="top"><a href="#to-json-3">to-json/3</a></td>
+    <td valign="top"><a href="#to-json-3">to_json/3</a></td>
     <td>transforms a dataframe into a json format.</td>
   </tr>
   <tr>
