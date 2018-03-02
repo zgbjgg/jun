@@ -96,3 +96,5 @@ returns an opaque dataframe in erlang readable terms.
 <pre><code>
 max(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords"></a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
+
+calculates the max value of a column or in an entire grouped dataframe.
