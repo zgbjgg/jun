@@ -41,7 +41,7 @@ jun_dataframe() = {'pandas.core.frame.DataFrame', <a href="#type-dataframe">data
 dataframe() = {'$erlport.opaque', python, binary()}
 </code></pre>
 
-### <a name="type-erlang-dataframe">dataframe()</a> ###
+### <a name="type-erlang-dataframe">erlang_dataframe()</a> ###
 
 <pre><code>
 erlang_dataframe() = {'pandas.core.frame.DataFrame', [column :: binary(), ...], [[value :: any(), ...]]}
