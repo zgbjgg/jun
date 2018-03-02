@@ -59,6 +59,12 @@ keywords() = [{key :: atom(), value :: any()}, ...]
 jun_error() = {error, {exception :: atom(), description :: string()}
 </code></pre>
 
+### <a name="type-jun-subplot">jun_subplot()</a> ###
+
+<pre><code>
+jun_subplot = <<"matplotlib.AxesSubplot">>
+</code></pre>
+
 <a name="index"></a>
 
 ## Function Index ##
@@ -73,20 +79,76 @@ jun_error() = {error, {exception :: atom(), description :: string()}
     <td>calculates the max value of a column or in an entire grouped dataframe.</td>
   </tr>
   <tr>
-    <td valign="top"><a href="#min-4">max/4</a></td>
+    <td valign="top"><a href="#min-4">min/4</a></td>
     <td>calculates the min value of a column or in an entire grouped dataframe.</td>
   </tr>
   <tr>
-    <td valign="top"><a href="#count-4">max/4</a></td>
+    <td valign="top"><a href="#count-4">count/4</a></td>
     <td>calculates the count of a column or in an entire grouped dataframe.</td>
   </tr>
   <tr>
-    <td valign="top"><a href="#median-4">max/4</a></td>
+    <td valign="top"><a href="#median-4">median/4</a></td>
     <td>calculates the median value of a column or in an entire grouped dataframe.</td>
   </tr>
   <tr>
-    <td valign="top"><a href="#sum-4">max/4</a></td>
+    <td valign="top"><a href="#sum-4">sum/4</a></td>
     <td>calculates the sum value of a column or in an entire grouped dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#read-csv-2">read-csv/2</a></td>
+    <td>read a csv and transforms into a valid dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#to-csv-3">to-csv/3</a></td>
+    <td>transforms a dataframe into a csv format.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#to-html-3">to-csv/3</a></td>
+    <td>transforms a dataframe into an html format.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#to-json-3">to-json/3</a></td>
+    <td>transforms a dataframe into a json format.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#query-4">query/4</a></td>
+    <td>execute a valid query into dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#first-4">first/4</a></td>
+    <td>gets the N first elements.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#last-4">last/4</a></td>
+    <td>gets the N last elements.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#columns-3">columns/3</a></td>
+    <td>gets the column names as binary separated by comma in dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#len-columns-4">len_columns/3</a></td>
+    <td>gets the total number of columns in dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#len-index-3">len_index/3</a></td>
+    <td>gets the length of index in a dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#memory-usage-3">memory_usage/3</a></td>
+    <td>gets the amount of memory usage used to hold the dataframe in a readable human syntax.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#info-columns-3">info_columns/3</a></td>
+    <td>gets the information of each column in a dataframe in a readable human syntax.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#selection-4">selection/4</a></td>
+    <td>selects only certain columns from the dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#plot-4">plot/4</a></td>
+    <td>generates a plot from dataframe using keywords to spec args for graph.</td>
   </tr>
 </table>
 
@@ -110,7 +172,7 @@ returns an opaque dataframe in erlang readable terms.
 ### max/4 ###
 
 <pre><code>
-max(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords"></a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+max(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the max value of a column or in an entire grouped dataframe.
@@ -120,7 +182,7 @@ calculates the max value of a column or in an entire grouped dataframe.
 ### min/4 ###
 
 <pre><code>
-min(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords"></a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+min(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the min value of a column or in an entire grouped dataframe.
@@ -130,7 +192,7 @@ calculates the min value of a column or in an entire grouped dataframe.
 ### count/4 ###
 
 <pre><code>
-count(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords"></a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+count(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the count of a column or in an entire grouped dataframe.
@@ -140,7 +202,7 @@ calculates the count of a column or in an entire grouped dataframe.
 ### median/4 ###
 
 <pre><code>
-median(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords"></a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+median(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the median value of a column or in an entire grouped dataframe.
@@ -150,8 +212,150 @@ calculates the median value of a column or in an entire grouped dataframe.
 ### sum/4 ###
 
 <pre><code>
-sum(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords"></a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+sum(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the sum value of a column or in an entire grouped dataframe.
+
+<a name="read-csv-2"></a>
+
+### read_csv/2 ###
+
+<pre><code>
+read_csv(<a href="#type-jun-worker">jun_worker()</a>, path :: atom()) -> {ok, <a href="#type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+read a csv and transforms into a valid dataframe.
+
+<a name="to-csv-3"></a>
+
+### to_csv/3 ###
+
+<pre><code>
+to_csv(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, csv :: string()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+transforms a dataframe into a csv format.
+
+<a name="to-html-3"></a>
+
+### to_html/3 ###
+
+<pre><code>
+to_html(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, html :: string()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+transforms a dataframe into an html format.
+
+<a name="to-json-3"></a>
+
+### to_json/3 ###
+
+<pre><code>
+to_json(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, json :: string()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+transforms a dataframe into a json format.
+
+<a name="query-4"></a>
+
+### query/4 ###
+
+<pre><code>
+query(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, query :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="#type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+execute a valid query into dataframe.
+
+<a name="head-4"></a>
+
+### head/4 ###
+
+<pre><code>
+head(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, n :: non_neg_integer(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="#type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+gets the N first elements.
+
+
+<a name="tail-4"></a>
+
+### tail/4 ###
+
+<pre><code>
+tail(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, n :: non_neg_integer(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="#type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+gets the N last elements.
+
+<a name="columns-3"></a>
+
+### columns/3 ###
+
+<pre><code>
+columns(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, columns :: binary()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+gets the column names as binary separated by comma in dataframe.
+
+<a name="len-columns-3"></a>
+
+### len_columns/3 ###
+
+<pre><code>
+len_columns(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, length :: non_neg_integer()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+gets the total number of columns in dataframe.
+
+<a name="len-index-3"></a>
+
+### len_index/3 ###
+
+<pre><code>
+len_index(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, length :: non_neg_integer()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+gets the length of index in a dataframe.
+
+<a name="memory-usage-3"></a>
+
+### memory_usage/3 ###
+
+<pre><code>
+memory_usage(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, binary()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+gets the amount of memory usage used to hold the dataframe in a readable human syntax.
+
+<a name="info-columns-3"></a>
+
+### info_columns/3 ###
+
+<pre><code>
+info_columns(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, binary()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+gets the information of each column in a dataframe in a readable human syntax. 
+
+<a name="selection-4"></a>
+
+### selection/4 ###
+
+<pre><code>
+selection(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, columns :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, binary()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+selects only certain columns from the dataframe, you can pass the third argument as an atom separated by comma.
+
+<a name="plot-4"></a>
+
+### plot/4 ###
+
+<pre><code>
+plot(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, path :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, jun_subplot()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+generates a plot from dataframe using keywords to spec args for graph, it will be saved at `path` if passed otherwise just in memory.
+
 
