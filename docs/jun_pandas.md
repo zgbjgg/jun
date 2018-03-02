@@ -199,10 +199,6 @@ series() = {'$erlport.opaque', python, binary()}
     <td>assign a series to a new column in a dataframe.</td>
   </tr>
   <tr>
-    <td valign="top"><a href="#legacy-assignment-4">legacy_assignment/4</a></td>
-    <td>assign a series to a new column in a dataframe.</td>
-  </tr>
-  <tr>
     <td valign="top"><a href="#drop-4">drop/4</a></td>
     <td>drops a column in a dataframe.</td>
   </tr>
