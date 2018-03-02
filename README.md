@@ -28,10 +28,10 @@ This will create and hold your environment in the `Pid` so you can start with th
 For now the only way to load a dataframe into jun is reading a csv (in later version we are planning support all methods of pandas api):
 
 ```erlang
-(jun@hurakann)2> {ok, DataFrame} = jun_pandas:read_csv(Pid, '/file.csv').
-{ok,{'$erlport.opaque',python,
+(jun@hurakann)2> {ok, {_, DataFrame}} = jun_pandas:read_csv(Pid, '/file.csv').
+{ok,{'pandas.core.frame.DataFrame', {'$erlport.opaque',python,
                        <<128,2,99,112,97,110,100,97,115,46,99,111,114,101,46,
-                         102,114,97,109,101,10,68,97,116,...>>}}
+                         102,114,97,109,101,10,68,97,116,...>>}}}
 ```
 
 Ensure that path exists and is in atom data type. The above code should return a dataframe in an `opaque` format, so this object is a serializable of the original in py env,
@@ -78,68 +78,12 @@ a list with the column names, the third is a list of lists with the values of ea
 
 #### Function Index
 
-| **Serialization / IO / Conversion** |
+| ** Modules ** |
 |-------------------------------------|
-| **[read_csv/2]()** |
-| **[to_csv/3]()** |
-| **[to_html/3]()** |
-| **[to_json/3]()** |
-
-| **Computations / Descriptive Stats** |
-|--------------------------------------|
-| **[max/4]()** |
-| **[min/4]()** |
-| **[count/4]()** |
-| **[median/4]()** |
-| **[sum/4]()** |
-
-| **Indexing, iteration** |
-|--------------------------|
-| **[query/4]()** |
-| **[head/2]()** |
-| **[tail/2]()** |
-| **[legacy_query/4]()** |
-
-| **Helpers** |
-|-------------|
-| **[columns/3]()** |
-| **[len_columns/3]()** |
-| **[len_index/3]()** |
-| **[memory_usage/3]()** |
-| **[info_columns/3]()** |
-| **[selection/4]()** |
-
-| **Plotting** |
-|--------------|
-| **[plot/4]()** |
-
-| **Function application, GroupBy & Window** |
-|--------------------------------------------|
-| **[groupby/4]()** |
-
-| **Reshaping, Sorting, Transposing** |
-|-------------------------------------|
-| **[sort_values/4]()** |
-| **[sort_index/4]()** |
-
-| **Plotly** |
-|------------|
-| **[iplot/4]()** |
-
-| **Seaborn** |
-|-------------|
-| **[lmplot/4]()** |
-| **[factorplot/4]()** |
-| **[pairplot/4]()** |
-| **[jointplot/4]()** |
-| **[stripplot/4]()** |
-| **[swarmplot/4]()** |
-| **[boxplot/4]()** |
-| **[violinplot/4]()** |
-| **[lvplot/4]()** |
-| **[pointplot/4]()** |
-| **[barplot/4]()** |
-| **[countplot/4]()** |
+| **[jun_worker](docs/jun_worker.md)** |
+| **[jun_pandas](docs/jun_pandas.md)** |
+| **[jun_plotly](docs/jun_plotly.md)** |
+| **[jun_seaborn]()** |
 
 ### See also
 
