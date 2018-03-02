@@ -76,7 +76,7 @@ a single encoder:
 In the above snippet you can see how is a pandas dataframe represented in erlang term, the first is an atom with the class of the dataframe, the second are
 a list with the column names, the third is a list of lists with the values of each row.
 
-#### Function Index
+#### Modules Index
 
 | **Modules** |
 |-------------------------------------|
