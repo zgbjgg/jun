@@ -78,7 +78,7 @@ a list with the column names, the third is a list of lists with the values of ea
 
 #### Function Index
 
-| ** Modules ** |
+| **Modules** |
 |-------------------------------------|
 | **[jun_worker](docs/jun_worker.md)** |
 | **[jun_pandas](docs/jun_pandas.md)** |
