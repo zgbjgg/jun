@@ -62,7 +62,31 @@ jun_error() = {error, {exception :: atom(), description :: string()}
 ### <a name="type-jun-subplot">jun_subplot()</a> ###
 
 <pre><code>
-jun_subplot = <<"matplotlib.AxesSubplot">>
+jun_subplot() = <<"matplotlib.AxesSubplot">>
+</code></pre>
+
+### <a name="type-jun-groupby">jun_groupby()</a> ###
+
+<pre><code>
+jun_groupby() = {'pandas.core.groupby.DataFrameGroupBy', <a href="#type-groupby">groupby()</a>}
+</code></pre>
+
+### <a name="type-groupby">groupby()</a> ###
+
+<pre><code>
+groupby() = {'$erlport.opaque', python, binary()}
+</code></pre>
+
+### <a name="type-jun-series">jun_series()</a> ###
+
+<pre><code>
+jun_series() = {'pandas.core.frame.Series', <a href="#type-series">series()</a>}
+</code></pre>
+
+### <a name="type-series">series()</a> ###
+
+<pre><code>
+series() = {'$erlport.opaque', python, binary()}
 </code></pre>
 
 <a name="index"></a>
@@ -150,6 +174,38 @@ jun_subplot = <<"matplotlib.AxesSubplot">>
     <td valign="top"><a href="#plot-4">plot/4</a></td>
     <td>generates a plot from dataframe using keywords to spec args for graph.</td>
   </tr>
+  <tr>
+    <td valign="top"><a href="#groupby-4">groupby/4</a></td>
+    <td>groups a dataframe based on passed columns.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#apply-4">apply/4</a></td>
+    <td>applies a function in a dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#sort-values-4">sort_values/4</a></td>
+    <td>sorts a dataframe by specific a column.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#sort-index-4">sort_index/4</a></td>
+    <td>sorts a dataframe or groupby using index.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#legacy-query-4">legacy_query/4</a></td>
+    <td>applies a query as `query` but it can be used for more complex queries such as string comparisons.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#legacy-assignment-4">legacy_assignment/4</a></td>
+    <td>assign a series to a new column in a dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#legacy-assignment-4">legacy_assignment/4</a></td>
+    <td>assign a series to a new column in a dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#drop-4">drop/4</a></td>
+    <td>drops a column in a dataframe.</td>
+  </tr>
 </table>
 
 <a name="functions"></a>
@@ -172,7 +228,7 @@ returns an opaque dataframe in erlang readable terms.
 ### max/4 ###
 
 <pre><code>
-max(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+max(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the max value of a column or in an entire grouped dataframe.
@@ -182,7 +238,7 @@ calculates the max value of a column or in an entire grouped dataframe.
 ### min/4 ###
 
 <pre><code>
-min(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+min(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the min value of a column or in an entire grouped dataframe.
@@ -192,7 +248,7 @@ calculates the min value of a column or in an entire grouped dataframe.
 ### count/4 ###
 
 <pre><code>
-count(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+count(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the count of a column or in an entire grouped dataframe.
@@ -202,7 +258,7 @@ calculates the count of a column or in an entire grouped dataframe.
 ### median/4 ###
 
 <pre><code>
-median(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+median(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the median value of a column or in an entire grouped dataframe.
@@ -212,7 +268,7 @@ calculates the median value of a column or in an entire grouped dataframe.
 ### sum/4 ###
 
 <pre><code>
-sum(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+sum(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the sum value of a column or in an entire grouped dataframe.
@@ -358,4 +414,72 @@ plot(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">data
 
 generates a plot from dataframe using keywords to spec args for graph, it will be saved at `path` if passed otherwise just in memory.
 
+<a name="groupby-4"></a>
 
+### groupby/4 ###
+
+<pre><code>
+groupby(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, columns :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-groupby">jun_groupby()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+groups a dataframe based on passed columns.
+
+<a name="apply-4"></a>
+
+### apply/4 ###
+
+<pre><code>
+apply(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-series">jun_series()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+applies a function in a dataframe and return a series. see <a href="type-lambda">lambda</a> to check how to express a function in erlang.
+
+<a name="sort-values-4"></a>
+
+### sort_values/4 ###
+
+<pre><code>
+sort_values(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+sorts a dataframe by specific a column.
+
+<a name="sort-index-4"></a>
+
+### sort_index/4 ###
+
+<pre><code>
+sort_index(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+sorts a dataframe or groupby using index.
+
+<a name="legacy-query-4"></a>
+
+### legacy_query/4 ###
+
+<pre><code>
+legacy_query(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, query :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+applies a query as `query` but it can be used for more complex queries such as string comparisons.
+
+<a name="legacy-assignment-4"></a>
+
+### legacy_assignment/4 ###
+
+<pre><code>
+legacy_assignment(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-series">series()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+assign a series to a new column in a dataframe.
+
+<a name="drop-4"></a>
+
+### drop/4 ###
+
+<pre><code>
+drop(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+drops a column in a dataframe.
