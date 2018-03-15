@@ -1,6 +1,6 @@
 {application, jun,
- [{description, "An OTP application"},
-  {vsn, "0.1.0"},
+ [{description, "python pandas, plotly, seaborn support & dataframes manipulation"},
+  {vsn, "0.1.5"},
   {registered, []},
   {mod, { jun_app, []}},
   {applications,
