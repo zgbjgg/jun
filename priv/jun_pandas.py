@@ -204,3 +204,35 @@ def legacy_assignment(df, column, value):
             return df
     else:
         return 'error_format_data_frame_invalid'
+
+# descriptive stats over a series
+# this is used with a dynamical assignment since
+# series will hold by erlang process and the
+# syntax to apply functions over data will be complex
+def jun_series(series, fn, args, axis='None', keywords=[]):
+    if ( isinstance(series, pd.core.frame.Series) ):
+        args = [ islambda_from_erl(arg) for arg in args ]
+        # for complete integration also check for keywords with lambdas
+        # keywords = [ islambda_from_erl(keyword) for keyword in keywords ]
+        if axis != 'None':
+            fun = getattr(series[axis], fn)
+        else:
+            fun = getattr(series, fn)
+        # make dict from keywords even if empty!
+        kwargs = dict(keywords)
+        # explicity execute the fun
+        if len(args) == 0:
+            value = fun(**kwargs)
+        else:
+            value = fun(*args, **kwargs)
+        # check for instance of int64 and return as scalar
+        if isinstance(value, np.int64):
+            return np.asscalar(value)
+        elif isinstance(value, np.float64):
+            return np.asscalar(value)
+        elif isinstance(value, pd.core.frame.Series):
+            return (Atom("pandas.core.frame.Series"), value)
+        else:
+            return value
+    else:
+        return 'error_format_series_invalid'
