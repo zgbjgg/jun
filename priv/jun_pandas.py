@@ -212,6 +212,7 @@ def legacy_assignment(df, column, value):
 def jun_series(series, fn, args, axis='None', keywords=[]):
     if ( isinstance(series, pd.core.frame.Series) ):
         args = [ islambda_from_erl(arg) for arg in args ]
+        keywords = [ (k, islambda_from_erl(v)) for (k, v) in keywords ]
         # for complete integration also check for keywords with lambdas
         # keywords = [ islambda_from_erl(keyword) for keyword in keywords ]
         if axis != 'None':
