@@ -11,6 +11,4 @@
 %% Binary operator functions
 
 combine(Pid, Series, Series2, Keywords) ->
-    Keywords0 = proplists:delete(func, Keywords),
-    Func = proplists:get_value(func, Keywords),
-    gen_server:call(Pid, {'core.jun.series', [Series, combine, [Series2, Func], 'None', Keywords0]}, infinity).
+    gen_server:call(Pid, {'core.jun.series', [Series, combine, [Series2], 'None', Keywords]}, infinity).
