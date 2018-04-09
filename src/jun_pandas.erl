@@ -10,7 +10,8 @@
     min/4,
     count/4,
     median/4,
-    sum/4]).
+    sum/4,
+    unique/4]).
 
 -export([read_csv/2,
     to_csv/3,
@@ -66,6 +67,9 @@ median(Pid, DataFrame, Axis, Keywords) ->
 
 sum(Pid, DataFrame, Axis, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, sum, [], Axis, Keywords]}, infinity).
+
+unique(Pid, DataFrame, Axis, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, unique, [], Axis, Keywords]}, infinity).
 
 %% Serialization / IO / Conversion
 

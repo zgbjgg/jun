@@ -11,6 +11,7 @@
     test_jun_pandas_count/1,
     test_jun_pandas_median/1,
     test_jun_pandas_sum/1,
+    test_jun_pandas_unique/1,
     test_jun_pandas_bad_axis/1]).
 
 all() ->
@@ -19,6 +20,7 @@ all() ->
      test_jun_pandas_count,
      test_jun_pandas_median,
      test_jun_pandas_sum,
+     test_jun_pandas_unique,
      test_jun_pandas_bad_axis].
 
 init_per_testcase(_, _Config) ->
@@ -57,6 +59,11 @@ test_jun_pandas_sum([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
     Sum = jun_pandas:sum(Pid, DataFrame, age, []),
     ?assertEqual(Sum, {ok, 198}).
+
+test_jun_pandas_unique([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    Unique = jun_pandas:unique(Pid, DataFrame, age, []),
+    ?assertEqual(Unique, {ok, <<"29,30,40">>}).
 
 test_jun_pandas_bad_axis([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
