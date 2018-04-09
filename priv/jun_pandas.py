@@ -132,12 +132,12 @@ def jun_dataframe_plot(df, save='None', keywords=[]):
         # make dict from keywords even if empty!
         kwargs = dict(keywords)
         # IMPORTANT: check if columns has the x and y, otherwise remove to plot
-        x = kwargs.get('x')
-        y = kwargs.get('y')
+        x = kwargs.get('x', 'None')
+        y = kwargs.get('y', 'None')
         columns = list(df)
-        if x not in columns:
+        if x not in columns and x != 'None':
           del kwargs['x']
-        if y not in columns:
+        if y not in columns and y != 'None':
           del kwargs['y']
         # explicity execute the fun
         plot = df.plot(**kwargs)
