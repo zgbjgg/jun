@@ -47,6 +47,8 @@ def jun_dataframe(df, fn, args, axis='None', keywords=[]):
             return (Atom("pandas.core.groupby.DataFrameGroupBy"), value)
         elif isinstance(value, pd.core.frame.Series):
             return (Atom("pandas.core.frame.Series"), value)
+        elif isinstance(value, np.ndarray):
+            return ','.join(str(v) for v in value)
         else:
             return value
     else:
@@ -233,6 +235,8 @@ def jun_series(series, fn, args, axis='None', keywords=[]):
             return np.asscalar(value)
         elif isinstance(value, pd.core.frame.Series):
             return (Atom("pandas.core.frame.Series"), value)
+        elif isinstance(value, np.ndarray):
+            return ','.join(str(v) for v in value)
         else:
             return value
     else:
