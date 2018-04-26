@@ -1,6 +1,6 @@
 {application, jun,
  [{description, "python pandas, plotly, seaborn support & dataframes manipulation"},
-  {vsn, "0.1.5"},
+  {vsn, "0.1.6"},
   {registered, []},
   {mod, { jun_app, []}},
   {applications,
