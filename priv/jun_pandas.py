@@ -30,7 +30,7 @@ def jun_dataframe(df, fn, args, axis='None', keywords=[]):
         else:
             fun = getattr(df, fn)
         # make dict from keywords even if empty!
-        kwargs = dict(keywords)
+        kwargs = dict([ (k, isexpression_from_erl(v)) for (k, v) in keywords ])
         # explicity execute the fun
         if len(args) == 0:
             value = fun(**kwargs)
@@ -130,7 +130,7 @@ def _sizeof_fmt(num):
 def jun_dataframe_plot(df, save='None', keywords=[]):
     if ( isinstance(df, pd.core.frame.DataFrame) ):
         # make dict from keywords even if empty!
-        kwargs = dict(keywords)
+        kwargs = dict([ (k, isexpression_from_erl(v)) for (k, v) in keywords ])
         # IMPORTANT: check if columns has the x and y, otherwise remove to plot
         x = kwargs.get('x', 'None')
         y = kwargs.get('y', 'None')
@@ -222,7 +222,7 @@ def jun_series(series, fn, args, axis='None', keywords=[]):
         else:
             fun = getattr(series, fn)
         # make dict from keywords even if empty!
-        kwargs = dict(keywords)
+        kwargs = dict([ (k, isexpression_from_erl(v)) for (k, v) in keywords ])
         # explicity execute the fun
         if len(args) == 0:
             value = fun(**kwargs)
@@ -241,3 +241,13 @@ def jun_series(series, fn, args, axis='None', keywords=[]):
             return value
     else:
         return 'error_format_series_invalid'
+
+# in keywords we cannot assing so easily the data comming from
+# erlang, since protocol buffers keep keywords as single strings
+# in key and value, eval each value so we can check if some of them
+# must be evaluated as an expression
+def isexpression_from_erl(expression):
+    try:
+        return eval(expression)
+    except:
+        return expression # return fn safetly, same as passed
