@@ -42,7 +42,8 @@
 -export([legacy_query/4,
     legacy_assignment/4]).
 
--export([drop/4]).
+-export([drop/4,
+    rename/4]).
 
 %% DataFrames in erlang term
 to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
@@ -157,7 +158,7 @@ legacy_query(Pid, DataFrame, Query, _Keywords) ->
 legacy_assignment(Pid, DataFrame, Value, Keywords) ->
     % from keywords get the column to assign
     Column = begin
-        ColumnAtom = proplists:get_value(column, Keywords, <<>>),
+        ColumnAtom = proplists:get_value(column, Keywords, ''),
         ColumnList = atom_to_list(ColumnAtom),
         list_to_binary(ColumnList)
     end,
@@ -166,4 +167,7 @@ legacy_assignment(Pid, DataFrame, Value, Keywords) ->
 %% Reindexing, Selection & Label manipulation
 
 drop(Pid, DataFrame, Column, Keywords) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, drop, [Column], 'None', Keywords]}, infinity). 
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, drop, [Column], 'None', Keywords]}, infinity).
+
+rename(Pid, DataFrame, _Column, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, rename, [], 'None', Keywords]}, infinity).
