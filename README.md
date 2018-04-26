@@ -4,6 +4,7 @@
 
 **JUN** - python pandas, plotly, seaborn support & dataframes manipulation over erlang
 
+[![Hex.pm](https://img.shields.io/hexpm/v/jun.svg)](https://hex.pm/packages/jun) 
 [![Build Status](https://travis-ci.org/zgbjgg/jun.svg?branch=master)](https://travis-ci.org/zgbjgg/jun)
 [![Codecov](https://img.shields.io/codecov/c/github/zgbjgg/jun.svg)](https://codecov.io/gh/zgbjgg/jun)
 [![License: MIT](https://img.shields.io/github/license/zgbjgg/jun.svg)](https://raw.githubusercontent.com/zgbjgg/jun/master/LICENSE)
