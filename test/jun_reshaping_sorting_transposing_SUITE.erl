@@ -29,14 +29,14 @@ test_jun_pandas_sort_values([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path), 
     {ok, {?DATAFRAME, SortedDataFrame}} = jun_pandas:sort_values(Pid, DataFrame, 'None', [{'by', 'age'}, {'ascending', 'False'}]),
     {ok, Erl} = jun_pandas:to_erl(Pid, SortedDataFrame),
-    ?assertEqual({'pandas.core.frame.DataFrame', [<<"name">>,<<"age">>], [[<<"Allison">>,29],
-        [<<"George">>,29], [<<"Kristen">>,30], [<<"Katy">>,30], [<<"Debbie">>,40],
-        [<<"Bjork">>,40]]}, Erl).
+    ?assertEqual({'pandas.core.frame.DataFrame', [<<"name">>,<<"age">>], [[<<"Debbie">>,40],
+        [<<"Bjork">>,40], [<<"Kristen">>,30], [<<"Katy">>,30], [<<"Allison">>,29],
+        [<<"George">>,29]]}, Erl).
 
 test_jun_pandas_sort_index([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
     {ok, {?DATAFRAME, SortedDataFrame}} = jun_pandas:sort_index(Pid, DataFrame, 'None', [{'ascending', 'False'}]),
     {ok, Erl} = jun_pandas:to_erl(Pid, SortedDataFrame),
-    ?assertEqual({'pandas.core.frame.DataFrame', [<<"name">>,<<"age">>], [[<<"Allison">>,29],
-        [<<"George">>,29], [<<"Kristen">>,30], [<<"Debbie">>,40], [<<"Bjork">>,40],
-        [<<"Katy">>,30]]}, Erl).
+    ?assertEqual({'pandas.core.frame.DataFrame', [<<"name">>,<<"age">>], [[<<"Katy">>,30],
+        [<<"Bjork">>,40], [<<"Debbie">>,40], [<<"Kristen">>,30], [<<"George">>,29],
+        [<<"Allison">>,29]]}, Erl).
