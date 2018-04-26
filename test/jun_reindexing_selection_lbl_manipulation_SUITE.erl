@@ -6,10 +6,12 @@
 -define(DATAFRAME, 'pandas.core.frame.DataFrame').
 
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
--export([test_jun_pandas_drop/1]).
+-export([test_jun_pandas_drop/1,
+    test_jun_pandas_rename/1]).
 
 all() ->
-    [test_jun_pandas_drop].
+    [test_jun_pandas_drop,
+     test_jun_pandas_rename].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -30,3 +32,12 @@ test_jun_pandas_drop([{jun_worker, Pid}, {path, Path}, _]) ->
     ?assertEqual({'pandas.core.frame.DataFrame', [<<"name">>], [[<<"Allison">>],
         [<<"George">>], [<<"Kristen">>], [<<"Debbie">>], [<<"Bjork">>],
         [<<"Katy">>]]}, Erl).
+
+test_jun_pandas_rename([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, RenameDataFrame}} = jun_pandas:rename(Pid, DataFrame, '', [{'index', 'str'},
+        {'columns', '{\'age\': \'agex\'}'}]),
+    {ok, Erl} = jun_pandas:to_erl(Pid, RenameDataFrame),
+    ?assertEqual({'pandas.core.frame.DataFrame', [<<"name">>, <<"agex">>], [[<<"Allison">>,29],
+        [<<"George">>,29], [<<"Kristen">>,30], [<<"Debbie">>,40], [<<"Bjork">>,40],
+        [<<"Katy">>,30]]}, Erl).
