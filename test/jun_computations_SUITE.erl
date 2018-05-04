@@ -36,36 +36,36 @@ end_per_testcase(_, _Config) ->
     ok.
 
 test_jun_pandas_max([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Max = jun_pandas:max(Pid, DataFrame, age, []),
     ?assertEqual(Max, {ok, 40}).
 
 test_jun_pandas_min([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Min = jun_pandas:min(Pid, DataFrame, age, []),
     ?assertEqual(Min, {ok, 29}).
 
 test_jun_pandas_count([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Count = jun_pandas:count(Pid, DataFrame, age, []),
     ?assertEqual(Count, {ok, 6}).
 
 test_jun_pandas_median([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Median = jun_pandas:median(Pid, DataFrame, age, []),
     ?assertEqual(Median, {ok, 30.0}).
 
 test_jun_pandas_sum([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Sum = jun_pandas:sum(Pid, DataFrame, age, []),
     ?assertEqual(Sum, {ok, 198}).
 
 test_jun_pandas_unique([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Unique = jun_pandas:unique(Pid, DataFrame, age, []),
     ?assertEqual(Unique, {ok, <<"29,30,40">>}).
 
 test_jun_pandas_bad_axis([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Error = jun_pandas:max(Pid, DataFrame, unknown, []),
     ?assertEqual({error, {'exceptions.KeyError', "Atom('unknown')"}}, Error).

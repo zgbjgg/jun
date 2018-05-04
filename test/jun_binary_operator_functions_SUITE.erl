@@ -33,7 +33,7 @@ end_per_testcase(_, _Config) ->
     ok.
 
 test_jun_pandas_series_combine([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, {?SERIES, Series1}} = jun_pandas:apply(Pid, DataFrame, 'None', [{lambda, ?LAMBDA_1},
         {axis, 1}]),
     {ok, {?SERIES, Series2}} = jun_pandas:apply(Pid, DataFrame, 'None', [{lambda, ?LAMBDA_2},

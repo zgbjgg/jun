@@ -28,7 +28,7 @@ end_per_testcase(_, _Config) ->
     ok.
 
 test_jun_pandas_legacy_query([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, {?DATAFRAME, NewDataFrame}} = jun_pandas:legacy_query(Pid, DataFrame, 'age < 30', []),
     % the new dataframe just contains two values, check it!
     {ok, Erl} = jun_pandas:to_erl(Pid, NewDataFrame),
@@ -37,7 +37,7 @@ test_jun_pandas_legacy_query([{jun_worker, Pid}, {path, Path}, _]) ->
     ?assertEqual(Out, Erl).
 
 test_jun_pandas_legacy_assignment([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, {?DATAFRAME, NewDataFrame}} = jun_pandas:legacy_query(Pid, DataFrame, 'age < 30', []),
     {ok, {?SERIES, Series}} = jun_pandas:apply(Pid, NewDataFrame, 'None', [{lambda, ?LAMBDA},
         {axis, 1}]),

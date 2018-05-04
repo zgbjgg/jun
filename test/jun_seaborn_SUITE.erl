@@ -48,77 +48,77 @@ end_per_testcase(_, _Config) ->
     ok.
 
 test_jun_seaborn_lmplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_seaborn:lmplot(Pid, DataFrame, 'fig0.png', [{'x', 'month'},
         {'y', 'users'}, {'hue', 'smoker'}, {'fit_reg', 'False'}]),
     ?assertEqual(Plot, {ok, <<"seaborn.axisgrid.*">>}).
 
 test_jun_seaborn_factorplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_seaborn:factorplot(Pid, DataFrame, 'fig1.png', [{'x', 'month'},
         {'y', 'users'}, {'hue', 'smoker'}, {'fit_reg', 'False'}]),
     ?assertEqual(Plot, {ok, <<"seaborn.axisgrid.*">>}).
 
 test_jun_seaborn_pairplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_seaborn:pairplot(Pid, DataFrame, 'fig2.png', []),
     ?assertEqual(Plot, {ok, <<"seaborn.axisgrid.*">>}).
 
 test_jun_seaborn_jointplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_seaborn:jointplot(Pid, DataFrame, 'fig3.png', [{'x', 'month'},
         {'y', 'users'}]),
     ?assertEqual(Plot, {ok, <<"seaborn.axisgrid.*">>}).
 
 test_jun_seaborn_stripplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_seaborn:stripplot(Pid, DataFrame, 'fig0.png', [{'x', 'month'},
         {'y', 'users'}, {'hue', 'smoker'}]),
     ?assertEqual(Plot, {ok, <<"matplotlib.AxesSubplot">>}).
 
 test_jun_seaborn_swarmplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_seaborn:swarmplot(Pid, DataFrame, 'fig0.png', [{'x', 'month'},
         {'y', 'users'}, {'hue', 'smoker'}]),
     ?assertEqual(Plot, {ok, <<"matplotlib.AxesSubplot">>}).
 
 test_jun_seaborn_boxplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_seaborn:boxplot(Pid, DataFrame, 'fig0.png', [{'x', 'month'},
         {'y', 'users'}, {'hue', 'smoker'}]),
     ?assertEqual(Plot, {ok, <<"matplotlib.AxesSubplot">>}).
 
 test_jun_seaborn_violinplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_seaborn:violinplot(Pid, DataFrame, 'fig0.png', [{'x', 'month'},
         {'y', 'users'}, {'hue', 'smoker'}]),
     ?assertEqual(Plot, {ok, <<"matplotlib.AxesSubplot">>}).
 
 test_jun_seaborn_lvplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_seaborn:lvplot(Pid, DataFrame, 'fig0.png', [{'x', 'month'},
         {'y', 'users'}, {'hue', 'smoker'}]),
     ?assertEqual(Plot, {ok, <<"matplotlib.AxesSubplot">>}).
 
 test_jun_seaborn_pointplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_seaborn:pointplot(Pid, DataFrame, 'fig0.png', [{'x', 'month'},
         {'y', 'users'}, {'hue', 'smoker'}]),
     ?assertEqual(Plot, {ok, <<"matplotlib.AxesSubplot">>}).
 
 test_jun_seaborn_barplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_seaborn:barplot(Pid, DataFrame, 'fig0.png', [{'x', 'month'},
         {'y', 'users'}, {'hue', 'smoker'}]),
     ?assertEqual(Plot, {ok, <<"matplotlib.AxesSubplot">>}).
 
 test_jun_seaborn_countplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_seaborn:countplot(Pid, DataFrame, 'fig0.png', [{'x', 'month'}]),
     ?assertEqual(Plot, {ok, <<"matplotlib.AxesSubplot">>}).
 
 test_jun_seaborn_plot_error([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     PlotError = jun_seaborn:lmplot(Pid, DataFrame, 'fig4.png', [{'x', 'month'},
         {'y', 'unknown'}, {'hue', 'smoker'}]),
     ?assertMatch({error, _}, PlotError).

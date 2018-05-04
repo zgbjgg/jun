@@ -26,7 +26,7 @@ end_per_testcase(_, _Config) ->
     ok.
 
 test_jun_pandas_drop([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path), 
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []), 
     {ok, {?DATAFRAME, DropDataFrame}} = jun_pandas:drop(Pid, DataFrame, 'age', [{'axis', 1}]),
     {ok, Erl} = jun_pandas:to_erl(Pid, DropDataFrame),
     ?assertEqual({'pandas.core.frame.DataFrame', [<<"name">>], [[<<"Allison">>],
@@ -34,7 +34,7 @@ test_jun_pandas_drop([{jun_worker, Pid}, {path, Path}, _]) ->
         [<<"Katy">>]]}, Erl).
 
 test_jun_pandas_rename([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, {?DATAFRAME, RenameDataFrame}} = jun_pandas:rename(Pid, DataFrame, '', [{'index', 'str'},
         {'columns', '{\'age\': \'agex\'}'}]),
     {ok, Erl} = jun_pandas:to_erl(Pid, RenameDataFrame),

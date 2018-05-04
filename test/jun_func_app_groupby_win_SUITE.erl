@@ -29,12 +29,12 @@ end_per_testcase(_, _Config) ->
     ok.
 
 test_jun_pandas_groupby([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, Group} = jun_pandas:groupby(Pid, DataFrame, 'name', []),
     ?assertMatch({?GROUPBY, {'$erlport.opaque', python, _}}, Group).
 
 test_jun_pandas_apply([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, Series} = jun_pandas:apply(Pid, DataFrame, 'None', [{lambda, ?LAMBDA},
         {axis, 1}]),
     ?assertMatch({?SERIES, {'$erlport.opaque', python, _}}, Series).

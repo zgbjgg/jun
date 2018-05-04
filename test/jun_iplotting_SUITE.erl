@@ -26,13 +26,13 @@ end_per_testcase(_, _Config) ->
     ok.
 
 test_jun_pandas_iplot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_plotly:iplot(Pid, DataFrame, 'line/iplot', [{'kind', 'line'},
         {'x', 'name'}, {'y', 'age'}]),
     ?assertMatch({ok, _}, Plot).
 
 test_jun_pandas_iplot_error([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     PlotError = jun_plotly:iplot(Pid, DataFrame, 'unknown/iplot', [{'kind', 'unknown'},
         {'x', 'name'}, {'y', 'unknown'}]),
     ?assertMatch({error, _}, PlotError).

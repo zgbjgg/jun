@@ -26,13 +26,13 @@ end_per_testcase(_, _Config) ->
     ok.
 
 test_jun_pandas_plot([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Plot = jun_pandas:plot(Pid, DataFrame, 'fig.png', [{'kind', 'line'},
         {'x', 'name'}, {'y', 'age'}]),
     ?assertEqual(Plot, {ok, <<"matplotlib.AxesSubplot">>}).
 
 test_jun_pandas_plot_error([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     PlotError = jun_pandas:plot(Pid, DataFrame, 'fig.png', [{'kind', 'unknown'},
         {'x', 'name'}, {'y', 'unknown'}]),
     ?assertMatch({error, _}, PlotError).

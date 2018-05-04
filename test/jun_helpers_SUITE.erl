@@ -34,37 +34,37 @@ end_per_testcase(_, _Config) ->
     ok.
 
 test_jun_pandas_columns([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, Columns} = jun_pandas:columns(Pid, DataFrame, []),
     Out = <<"name,age">>,
     ?assertEqual(Out, Columns).
 
 test_jun_pandas_len_columns([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, LenColumns} = jun_pandas:len_columns(Pid, DataFrame, []),
     Out = 2,
     ?assertEqual(Out, LenColumns).
 
 test_jun_pandas_len_index([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, LenIndex} = jun_pandas:len_index(Pid, DataFrame, []),
     Out = 6,
     ?assertEqual(Out, LenIndex).
 
 test_jun_pandas_memory_usage([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, MemoryUsage} = jun_pandas:memory_usage(Pid, DataFrame, []),
     Out = <<"425.0+ bytes">>,
     ?assertEqual(Out, MemoryUsage).
 
 test_jun_pandas_info_columns([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, InfoColumns} = jun_pandas:info_columns(Pid, DataFrame, []),
     Out = <<"name,object,6\nage,int64,6\n">>,
     ?assertEqual(Out, InfoColumns).
 
 test_jun_pandas_selection([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path),
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, {?DATAFRAME, ColumnAgeDataFrame}} = jun_pandas:selection(Pid, DataFrame, 'age', []),
     {ok, Erl} = jun_pandas:to_erl(Pid, ColumnAgeDataFrame),
     Out = {'pandas.core.frame.DataFrame', [<<"age">>],
