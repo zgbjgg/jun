@@ -67,9 +67,9 @@ handle_call({'core.jun.dataframe', Args}, _From, State) ->
             {reply, {ok, Return}, State}
     end;
 
-handle_call({'pandas', Fn, Args}, _From, State) ->
+handle_call({'core.jun.pandas', Args}, _From, State) ->
     PyPid = State#state.py_pid,
-    case catch python:call(PyPid, pandas, Fn, Args) of
+    case catch python:call(PyPid, ?JUN_PANDAS, ?JUN_PANDAS, Args) of
         {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
             {reply, {error, {Class, Argument}}, State};
         Return                                           ->
