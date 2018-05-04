@@ -13,7 +13,7 @@
     sum/4,
     unique/4]).
 
--export([read_csv/2,
+-export([read_csv/3,
     to_csv/3,
     to_html/3,
     to_json/3]).
@@ -46,6 +46,7 @@
     rename/4]).
 
 %% DataFrames in erlang term
+
 to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
     % tries convert to a erlang term, be careful of timeout in large dataframes!
     gen_server:call(Pid, {'core.jun', to_erl, [OpaqueDataFrame]}, infinity);
@@ -74,8 +75,8 @@ unique(Pid, DataFrame, Axis, Keywords) ->
 
 %% Serialization / IO / Conversion
 
-read_csv(Pid, Path) ->
-    gen_server:call(Pid, {'pandas', read_csv, [Path]}, infinity).
+read_csv(Pid, Path, Keywords) ->
+    gen_server:call(Pid, {'core.jun.pandas', [read_csv, [Path], Keywords]}, infinity).
 
 to_csv(Pid, DataFrame, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, to_csv, [], 'None', Keywords]}, infinity).
