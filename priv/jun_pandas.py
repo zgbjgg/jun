@@ -251,3 +251,32 @@ def isexpression_from_erl(expression):
         return eval(expression)
     except:
         return expression # return fn safetly, same as passed
+
+# this is used to apply functions to a
+# single dataframe but instead of getting functions to apply
+# based on the DataFrame class, use directly pandas implementation
+def jun_pandas(fn, args, keywords=[]):
+    args = [ islambda_from_erl(arg) for arg in args ]
+    fun = getattr(pd, fn)
+    # make dict from keywords even if empty!
+    kwargs = dict([ (k, isexpression_from_erl(v)) for (k, v) in keywords ])
+    # explicity execute the fun
+    if len(args) == 0:
+        value = fun(**kwargs)
+    else:
+        value = fun(*args, **kwargs)
+    # check for instance of int64 and return as scalar
+    if isinstance(value, np.int64):
+        return np.asscalar(value)
+    elif isinstance(value, np.float64):
+        return np.asscalar(value)
+    elif isinstance(value, pd.core.frame.DataFrame):
+       return (Atom("pandas.core.frame.DataFrame"), value)
+    elif isinstance(value, pd.core.groupby.DataFrameGroupBy):
+        return (Atom("pandas.core.groupby.DataFrameGroupBy"), value)
+    elif isinstance(value, pd.core.frame.Series):
+        return (Atom("pandas.core.frame.Series"), value)
+    elif isinstance(value, np.ndarray):
+        return ','.join(str(v) for v in value)
+    else:
+        return value
