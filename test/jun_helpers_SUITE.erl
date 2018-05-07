@@ -4,6 +4,7 @@
 -include_lib("eunit/include/eunit.hrl").
 
 -define(DATAFRAME, 'pandas.core.frame.DataFrame').
+-define(SERIES, 'pandas.core.frame.Series').
 
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
 -export([test_jun_pandas_columns/1,
@@ -11,7 +12,8 @@
     test_jun_pandas_len_index/1,
     test_jun_pandas_memory_usage/1,
     test_jun_pandas_info_columns/1,
-    test_jun_pandas_selection/1]).
+    test_jun_pandas_selection/1,
+    test_jun_pandas_single_selection/1]).
 
 all() ->
     [test_jun_pandas_columns,
@@ -19,7 +21,8 @@ all() ->
      test_jun_pandas_len_index,
      test_jun_pandas_memory_usage,
      test_jun_pandas_info_columns,
-     test_jun_pandas_selection].
+     test_jun_pandas_selection,
+     test_jun_pandas_single_selection].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -70,3 +73,8 @@ test_jun_pandas_selection([{jun_worker, Pid}, {path, Path}, _]) ->
     Out = {'pandas.core.frame.DataFrame', [<<"age">>],
         [[29], [29], [30], [40], [40], [30]]},
     ?assertEqual(Out, Erl).
+
+test_jun_pandas_single_selection([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
+    {ok, Series} = jun_pandas:single_selection(Pid, DataFrame, 'age', []),
+    ?assertMatch({?SERIES, _}, Series).
