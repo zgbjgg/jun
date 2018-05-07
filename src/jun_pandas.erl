@@ -29,7 +29,8 @@
     len_index/3,
     memory_usage/3,
     info_columns/3,
-    selection/4]).
+    selection/4,
+    single_selection/4]).
 
 -export([plot/4]).
 
@@ -121,6 +122,9 @@ selection(Pid, DataFrame, ColumnsStr, _Keywords) ->
     ColumnsTokens = string:tokens(ColumnsStr, [$,]),
     Columns = list_to_tuple([ list_to_binary(C) || C <- ColumnsTokens]),
     gen_server:call(Pid, {'core.jun', selection, [DataFrame, Columns]}, infinity).
+
+single_selection(Pid, DataFrame, Column, _Keywords) ->
+    gen_server:call(Pid, {'core.jun', single_selection, [DataFrame, Column]}, infinity).
 
 %% Plotting
 
