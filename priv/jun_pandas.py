@@ -155,7 +155,7 @@ def jun_dataframe_plot(df, save='None', keywords=[]):
 # using a single syntax such as accesing data from dataframe
 def selection(df, columns):
     if ( isinstance(df, pd.core.frame.DataFrame) ):
-        return df[list(columns)]
+        return (Atom("pandas.core.frame.DataFrame"), df[list(columns)])
     else:
         return 'error_format_data_frame_invalid'
 
@@ -280,3 +280,11 @@ def jun_pandas(fn, args, keywords=[]):
         return ','.join(str(v) for v in value)
     else:
         return value
+
+# single selection of a column, return a series data
+# since this are now supported by jun core
+def single_selection(df, column):
+    if ( isinstance(df, pd.core.frame.DataFrame) ):
+        return (Atom("pandas.core.frame.Series"), df[column])
+    else:
+        return 'error_format_data_frame_invalid'
