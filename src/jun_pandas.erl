@@ -16,7 +16,8 @@
 -export([read_csv/3,
     to_csv/3,
     to_html/3,
-    to_json/3]).
+    to_json/3,
+    to_datetime/3]).
 
 -export(['query'/4,
     head/4,
@@ -87,6 +88,9 @@ to_html(Pid, DataFrame, Keywords) ->
 
 to_json(Pid, DataFrame, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, to_json, [], 'None', Keywords]}, infinity).
+
+to_datetime(Pid, Serie, Keywords) ->
+    gen_server:call(Pid, {'core.jun.pandas', [to_datetime, [Serie], Keywords]}, infinity).
 
 %% Indexing / Iteration
 
