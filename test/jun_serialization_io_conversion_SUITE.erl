@@ -4,6 +4,7 @@
 -include_lib("eunit/include/eunit.hrl").
 
 -define(DATAFRAME, 'pandas.core.frame.DataFrame').
+-define(SERIES, 'pandas.core.frame.Series').
 
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
 -export([test_jun_pandas_read_csv/1,
@@ -11,7 +12,8 @@
     test_jun_pandas_to_html/1,
     test_jun_pandas_to_json/1,
     test_jun_pandas_to_erl/1,
-    test_jun_pandas_bad_call/1]).
+    test_jun_pandas_bad_call/1,
+    test_jun_pandas_to_datetime/1]).
 
 all() ->
     [test_jun_pandas_read_csv,
@@ -19,7 +21,8 @@ all() ->
      test_jun_pandas_to_html,
      test_jun_pandas_to_json,
      test_jun_pandas_to_erl,
-     test_jun_pandas_bad_call].
+     test_jun_pandas_bad_call,
+     test_jun_pandas_to_datetime].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -67,3 +70,9 @@ test_jun_pandas_bad_call([{jun_worker, Pid}, _, {cwd, Cwd}]) ->
     Path = list_to_atom(Cwd ++ "/../../lib/jun/test/files/enoent.txt"),
     Error = jun_pandas:read_csv(Pid, Path, []),
     ?assertMatch({error, {'exceptions.IOError', _}}, Error).
+
+test_jun_pandas_to_datetime([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
+    {ok, {?SERIES, Series}} = jun_pandas:single_selection(Pid, DataFrame, 'age', []),
+    {ok, SeriesDt} = jun_pandas:to_datetime(Pid, Series, []),
+    ?assertMatch({?SERIES, _}, SeriesDt).
