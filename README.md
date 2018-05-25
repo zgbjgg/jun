@@ -83,6 +83,7 @@ a list with the column names, the third is a list of lists with the values of ea
 |-------------------------------------|
 | **[jun_worker](docs/jun_worker.md)** |
 | **[jun_pandas](docs/jun_pandas.md)** |
+| **[jun_pandas_series](docs/jun_pandas_series.md)** |
 | **[jun_plotly](docs/jun_plotly.md)** |
 | **[jun_seaborn]()** |
 
