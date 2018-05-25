@@ -95,7 +95,7 @@ series() = {'$erlport.opaque', python, binary()}
 
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index">
   <tr>
-    <td valign="top"><a href="#combine-4">to_erl/2</a></td>
+    <td valign="top"><a href="#combine-4">combine/4</a></td>
     <td>combine two series of a dataframe in one.</td>
   </tr>
 </table>
