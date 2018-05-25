@@ -1,8 +1,6 @@
 # Module jun_worker #
 * [Description](#description)
-* [Data Types](#types)
-* [Function Index](#index)
-* [Function Details](#functions)
+* [Supported Calls](#supported-calls)
 
 The jun_worker module is responsible for creating a new process holding python environment
 into it, so any python command related to pandas, seaborn, numpy, plotly, etc. will be executed
@@ -20,6 +18,8 @@ Creates a new jun worker:
 
 	{ok, Pid} = jun_worker:start_link()
 ```
+
+<a name="supported-calls"></a>
 
 ## Supported calls
 
