@@ -119,6 +119,10 @@ series() = {'$erlport.opaque', python, binary()}
     <td>calculates the sum value of a column or in an entire grouped dataframe.</td>
   </tr>
   <tr>
+    <td valign="top"><a href="#unique-4">unique/4</a></td>
+    <td>return unique values in a column of dataframe.</td>
+  </tr>  
+  <tr>
     <td valign="top"><a href="#read-csv-2">read_csv/2</a></td>
     <td>read a csv and transforms into a valid dataframe.</td>
   </tr>
@@ -133,6 +137,10 @@ series() = {'$erlport.opaque', python, binary()}
   <tr>
     <td valign="top"><a href="#to-json-3">to_json/3</a></td>
     <td>transforms a dataframe into a json format.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#to-datetime-3">to_datetime/3</a></td>
+    <td>transforms a column of dataframe into a valid datetime dtype.</td>
   </tr>
   <tr>
     <td valign="top"><a href="#query-4">query/4</a></td>
@@ -202,6 +210,10 @@ series() = {'$erlport.opaque', python, binary()}
     <td valign="top"><a href="#drop-4">drop/4</a></td>
     <td>drops a column in a dataframe.</td>
   </tr>
+  <tr>
+    <td valign="top"><a href="#rename-4">rename/4</a></td>
+    <td>rename a column in a dataframe.</td>    
+  </tr>      
 </table>
 
 <a name="functions"></a>
@@ -269,6 +281,16 @@ sum(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataf
 
 calculates the sum value of a column or in an entire grouped dataframe.
 
+<a name="unique-4"></a>
+
+### unique/4 ###
+
+<pre><code>
+unique(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, binary()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+return the uniques data of a column in a dataframe.
+
 <a name="read-csv-2"></a>
 
 ### read_csv/2 ###
@@ -308,6 +330,16 @@ to_json(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">d
 </code></pre>
 
 transforms a dataframe into a json format.
+
+<a name="to-datetime-3"></a>
+
+### to_datetime/3 ###
+
+<pre><code>
+to_datetime(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">series()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, series :: jun_series()} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+transforms a column of dataframe into a valid datetime dtype.
 
 <a name="query-4"></a>
 
@@ -479,3 +511,11 @@ drop(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">data
 </code></pre>
 
 drops a column in a dataframe.
+
+<a name="rename-4"></a>
+
+### rename/4 ###
+
+<pre><code>
+rename(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
