@@ -336,7 +336,7 @@ transforms a dataframe into a json format.
 ### to_datetime/3 ###
 
 <pre><code>
-to_datetime(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">series()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, series :: jun_series()} | <a href="#type-jun-error">jun_error()</a>
+to_datetime(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-series">series()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, series :: jun_series()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 transforms a column of dataframe into a valid datetime dtype.
