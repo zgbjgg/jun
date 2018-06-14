@@ -288,3 +288,15 @@ def single_selection(df, column):
         return (Atom("pandas.core.frame.Series"), df[column])
     else:
         return 'error_format_data_frame_invalid'
+
+# timedelta operations
+def jun_timedelta(series, fn, axis='None', keywords=[]):
+    if isinstance(series, pd.core.frame.Series):
+        fun = getattr(series, 'dt')
+        value = getattr(fun, fn)
+        if isinstance(value, pd.core.frame.Series):
+            return (Atom("pandas.core.frame.Series"), value)
+        else:
+            return value
+    else:
+        return 'error_format_data_frame_or_serie_invalid' 
