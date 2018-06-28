@@ -17,7 +17,8 @@
     to_csv/3,
     to_html/3,
     to_json/3,
-    to_datetime/3]).
+    to_datetime/3,
+    read_sql/3]).
 
 -export(['query'/4,
     head/4,
@@ -91,6 +92,26 @@ to_json(Pid, DataFrame, Keywords) ->
 
 to_datetime(Pid, Serie, Keywords) ->
     gen_server:call(Pid, {'core.jun.pandas', [to_datetime, [Serie], Keywords]}, infinity).
+
+read_sql(Pid, Sql, Keywords) ->
+    % in the original read_sql you need a connection but from this step we dont have that
+    % so first create a valid conn then connect
+    DSN = proplists:get_value(dsn, Keywords),
+    Username = proplists:get_value(username, Keywords),
+    Password = proplists:get_value(password, Keywords),
+    Database = proplists:get_value(database, Keywords),
+    case jun_sql_connector:conn(Pid, DSN, Username, Password, Database) of
+        {ok, {'pyodbc.conn', Conn}} ->
+            Keywords0 = lists:filter(fun({dsn, _}) -> false;
+                ({username, _}) -> false;
+                ({password, _}) -> false;
+                ({database, _}) -> false;
+                (_)             -> true
+            end, Keywords) ++ [{conn, Conn}],
+            gen_server:call(Pid, {'core.jun.pandas', [read_sql, [Sql], Keywords0]}, infinity);
+        Error                       ->
+            Error
+    end.
 
 %% Indexing / Iteration
 
