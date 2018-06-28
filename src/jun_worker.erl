@@ -23,6 +23,9 @@
 -define(JUN_SEABORN, jun_seaborn).
 -define(JUN_SERIES, jun_series).
 -define(JUN_TIMEDELTA, jun_timedelta).
+% for sql
+-define(JUN_SQL_CONNECTOR, jun_sql_connector).
+-define(CONN, conn).
 
 % the values can be override during initialization
 -record(state, {py_pid = undefined :: pid(),
@@ -116,6 +119,15 @@ handle_call({'core.jun.series', Args}, _From, State) ->
 handle_call({'core.jun.timedelta', Args}, _From, State) ->
     PyPid = State#state.py_pid,
     case catch python:call(PyPid, ?JUN_PANDAS, ?JUN_TIMEDELTA, Args) of
+        {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
+            {reply, {error, {Class, Argument}}, State};
+        Return                                           ->
+            {reply, {ok, Return}, State}
+    end;
+
+handle_call({'core.jun.sql', Args}, _From, State) ->
+    PyPid = State#state.py_pid,
+    case catch python:call(PyPid, ?JUN_SQL_CONNECTOR, ?CONN, Args) of
         {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
             {reply, {error, {Class, Argument}}, State};
         Return                                           ->
