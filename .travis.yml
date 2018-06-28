@@ -11,6 +11,7 @@ install:
   - sudo pip install cufflinks --upgrade
   - sudo pip install seaborn
   - sudo pip install --upgrade IPython
+  - sudo pip install pyodbc
   - sudo pip install codecov
 after_success: "codecov"
 otp_release:
