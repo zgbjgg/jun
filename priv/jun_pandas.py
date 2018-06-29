@@ -5,6 +5,7 @@ import matplotlib as mpl
 import pandas as pd
 import sklearn as skl
 import operator as opt
+import pyodbc as pyodbc
 from erlport.erlterms import Atom
 mpl.use('Agg')
 opers = {'<': opt.lt,
@@ -13,6 +14,7 @@ opers = {'<': opt.lt,
          '>=': opt.ge,
          '==': opt.eq,
          '!=': opt.ne}
+sql = [ 'dsn', 'username', 'password', 'database']
 
 # simple return sys version
 def version():
@@ -258,8 +260,12 @@ def isexpression_from_erl(expression):
 def jun_pandas(fn, args, keywords=[]):
     args = [ islambda_from_erl(arg) for arg in args ]
     fun = getattr(pd, fn)
+    # we need to check the conn if using `read_sql` since conn
+    # cannot be pickled :-(
+    if fn == 'read_sql':
+        keywords.extend([('con', conn(keywords, sql))])
     # make dict from keywords even if empty!
-    kwargs = dict([ (k, isexpression_from_erl(v)) for (k, v) in keywords ])
+    kwargs = dict([ (k, isexpression_from_erl(v)) for (k, v) in keywords if not k in sql])
     # explicity execute the fun
     if len(args) == 0:
         value = fun(**kwargs)
@@ -299,4 +305,24 @@ def jun_timedelta(series, fn, axis='None', keywords=[]):
         else:
             return value
     else:
-        return 'error_format_data_frame_or_serie_invalid' 
+        return 'error_format_data_frame_or_serie_invalid'
+
+# make a valid connection for sql using
+# pyodbc, this will return an opaque connection
+# to erlang, but the jun_pandas module will use that
+# to use related functions using such connection.
+def conn(keywords, sql):
+    # ensure that ini file exists to generate the connection
+    for (k, v) in keywords:
+        if k in sql:
+            if k == 'dsn':
+                dsn = 'DSN=' + v
+            elif k == 'username':
+                username = 'UID=' + v
+            elif k == 'password':
+                password = 'PWD=' + v
+            elif k == 'database':
+                database = 'DATABASE=' + v
+    setup_conn = ( dsn, username, password, database )
+    conn = pyodbc.connect(';'.join(str(arg) for arg in setup_conn))
+    return conn
