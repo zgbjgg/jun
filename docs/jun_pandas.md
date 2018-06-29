@@ -143,6 +143,10 @@ series() = {'$erlport.opaque', python, binary()}
     <td>transforms a column of dataframe into a valid datetime dtype.</td>
   </tr>
   <tr>
+    <td valign="top"><a href="#read-sql-2">read_sql/2</a></td>
+    <td>read a sql query and transforms into a valid dataframe.</td>
+  </tr>
+  <tr>
     <td valign="top"><a href="#query-4">query/4</a></td>
     <td>execute a valid query into dataframe.</td>
   </tr>
@@ -340,6 +344,16 @@ to_datetime(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-series">
 </code></pre>
 
 transforms a column of dataframe into a valid datetime dtype.
+
+<a name="read-sql-2"></a>
+
+### read_sql/2 ###
+
+<pre><code>
+read_sql(<a href="#type-jun-worker">jun_worker()</a>, sql_query :: atom()) -> {ok, <a href="#type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+read a sql query and transforms into a valid dataframe.
 
 <a name="query-4"></a>
 
