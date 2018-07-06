@@ -19,13 +19,9 @@
 -define(JUN_CORE, jun_core).
 -define(JUN_DATAFRAME_PLOT, jun_dataframe_plot).
 -define(JUN_PLOTLY, jun_plotly).
--define(JUN_DATAFRAME_IPLOT, jun_dataframe_iplot).
 -define(JUN_SEABORN, jun_seaborn).
 -define(JUN_SERIES, jun_series).
 -define(JUN_TIMEDELTA, jun_timedelta).
-% for sql
--define(JUN_SQL_CONNECTOR, jun_sql_connector).
--define(CONN, conn).
 
 % the values can be override during initialization
 -record(state, {py_pid = undefined :: pid(),
@@ -89,9 +85,10 @@ handle_call({'core.jun.dataframe.plot', Args}, _From, State) ->
             {reply, {ok, Return}, State}
     end;
 
-handle_call({'core.jun.dataframe.iplot', Args}, _From, State) ->
+% on this call Fn comes from main interface
+handle_call({'core.jun.dataframe.iplot', [Fn | Args]}, _From, State) ->
     PyPid = State#state.py_pid,
-    case catch python:call(PyPid, ?JUN_PLOTLY, ?JUN_DATAFRAME_IPLOT, Args) of
+    case catch python:call(PyPid, ?JUN_PLOTLY, Fn, Args) of
         {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
             {reply, {error, {Class, Argument}}, State};
         Return                                           ->
@@ -119,15 +116,6 @@ handle_call({'core.jun.series', Args}, _From, State) ->
 handle_call({'core.jun.timedelta', Args}, _From, State) ->
     PyPid = State#state.py_pid,
     case catch python:call(PyPid, ?JUN_PANDAS, ?JUN_TIMEDELTA, Args) of
-        {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
-            {reply, {error, {Class, Argument}}, State};
-        Return                                           ->
-            {reply, {ok, Return}, State}
-    end;
-
-handle_call({'core.jun.sql', Args}, _From, State) ->
-    PyPid = State#state.py_pid,
-    case catch python:call(PyPid, ?JUN_SQL_CONNECTOR, ?CONN, Args) of
         {'EXIT', {{python, Class, Argument, _Stack}, _}} ->
             {reply, {error, {Class, Argument}}, State};
         Return                                           ->
