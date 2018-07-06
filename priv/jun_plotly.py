@@ -4,6 +4,10 @@ import numpy as np
 import pandas as pd
 import plotly.plotly as py
 import cufflinks as cf
+from erlport.erlterms import Atom
+
+# define a global dict to store items that not working pickled
+pickling = {}
 
 # simple return sys version
 def version():
@@ -12,7 +16,7 @@ def version():
 # common helper for plotting functions in plotly
 # using cufflinks, wrapped over erlang,
 # return the url holding the plot to use in the client 
-def jun_dataframe_iplot(df, _filename, keywords=[]):
+def jun_iplot_dataframe(df, key, keywords=[]):
     if ( isinstance(df, pd.core.frame.DataFrame) ):
         # make dict from keywords even if empty!
         kwargs = dict(keywords)
@@ -26,8 +30,20 @@ def jun_dataframe_iplot(df, _filename, keywords=[]):
           del kwargs['y']
         # explicity execute the fun
         iplot = df.iplot(**kwargs)
-        # since iplot is an object of plotly.tools.PlotlyDisplay class, then make as plot
-        url = py.plot(iplot, auto_open=False) 
-        return url
+        pickling[key] = iplot
+        # use get data since this should be achive as figure
+        return (Atom("plotly.iplot"), key)
     else:
         return 'error_format_data_frame_invalid'
+
+def jun_iplot_plot(iplot, _filename, keywords=[]):
+    iplot = pickling[iplot]
+    url = py.plot(iplot, auto_open=False)
+    return url
+
+def jun_iplot_extend(iplot_x, iplot_y, keywords=[]):
+    iplot_yy = pickling[iplot_y]
+    iplot_xx = pickling[iplot_x]
+    iplot_yy['data'].extend(iplot_xx['data'])
+    pickling[iplot_y] = iplot_yy
+    return (Atom("plotly.iplot"), iplot_y)
