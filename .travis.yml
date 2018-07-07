@@ -7,7 +7,7 @@ install:
   - sudo pip install matplotlib
   - sudo pip install sklearn
   - sudo pip install scipy
-  - sudo pip install plotly --upgrade
+  - sudo pip install plotly==2.6.0 --upgrade
   - sudo pip install cufflinks --upgrade
   - sudo pip install seaborn
   - sudo pip install --upgrade IPython
