@@ -8,12 +8,14 @@
 
 -export([iplot/4,
     plot/4,
-    extend/4]).
+    extend/4,
+    get_figure/4]).
 
 % since there are a low cases of plotly lib usage for now define separately
 -define(JUN_IPLOT_DATAFRAME, jun_iplot_dataframe).
 -define(JUN_IPLOT_PLOT, jun_iplot_plot).
 -define(JUN_IPLOT_EXTEND, jun_iplot_extend).
+-define(JUN_IPLOT_GET_FIGURE, jun_iplot_get_figure).
 
 %% iPlotting
 
@@ -25,3 +27,6 @@ plot(Pid, IPlot, Filename, Keywords) ->
 
 extend(Pid, IPlotX, IPlotY, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe.iplot', [?JUN_IPLOT_EXTEND, IPlotX, IPlotY, Keywords]}, infinity).
+
+get_figure(Pid, IPlot, Key, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe.iplot', [?JUN_IPLOT_GET_FIGURE, IPlot, Key, Keywords]}, infinity).

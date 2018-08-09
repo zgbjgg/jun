@@ -47,3 +47,8 @@ def jun_iplot_extend(iplot_x, iplot_y, keywords=[]):
     iplot_yy['data'].extend(iplot_xx['data'])
     pickling[iplot_y] = iplot_yy
     return (Atom("plotly.iplot"), iplot_y)
+
+def jun_iplot_get_figure(url, key, keywords=[]):
+    iplot = py.get_figure(url)
+    pickling[key] = iplot
+    return (Atom("plotly.iplot"), key)
