@@ -10,13 +10,15 @@
 -export([test_jun_pandas_iplot/1,
     test_jun_pandas_iplot_error/1,
     test_jun_pandas_iplot_plot/1,
-    test_jun_pandas_iplot_extend/1]).
+    test_jun_pandas_iplot_extend/1,
+    test_jun_pandas_iplot_get_figure/1]).
 
 all() ->
     [test_jun_pandas_iplot,
      test_jun_pandas_iplot_error,
      test_jun_pandas_iplot_plot,
-     test_jun_pandas_iplot_extend].
+     test_jun_pandas_iplot_extend,
+     test_jun_pandas_iplot_get_figure].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -57,3 +59,12 @@ test_jun_pandas_iplot_extend([{jun_worker, Pid}, {path, Path}, _]) ->
         {'x', 'name'}, {'y', 'age'}, {'asFigure', true}]),
     IPlot = jun_plotly:extend(Pid, IPlotX, IPlotY, []),
     ?assertMatch({ok, {?PLOTLY, _}}, IPlot).
+
+test_jun_pandas_iplot_get_figure([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
+    {ok, {?PLOTLY, IPlot}} = jun_plotly:iplot(Pid, DataFrame, 'line/plot', [{'kind', 'line'},
+        {'x', 'name'}, {'y', 'age'}, {'asFigure', true}]),
+    {ok, Plot} = jun_plotly:plot(Pid, IPlot, 'line/plot', []),
+    % converts to again into figure
+    IPlotX = jun_plotly:get_figure(Pid, list_to_atom(Plot), 'line/plotx', []),
+    ?assertMatch({ok, {?PLOTLY, _}}, IPlotX).
