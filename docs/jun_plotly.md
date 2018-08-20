@@ -48,12 +48,30 @@ dataframe() = {'$erlport.opaque', python, binary()}
 keywords() = [{key :: atom(), value :: any()}, ...]
 </code></pre>
 
+### <a name="type-plotly">plotly()</a> ###
+
+<pre><code>
+plotly() = {'plotly.iplot', atom()}
+</code></pre>
+
 ## Function Index ##
 
 <table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index">
   <tr>
     <td valign="top"><a href="#iplot-4">iplot/4</a></td>
     <td>creates a new plot into plotly using a dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#plot-4">plot/4</a></td>
+    <td>creates a new plot into a valid plotly url.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#extend-4">extend/4</a></td>
+    <td>extends two plots into one (like merge them).</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#get-figure-4">get_figure/4</a></td>
+    <td>gets the figure (data representation) from a valid plotly url.</td>
   </tr>
 </table>
 
@@ -66,8 +84,38 @@ keywords() = [{key :: atom(), value :: any()}, ...]
 ### iplot/4 ###
 
 <pre><code>
-iplot(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, filename :: atom(), <a href="#type-keywords">keywords()</a>) -> {error, no_opaque_dataframe} | {ok, <a href="#type-erlang-dataframe">erlang_dataframe()</a>} 
+iplot(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, filename :: atom(), <a href="#type-keywords">keywords()</a>) -> {error, no_opaque_dataframe} | {ok, <a href="#type-plotly">plotly()</a>} 
 </code></pre>
 <br />
 
 creates a new plot into plotly using a dataframe.
+
+<a name="plot-4"></a>
+
+### plot/4 ###
+
+<pre><code>
+plot(<a href="#type-jun-worker">jun_worker()</a>, iplot :: atom(), filename :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, url :: string()}
+</code></pre>
+
+creates a new plot into a valid plotly url.
+
+<a name="extend-4"></a>
+
+### extend/4 ###
+
+<pre><code>
+extend(<a href="#type-jun-worker">jun_worker()</a>, iplotx :: atom(), iploty :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="#type-plotly">plotly()</a>} 
+</code></pre>
+
+extends two plots into one (like merge them).
+
+<a name="get-figure-4"></a>
+
+### get_figure/4 ###
+
+<pre><code>
+get_figure(<a href="#type-jun-worker">jun_worker()</a>, url :: atom(), filename :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="#type-plotly">plotly()</a>}
+</code></pre>
+
+get the figure (data representation) from a valid plotly url.
