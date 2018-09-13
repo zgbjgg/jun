@@ -36,9 +36,9 @@ def jun_iplot_dataframe(df, key, keywords=[]):
     else:
         return 'error_format_data_frame_invalid'
 
-def jun_iplot_plot(iplot, _filename, keywords=[]):
+def jun_iplot_plot(iplot, filename, keywords=[]):
     iplot = pickling[iplot]
-    url = py.plot(iplot, auto_open=False)
+    url = py.plot(iplot, filename=filename, auto_open=False)
     return url
 
 def jun_iplot_extend(iplot_x, iplot_y, keywords=[]):

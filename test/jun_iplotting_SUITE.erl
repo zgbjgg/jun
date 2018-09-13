@@ -34,37 +34,37 @@ end_per_testcase(_, _Config) ->
 
 test_jun_pandas_iplot([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
-    IPlot = jun_plotly:iplot(Pid, DataFrame, 'line/iplot', [{'kind', 'line'},
+    IPlot = jun_plotly:iplot(Pid, DataFrame, 'iplot', [{'kind', 'line'},
         {'x', 'name'}, {'y', 'age'}, {'asFigure', true}]),
     ?assertMatch({ok, {?PLOTLY, _}}, IPlot).
 
 test_jun_pandas_iplot_error([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
-    PlotError = jun_plotly:iplot(Pid, DataFrame, 'unknown/iplot', [{'kind', 'unknown'},
+    PlotError = jun_plotly:iplot(Pid, DataFrame, 'iplot', [{'kind', 'unknown'},
         {'x', 'name'}, {'y', 'unknown'}, {'asFigure', true}]),
     ?assertMatch({error, _}, PlotError).
 
 test_jun_pandas_iplot_plot([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
-    {ok, {?PLOTLY, IPlot}} = jun_plotly:iplot(Pid, DataFrame, 'line/plot', [{'kind', 'line'},
+    {ok, {?PLOTLY, IPlot}} = jun_plotly:iplot(Pid, DataFrame, 'plot', [{'kind', 'line'},
         {'x', 'name'}, {'y', 'age'}, {'asFigure', true}]),
-    Plot = jun_plotly:plot(Pid, IPlot, 'line/plot', []),
+    Plot = jun_plotly:plot(Pid, IPlot, 'plot_t1', []),
     ?assertMatch({ok, _}, Plot).
 
 test_jun_pandas_iplot_extend([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
-    {ok, {?PLOTLY, IPlotX}} = jun_plotly:iplot(Pid, DataFrame, 'line/plot', [{'kind', 'line'},
+    {ok, {?PLOTLY, IPlotX}} = jun_plotly:iplot(Pid, DataFrame, 'plotx', [{'kind', 'line'},
         {'x', 'name'}, {'y', 'age'}, {'asFigure', true}]),
-    {ok, {?PLOTLY, IPlotY}} = jun_plotly:iplot(Pid, DataFrame, 'line2/plot', [{'kind', 'line'},
+    {ok, {?PLOTLY, IPlotY}} = jun_plotly:iplot(Pid, DataFrame, 'ploty', [{'kind', 'line'},
         {'x', 'name'}, {'y', 'age'}, {'asFigure', true}]),
     IPlot = jun_plotly:extend(Pid, IPlotX, IPlotY, []),
     ?assertMatch({ok, {?PLOTLY, _}}, IPlot).
 
 test_jun_pandas_iplot_get_figure([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
-    {ok, {?PLOTLY, IPlot}} = jun_plotly:iplot(Pid, DataFrame, 'line/plot', [{'kind', 'line'},
+    {ok, {?PLOTLY, IPlot}} = jun_plotly:iplot(Pid, DataFrame, 'plot', [{'kind', 'line'},
         {'x', 'name'}, {'y', 'age'}, {'asFigure', true}]),
-    {ok, Plot} = jun_plotly:plot(Pid, IPlot, 'line/plot', []),
+    {ok, Plot} = jun_plotly:plot(Pid, IPlot, 'plot_t2', []),
     % converts to again into figure
-    IPlotX = jun_plotly:get_figure(Pid, list_to_atom(Plot), 'line/plotx', []),
+    IPlotX = jun_plotly:get_figure(Pid, list_to_atom(Plot), 'plotx', []),
     ?assertMatch({ok, {?PLOTLY, _}}, IPlotX).
