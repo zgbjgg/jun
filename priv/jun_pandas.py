@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import sys
 import scipy as sp
 import numpy as np
@@ -7,6 +10,7 @@ import sklearn as skl
 import operator as opt
 import pyodbc as pyodbc
 from erlport.erlterms import Atom
+from dateutil.parser import parse
 mpl.use('Agg')
 opers = {'<': opt.lt,
          '>': opt.gt,
@@ -168,7 +172,11 @@ def legacy_query(df, column, operand, value):
     if ( isinstance(df, pd.core.frame.DataFrame) | isinstance(df, pd.core.groupby.DataFrameGroupBy) ):
         operation = opers[operand]
         if isinstance(value, str):
-            newdf = df[df[column].str.contains(value)] # since str cannot be evaluated with '=='
+            try:
+                parse(value, False)
+                newdf = df[operation(df[column], value)]
+            except ValueError:
+                newdf = df[df[column].str.contains(value)] # since str cannot be evaluated with '=='
         else:
             newdf = df[operation(df[column], value)]
 
