@@ -47,7 +47,8 @@
     legacy_assignment/4]).
 
 -export([drop/4,
-    rename/4]).
+    rename/4,
+    append/4]).
 
 %% DataFrames in erlang term
 
@@ -189,3 +190,6 @@ drop(Pid, DataFrame, Column, Keywords) ->
 
 rename(Pid, DataFrame, _Column, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, rename, [], 'None', Keywords]}, infinity).
+
+append(Pid, DataFrame, DataFrameToAppend, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, append, [DataFrameToAppend], 'None', Keywords]}, infinity).
