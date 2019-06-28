@@ -18,7 +18,8 @@
     to_html/3,
     to_json/3,
     to_datetime/3,
-    read_sql/3]).
+    read_sql/3,
+    read_string/3]).
 
 -export(['query'/4,
     head/4,
@@ -96,6 +97,9 @@ to_datetime(Pid, Serie, Keywords) ->
 read_sql(Pid, Sql, Keywords) ->
     % as te original setup, we need data to create connection from py interface
     gen_server:call(Pid, {'core.jun.pandas', [read_sql, [Sql], Keywords]}, infinity).
+
+read_string(Pid, String, Keywords) ->
+    gen_server:call(Pid, {'core.jun', read_string, [String, Keywords]}, infinity).
 
 %% Indexing / Iteration
 

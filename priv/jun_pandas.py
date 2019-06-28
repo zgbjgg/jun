@@ -9,6 +9,7 @@ import pandas as pd
 import sklearn as skl
 import operator as opt
 import pyodbc as pyodbc
+from pandas.compat import StringIO
 from erlport.erlterms import Atom
 from dateutil.parser import parse
 mpl.use('Agg')
@@ -334,3 +335,14 @@ def conn(keywords, sql):
     setup_conn = ( dsn, username, password, database )
     conn = pyodbc.connect(';'.join(str(arg) for arg in setup_conn))
     return conn
+
+# custom fun to treat string as a new dataframe
+# this from python is a custom code so JUN implements directly from
+# its API
+def read_string(string, keywords):
+    args = [StringIO(string.to_string())]
+    fun = getattr(pd, 'read_csv')
+    kwargs = dict(keywords)
+    # explicity execute the fun
+    value = fun(*args, **kwargs)
+    return (Atom("pandas.core.frame.DataFrame"), value)
