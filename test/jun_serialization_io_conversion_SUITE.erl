@@ -15,7 +15,8 @@
     test_jun_pandas_to_erl/1,
     test_jun_pandas_bad_call/1,
     test_jun_pandas_to_datetime/1,
-    test_jun_pandas_read_sql/1]).
+    test_jun_pandas_read_sql/1,
+    test_jun_pandas_read_string/1]).
 
 all() ->
     [test_jun_pandas_read_csv,
@@ -25,7 +26,8 @@ all() ->
      test_jun_pandas_to_erl,
      test_jun_pandas_bad_call,
      test_jun_pandas_to_datetime,
-     test_jun_pandas_read_sql].
+     test_jun_pandas_read_sql,
+     test_jun_pandas_read_string].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -83,4 +85,10 @@ test_jun_pandas_to_datetime([{jun_worker, Pid}, {path, Path}, _]) ->
 test_jun_pandas_read_sql([{jun_worker, Pid} | _]) ->
     {error,{Error, _}} = jun_pandas:read_sql(Pid, ['SELECT * FROM jun.table'], [{dsn, 'DSN'},
         {username, 'jun'}, {password, 'jun'}, {database, 'jun-database'}]),
-    ?assertEqual('pyodbc.InterfaceError', Error). 
+    ?assertEqual('pyodbc.InterfaceError', Error).
+
+test_jun_pandas_read_string([{jun_worker, Pid}, _, {cwd, Cwd} | _]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_string(Pid, "id,name\n1,Tutti", []),
+    {ok, Csv} = jun_pandas:to_csv(Pid, DataFrame, []),
+    {ok, Out} = file:read_file(Cwd ++ "/../../lib/jun/test/outputs/out.str"),
+    ?assertEqual(Out, Csv).
