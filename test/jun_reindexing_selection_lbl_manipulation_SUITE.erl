@@ -7,11 +7,13 @@
 
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
 -export([test_jun_pandas_drop/1,
-    test_jun_pandas_rename/1]).
+    test_jun_pandas_rename/1,
+    test_jun_pandas_append/1]).
 
 all() ->
     [test_jun_pandas_drop,
-     test_jun_pandas_rename].
+     test_jun_pandas_rename,
+     test_jun_pandas_append].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -41,3 +43,10 @@ test_jun_pandas_rename([{jun_worker, Pid}, {path, Path}, _]) ->
     ?assertEqual({'pandas.core.frame.DataFrame', [<<"name">>, <<"agex">>], [[<<"Allison">>,29],
         [<<"George">>,29], [<<"Kristen">>,30], [<<"Debbie">>,40], [<<"Bjork">>,40],
         [<<"Katy">>,30]]}, Erl).
+
+test_jun_pandas_append([{jun_worker, Pid} | _]) ->
+    {ok, {?DATAFRAME, DataFrameA}} = jun_pandas:read_string(Pid, "id,name\n1,Tutti", []),
+    {ok, {?DATAFRAME, DataFrameB}} = jun_pandas:read_string(Pid, "id,name\n2,Ziggy", []),
+    {ok, {?DATAFRAME, FinalDataFrame}} = jun_pandas:append(Pid, DataFrameA, DataFrameB, []),
+    {ok, Erl} = jun_pandas:to_erl(Pid, FinalDataFrame),
+    ?assertEqual({'pandas.core.frame.DataFrame', [<<"id">>, <<"name">>], [[1, <<"Tutti">>], [2, <<"Ziggy">>]]}, Erl).
