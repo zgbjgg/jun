@@ -218,6 +218,14 @@ series() = {'$erlport.opaque', python, binary()}
     <td valign="top"><a href="#rename-4">rename/4</a></td>
     <td>rename a column in a dataframe.</td>    
   </tr>      
+  <tr>
+    <td valign="top"><a href="#read-string-3">read_string/3</a></td>
+    <td>reads a string as a csv into a valid dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#append-4">append/4</a></td>
+    <td>appends a dataframe in another dataframe (mix).</td>
+  </tr>
 </table>
 
 <a name="functions"></a>
@@ -533,3 +541,25 @@ drops a column in a dataframe.
 <pre><code>
 rename(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
+
+renames a column in a dataframe.
+
+<a name="read-string-3"></a>
+
+### read_string/3 ###
+
+<pre><code>
+read_string(<a href="#type-jun-worker">jun_worker()</a>, string :: string(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+reads a string as a csv into a valid dataframe.
+
+<a name="append-4"></a>
+
+### append/4 ###
+
+<pre><code>
+append(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+appends a dataframe in another dataframe (mix).
