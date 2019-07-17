@@ -11,8 +11,6 @@
 
 JUN is a wrapper written in erlang to execute pandas, plotly, seaborn functions and manipuling dataframes creating an isolated environment, so you can handle multiple environments to treat dataframes in each of one them.
 
-This project is under development and should not be used in production, it's not ready for that.
-
 ### Creating an environment
 
 To create an environment you need start a jun worker:
@@ -29,7 +27,7 @@ This will create and hold your environment in the `Pid` so you can start with th
 For now the only way to load a dataframe into jun is reading a csv (in later version we are planning support all methods of pandas api):
 
 ```erlang
-(jun@hurakann)2> {ok, {_, DataFrame}} = jun_pandas:read_csv(Pid, '/file.csv').
+(jun@hurakann)2> {ok, {_, DataFrame}} = jun_pandas:read_csv(Pid, '/file.csv', []).
 {ok,{'pandas.core.frame.DataFrame', {'$erlport.opaque',python,
                        <<128,2,99,112,97,110,100,97,115,46,99,111,114,101,46,
                          102,114,97,109,101,10,68,97,116,...>>}}}
@@ -40,7 +38,7 @@ this dataframe is stored into `DataFrame` variable, so you can use for other pur
 
 ### Manipulating dataframe
 
-Now it's time to use some functions over our datafrane previously loaded, for example sum all values of _age_ column:
+Now it's time to use some functions over our dataframe previously loaded, for example sum all values of *_age_* column:
 
 ```erlang
 (jun@hurakann)3> jun_pandas:sum(Pid, DataFrame, age, []).
@@ -60,7 +58,7 @@ All errors will raise as a python errors, describing the class and arguments:
 
 ### Readable Data Frames into Erlang VM
 
-If you noticed, we are working with `opaque` terms (serialization),, this is because if we design a encoder/decoder for an erlang term to data frame in every execution
+If you noticed, we are working with `opaque` terms (serialization), this is because if we design a encoder/decoder for an erlang term to data frame in every execution
 this will be a very expensive task, so we decide use opaque terms, however sometimes you need to know the data frame in a readable syntax, for that purpose we design
 a single encoder:
 
