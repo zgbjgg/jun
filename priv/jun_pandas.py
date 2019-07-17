@@ -56,6 +56,8 @@ def jun_dataframe(df, fn, args, axis='None', keywords=[]):
             return (Atom("pandas.core.frame.Series"), value)
         elif isinstance(value, np.ndarray):
             return ','.join(str(v) for v in value)
+        elif value is None: # commonly when fun applies over callable object
+            return (Atom("pandas.core.frame.DataFrame"), df)
         else:
             return value
     else:
