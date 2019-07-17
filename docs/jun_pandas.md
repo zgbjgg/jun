@@ -226,6 +226,18 @@ series() = {'$erlport.opaque', python, binary()}
     <td valign="top"><a href="#append-4">append/4</a></td>
     <td>appends a dataframe in another dataframe (mix).</td>
   </tr>
+  <tr>
+    <td valign="top"><a href="#update-4">update/4</a></td>
+    <td>updates a dataframe with another dataframe by align indexes.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#set-index-4">set_index/4</a></td>
+    <td>sets index in a dataframe.</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#reset-index-4">reset_index/4</a></td>
+    <td>resets index in a dataframe</td>
+  </tr>
 </table>
 
 <a name="functions"></a>
@@ -563,3 +575,27 @@ append(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">da
 </code></pre>
 
 appends a dataframe in another dataframe (mix).
+
+### update/4 ###
+
+<pre><code>
+update(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+updates a dataframe with another dataframe by align indexes.
+
+### set_index/4 ###
+
+<pre><code>
+set_index(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+sets index in a dataframe.
+
+### reset_index/4 ###
+
+<pre><code>
+reset_index(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+resets index in a dataframe.
