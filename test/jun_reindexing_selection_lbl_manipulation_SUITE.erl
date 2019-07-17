@@ -8,12 +8,18 @@
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
 -export([test_jun_pandas_drop/1,
     test_jun_pandas_rename/1,
-    test_jun_pandas_append/1]).
+    test_jun_pandas_append/1,
+    test_jun_pandas_update/1,
+    test_jun_pandas_set_index/1,
+    test_jun_pandas_reset_index/1]).
 
 all() ->
     [test_jun_pandas_drop,
      test_jun_pandas_rename,
-     test_jun_pandas_append].
+     test_jun_pandas_append,
+     test_jun_pandas_update,
+     test_jun_pandas_set_index,
+     test_jun_pandas_reset_index].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -50,3 +56,30 @@ test_jun_pandas_append([{jun_worker, Pid} | _]) ->
     {ok, {?DATAFRAME, FinalDataFrame}} = jun_pandas:append(Pid, DataFrameA, DataFrameB, []),
     {ok, Erl} = jun_pandas:to_erl(Pid, FinalDataFrame),
     ?assertEqual({'pandas.core.frame.DataFrame', [<<"id">>, <<"name">>], [[1, <<"Tutti">>], [2, <<"Ziggy">>]]}, Erl).
+
+test_jun_pandas_update([{jun_worker, Pid} | _]) ->
+    {ok, {?DATAFRAME, DataFrameA}} = jun_pandas:read_string(Pid, "id,name\n1,Tutti\n2,Ziggy", []),
+    {ok, {?DATAFRAME, IndexDataFrameA}} = jun_pandas:set_index(Pid, DataFrameA, 'id', [{'inplace', true}]),
+    {ok, {?DATAFRAME, DataFrameB}} = jun_pandas:read_string(Pid, "id,name\n2,Ziggyfredo", []),
+    {ok, {?DATAFRAME, IndexDataFrameB}} = jun_pandas:set_index(Pid, DataFrameB, 'id', [{'inplace', true}]),
+    {ok, {?DATAFRAME, UpdatedDataFrame}} = jun_pandas:update(Pid, IndexDataFrameA, IndexDataFrameB, []),
+    {ok, {?DATAFRAME, FinalDataFrame}} = jun_pandas:reset_index(Pid, UpdatedDataFrame, 'None', []),
+    {ok, Erl} = jun_pandas:to_erl(Pid, FinalDataFrame),
+    ?assertEqual({'pandas.core.frame.DataFrame', [id, <<"name">>], [[1, <<"Tutti">>], [2, <<"Ziggyfredo">>]]}, Erl).
+
+test_jun_pandas_set_index([{jun_worker, Pid}, {path, Path} | _]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
+    {ok, {?DATAFRAME, IndexDataFrame}} = jun_pandas:set_index(Pid, DataFrame, 'age', [{'inplace', true}]),
+    {ok, Erl} = jun_pandas:to_erl(Pid, IndexDataFrame),
+    ?assertEqual({'pandas.core.frame.DataFrame', [<<"name">>], [[<<"Allison">>],
+        [<<"George">>], [<<"Kristen">>], [<<"Debbie">>], [<<"Bjork">>],
+        [<<"Katy">>]]}, Erl).
+
+test_jun_pandas_reset_index([{jun_worker, Pid}, {path, Path} | _]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
+    {ok, {?DATAFRAME, IndexDataFrame}} = jun_pandas:set_index(Pid, DataFrame, 'age', [{'inplace', true}]),
+    {ok, {?DATAFRAME, ResetIndexDataFrame}} = jun_pandas:reset_index(Pid, IndexDataFrame, 'None', []),
+    {ok, Erl} = jun_pandas:to_erl(Pid, ResetIndexDataFrame),
+    ?assertEqual({'pandas.core.frame.DataFrame', [age,<<"name">>], [[29,<<"Allison">>],
+        [29,<<"George">>], [30,<<"Kristen">>], [40,<<"Debbie">>], [40,<<"Bjork">>],
+        [30,<<"Katy">>]]}, Erl).
