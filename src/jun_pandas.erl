@@ -48,7 +48,10 @@
 
 -export([drop/4,
     rename/4,
-    append/4]).
+    append/4,
+    update/4,
+    set_index/4,
+    reset_index/4]).
 
 %% DataFrames in erlang term
 
@@ -193,3 +196,12 @@ rename(Pid, DataFrame, _Column, Keywords) ->
 
 append(Pid, DataFrame, DataFrameToAppend, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, append, [DataFrameToAppend], 'None', Keywords]}, infinity).
+
+update(Pid, DataFrame, DataFrameAsRow, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, update, [DataFrameAsRow], 'None', Keywords]}, infinity).
+
+set_index(Pid, DataFrame, Column, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, set_index, [Column], 'None', Keywords]}, infinity).
+
+reset_index(Pid, DataFrame, _Axis, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, reset_index, [], 'None', Keywords]}, infinity).
