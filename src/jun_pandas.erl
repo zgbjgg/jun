@@ -51,7 +51,8 @@
     append/4,
     update/4,
     set_index/4,
-    reset_index/4]).
+    reset_index/4,
+    drop_duplicates/4]).
 
 %% DataFrames in erlang term
 
@@ -205,3 +206,6 @@ set_index(Pid, DataFrame, Column, Keywords) ->
 
 reset_index(Pid, DataFrame, _Axis, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, reset_index, [], 'None', Keywords]}, infinity).
+
+drop_duplicates(Pid, DataFrame, Column, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, drop_duplicates, [Column], 'None', Keywords]}, infinity).
