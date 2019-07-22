@@ -238,6 +238,10 @@ series() = {'$erlport.opaque', python, binary()}
     <td valign="top"><a href="#reset-index-4">reset_index/4</a></td>
     <td>resets index in a dataframe</td>
   </tr>
+  <tr>
+    <td valign="top"><a href="#drop-duplicates-4">drop_duplicates/4</a></td>
+    <td>drops rows duplicated in a dataframe following the criteria passed over keywords</td>
+  </tr>
 </table>
 
 <a name="functions"></a>
@@ -599,3 +603,11 @@ reset_index(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-datafram
 </code></pre>
 
 resets index in a dataframe.
+
+### drop_duplicates/4 ###
+
+<pre><code>
+drop_duplicates(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: string(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+drops rows duplicated in a dataframe following the criteria passed over keywords.
