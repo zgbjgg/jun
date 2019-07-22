@@ -11,7 +11,8 @@
     test_jun_pandas_append/1,
     test_jun_pandas_update/1,
     test_jun_pandas_set_index/1,
-    test_jun_pandas_reset_index/1]).
+    test_jun_pandas_reset_index/1,
+    test_jun_pandas_drop_duplicates/1]).
 
 all() ->
     [test_jun_pandas_drop,
@@ -19,7 +20,8 @@ all() ->
      test_jun_pandas_append,
      test_jun_pandas_update,
      test_jun_pandas_set_index,
-     test_jun_pandas_reset_index].
+     test_jun_pandas_reset_index,
+     test_jun_pandas_drop_duplicates].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -83,3 +85,10 @@ test_jun_pandas_reset_index([{jun_worker, Pid}, {path, Path} | _]) ->
     ?assertEqual({'pandas.core.frame.DataFrame', [age,<<"name">>], [[29,<<"Allison">>],
         [29,<<"George">>], [30,<<"Kristen">>], [40,<<"Debbie">>], [40,<<"Bjork">>],
         [30,<<"Katy">>]]}, Erl).
+
+test_jun_pandas_drop_duplicates([{jun_worker, Pid}, {path, Path} | _]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
+    {ok, {?DATAFRAME, FinalDataFrame}} = jun_pandas:drop_duplicates(Pid, DataFrame, 'age', []),
+    {ok, Erl} = jun_pandas:to_erl(Pid, FinalDataFrame),
+    ?assertEqual({'pandas.core.frame.DataFrame', [<<"name">>,<<"age">>], [[<<"Allison">>, 29],
+        [<<"Kristen">>,30], [<<"Debbie">>,40]]}, Erl).
