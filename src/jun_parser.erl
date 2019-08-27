@@ -16,8 +16,8 @@
 
 % @hidden
 % parse a query legacy splitted
-parse_legacy_query([ColumnL, X, _, Y, ValueL]) ->
-    parse_legacy_query([ColumnL, X ++ Y, ValueL]);
+parse_legacy_query([ColumnL, X, _, Y | ValueL]) ->
+    parse_legacy_query([ColumnL, X ++ Y, lists:append(ValueL)]);
 parse_legacy_query([ColumnL, OperandL, ValueL]) ->
     Column = list_to_atom(remove_whitespaces_fl(ColumnL)),
     Operand = list_to_atom(OperandL),
