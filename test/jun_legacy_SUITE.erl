@@ -9,11 +9,13 @@
 
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
 -export([test_jun_pandas_legacy_query/1,
-    test_jun_pandas_legacy_assignment/1]).
+    test_jun_pandas_legacy_assignment/1,
+    test_jun_pandas_legacy_query_or/1]).
 
 all() ->
     [test_jun_pandas_legacy_query,
-     test_jun_pandas_legacy_assignment].
+     test_jun_pandas_legacy_assignment,
+     test_jun_pandas_legacy_query_or].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -47,4 +49,13 @@ test_jun_pandas_legacy_assignment([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, Erl} = jun_pandas:to_erl(Pid, FinalDataFrame),
     Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>, <<"age+7">>],
         [[<<"Allison">>, 29, 36], [<<"George">>, 29, 36]]},
+    ?assertEqual(Out, Erl).
+
+test_jun_pandas_legacy_query_or([{jun_worker, Pid}, {path, Path}, _]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
+    {ok, {?DATAFRAME, NewDataFrame}} = jun_pandas:legacy_query(Pid, DataFrame, 'name == George|Allison', []),
+    % the new dataframe just contains two values, check it!
+    {ok, Erl} = jun_pandas:to_erl(Pid, NewDataFrame),
+    Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>],
+        [[<<"Allison">>, 29], [<<"George">>, 29]]},
     ?assertEqual(Out, Erl).
