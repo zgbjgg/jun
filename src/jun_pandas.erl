@@ -54,6 +54,9 @@
     reset_index/4,
     drop_duplicates/4]).
 
+-export([fillna/4,
+    dropna/4]).
+
 %% DataFrames in erlang term
 
 to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
@@ -209,3 +212,11 @@ reset_index(Pid, DataFrame, _Axis, Keywords) ->
 
 drop_duplicates(Pid, DataFrame, Column, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, drop_duplicates, [Column], 'None', Keywords]}, infinity).
+
+%% Missing data handling
+
+fillna(Pid, DataFrame, _Axis, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, fillna, [], 'None', Keywords]}, infinity).
+
+dropna(Pid, DataFrame, _Axis, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, dropna, [], 'None', Keywords]}, infinity).
