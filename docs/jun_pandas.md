@@ -242,6 +242,14 @@ series() = {'$erlport.opaque', python, binary()}
     <td valign="top"><a href="#drop-duplicates-4">drop_duplicates/4</a></td>
     <td>drops rows duplicated in a dataframe following the criteria passed over keywords</td>
   </tr>
+  <tr>
+    <td valign="top"><a href="#fillna-4">fillna/4</a></td>
+    <td>fills na values</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#dropna-4">dropna/4</a></td>
+    <td>drops na values</td>
+  </tr>
 </table>
 
 <a name="functions"></a>
@@ -611,3 +619,19 @@ drop_duplicates(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-data
 </code></pre>
 
 drops rows duplicated in a dataframe following the criteria passed over keywords.
+
+### fillna/4 ###
+
+<pre><code>
+fillna(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+fills na values.
+
+### dropna/4 ###
+
+<pre><code>
+dropna(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+drops na values.
