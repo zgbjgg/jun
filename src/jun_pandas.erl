@@ -139,7 +139,9 @@ info_columns(Pid, DataFrame, _Keywords) ->
 
 selection(Pid, DataFrame, ColumnsStr, Keywords) when is_atom(ColumnsStr) ->
     selection(Pid, DataFrame, atom_to_list(ColumnsStr), Keywords);
-selection(Pid, DataFrame, ColumnsStr, _Keywords) ->
+selection(Pid, DataFrame, ColumnsStr, Keywords) when is_binary(ColumnsStr) ->
+    selection(Pid, DataFrame, binary_to_list(ColumnsStr), Keywords);
+selection(Pid, DataFrame, ColumnsStr, _Keywords) when is_list(ColumnsStr) ->
     ColumnsTokens = string:tokens(ColumnsStr, [$,]),
     Columns = list_to_tuple([ list_to_binary(C) || C <- ColumnsTokens]),
     gen_server:call(Pid, {'core.jun', selection, [DataFrame, Columns]}, infinity).
@@ -156,7 +158,9 @@ plot(Pid, DataFrame, Save, Keywords) ->
 
 groupby(Pid, DataFrame, ColumnsStr, Keywords) when is_atom(ColumnsStr) ->
     groupby(Pid, DataFrame, atom_to_list(ColumnsStr), Keywords);
-groupby(Pid, DataFrame, ColumnsStr, Keywords) ->
+groupby(Pid, DataFrame, ColumnsStr, Keywords) when is_binary(ColumnsStr) ->
+    groupby(Pid, DataFrame, binary_to_list(ColumnsStr), Keywords);
+groupby(Pid, DataFrame, ColumnsStr, Keywords) when is_list(ColumnsStr) ->
     ColumnsTokens = string:tokens(ColumnsStr, [$,]),
     Columns = list_to_tuple([ list_to_binary(C) || C <- ColumnsTokens]),
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, groupby, [Columns], 'None', Keywords]}, infinity).
@@ -185,8 +189,13 @@ legacy_assignment(Pid, DataFrame, Value, Keywords) ->
     % from keywords get the column to assign
     Column = begin
         ColumnAtom = proplists:get_value(column, Keywords, ''),
-        ColumnList = atom_to_list(ColumnAtom),
-        list_to_binary(ColumnList)
+        case ColumnAtom of
+            ColumAtom when is_atom(ColumAtom) ->
+                ColumnList = atom_to_list(ColumnAtom),
+                list_to_binary(ColumnList);
+            ColumnAtom when is_binary(ColumnAtom) ->
+                ColumnAtom
+        end
     end,
     gen_server:call(Pid, {'core.jun', legacy_assignment, [DataFrame, Column, Value]}, infinity).
 
