@@ -3,8 +3,8 @@
 -include_lib("common_test/include/ct.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
--define(DATAFRAME, 'pandas.core.frame.DataFrame').
--define(SERIES, 'pandas.core.frame.Series').
+-define(DATAFRAME, <<"pandas.core.frame.DataFrame">>).
+-define(SERIES, <<"pandas.core.frame.Series">>).
 
 % define multiple lambdas for each phase
 -define(LAMBDA_1, <<"lambda row : 'one' if row['age'] == 29 else 'none'">>).
@@ -48,7 +48,7 @@ test_jun_pandas_series_combine([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, FinalDataFrame}} = jun_pandas:legacy_assignment(Pid, DataFrame,
         SeriesFinal, [{<<"column">>, <<"category">>}]),
     {ok, Erl} = jun_pandas:to_erl(Pid, FinalDataFrame),
-    Out = {'pandas.core.frame.DataFrame', [<<"name">>, <<"age">>, <<"category">>],
+    Out = {?DATAFRAME, [<<"name">>, <<"age">>, <<"category">>],
         [[<<"Allison">>, 29, <<"one">>], [<<"George">>, 29, <<"one">>],
          [<<"Kristen">>, 30, <<"two">>], [<<"Debbie">>, 40, <<"three">>],
          [<<"Bjork">>, 40, <<"three">>], [<<"Katy">>, 30, <<"two">>]]},
