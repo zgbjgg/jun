@@ -4,6 +4,7 @@
 
 %% API
 -export([start_link/0,
+    start_link/1,
     stop_link/1]).
 
 %% gen_server callbacks
@@ -28,16 +29,23 @@
     mon_ref = undefined :: reference()}).
 
 start_link() ->
+    start_link(default).
+
+start_link(Py) ->
     % get priv path
     Path = code:priv_dir(jun),
-    gen_server:start_link(?MODULE, [Path], []).
+    gen_server:start_link(?MODULE, [Path, Py], []).
 
 stop_link(Pid) ->
     gen_server:call(Pid, stop_link).
 
-init([Path]) ->
+init([Path, Py]) ->
+    Opts = case Py of
+        default -> [{python_path, Path}];
+        _       -> [{python_path, Path}, {python, Py}]
+    end,
     % start the py process and initializes its importing modules
-    case python:start([{python_path, Path}]) of
+    case python:start(Opts) of
         {ok, PyPid} ->
             MonRef = erlang:monitor(process, PyPid),
             lager:info("initialized default modules for py pid ~p", [PyPid]),
