@@ -35,7 +35,7 @@ def jun_iplot_dataframe(df, key, keywords=[]):
         iplot = df.iplot(**kwargs)
         pickling[key] = iplot
         # use get data since this should be achive as figure
-        return (Atom("plotly.iplot"), key)
+        return (Atom(b'plotly.iplot'), key)
     else:
         return 'error_format_data_frame_invalid'
 
@@ -49,9 +49,9 @@ def jun_iplot_extend(iplot_x, iplot_y, keywords=[]):
     iplot_xx = pickling[iplot_x]
     iplot_yy['data'].extend(iplot_xx['data'])
     pickling[iplot_y] = iplot_yy
-    return (Atom("plotly.iplot"), iplot_y)
+    return (Atom(b'plotly.iplot'), iplot_y)
 
 def jun_iplot_get_figure(url, key, keywords=[]):
     iplot = py.get_figure(url)
     pickling[key] = iplot
-    return (Atom("plotly.iplot"), key)
+    return (Atom(b'plotly.iplot'), key)
