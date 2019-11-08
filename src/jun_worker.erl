@@ -16,7 +16,7 @@
     code_change/3]).
 
 -define(JUN_PANDAS, jun_pandas).
--define(JUN_DATAFRAME, jun_dataframe).
+-define(JUN_ENC_DEC, jun_enc_dec).
 -define(JUN_CORE, jun_core).
 -define(JUN_DATAFRAME_PLOT, jun_dataframe_plot).
 -define(JUN_PLOTLY, jun_plotly).
@@ -50,7 +50,7 @@ init([Path, Py]) ->
             MonRef = erlang:monitor(process, PyPid),
             lager:info("initialized default modules for py pid ~p", [PyPid]),
             % load custom encoder & decoder for data frame
-            ok = python:call(PyPid, jun_dataframe, setup_dtype, []),
+            ok = python:call(PyPid, ?JUN_ENC_DEC, setup_dtype, []),
             {ok, #state{py_pid = PyPid, mon_ref = MonRef}};
         Error      ->
             lager:error("cannot initializes py due to ~p", [Error]),
