@@ -3,6 +3,9 @@ language: erlang
 script: "make && make test"
 python:
   - 3.6
+before_install:
+  - python --version
+  - pip3 -V
 install:
   - sudo apt-get install python-tk
   - sudo pip install numpy
