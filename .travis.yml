@@ -9,8 +9,7 @@ before_install:
   - sudo apt-get install python3.6
   - sudo apt-get install python3.6-dev
   - sudo apt-get install python3-pip python3-setuptools
-  - sudo echo "alias python=python3.6" >> ~/.bash_aliases
-  - sudo source ~/.bash_aliases 
+  - pyenv global system 3.6
   - sudo apt-get install python-tk
   - python --version
   - pip3 -V
