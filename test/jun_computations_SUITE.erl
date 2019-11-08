@@ -68,4 +68,4 @@ test_jun_pandas_unique([{jun_worker, Pid}, {path, Path}, _]) ->
 test_jun_pandas_bad_axis([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     Error = jun_pandas:max(Pid, DataFrame, <<"unknown">>, []),
-    ?assertEqual({error, {'exceptions.KeyError', "'unknown'"}}, Error).
+    ?assertMatch({error, {_, "'unknown'"}}, Error).

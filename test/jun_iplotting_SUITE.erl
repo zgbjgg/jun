@@ -40,8 +40,7 @@ test_jun_pandas_iplot([{jun_worker, Pid}, {path, Path}, _]) ->
 
 test_jun_pandas_iplot_error([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
-    PlotError = jun_plotly:iplot(Pid, DataFrame, <<"iplot">>, [{<<"kind">>, <<"unknown">>},
-        {<<"x">>, <<"name">>}, {<<"y">>, <<"unknown">>}, {<<"asFigure">>, true}]),
+    PlotError = jun_plotly:iplot(Pid, DataFrame, <<"iplot">>, []),
     ?assertMatch({error, _}, PlotError).
 
 test_jun_pandas_iplot_plot([{jun_worker, Pid}, {path, Path}, _]) ->
@@ -66,5 +65,5 @@ test_jun_pandas_iplot_get_figure([{jun_worker, Pid}, {path, Path}, _]) ->
         {<<"x">>, <<"name">>}, {<<"y">>, <<"age">>}, {<<"asFigure">>, true}]),
     {ok, Plot} = jun_plotly:plot(Pid, IPlot, <<"plot_t2">>, []),
     % converts to again into figure
-    IPlotX = jun_plotly:get_figure(Pid, list_to_binary(Plot), <<"plotx">>, []),
+    IPlotX = jun_plotly:get_figure(Pid, Plot, <<"plotx">>, []),
     ?assertMatch({ok, {?PLOTLY, _}}, IPlotX).

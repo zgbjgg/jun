@@ -54,7 +54,7 @@ test_jun_pandas_to_html([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, Html} = jun_pandas:to_html(Pid, DataFrame, []),
     {ok, Out} = file:read_file(Cwd ++ "/../../lib/jun/test/outputs/out.html"),
-    ?assertEqual(binary_to_list(Out), Html).
+    ?assertEqual(Out, Html).
 
 test_jun_pandas_to_json([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
@@ -73,7 +73,7 @@ test_jun_pandas_to_erl([{jun_worker, Pid}, {path, Path}, _]) ->
 test_jun_pandas_bad_call([{jun_worker, Pid}, _, {cwd, Cwd}]) ->
     Path = list_to_binary(Cwd ++ "/../../lib/jun/test/files/enoent.txt"),
     Error = jun_pandas:read_csv(Pid, Path, []),
-    ?assertMatch({error, {'exceptions.IOError', _}}, Error).
+    ?assertMatch({error, {_, _}}, Error).
 
 test_jun_pandas_to_datetime([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
