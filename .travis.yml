@@ -2,7 +2,8 @@ dist: xenial
 language: erlang
 script: "make && make test"
 before_install:
-  - sudo pip install --upgrade pip
+  - sudo apt-get install python3-matplotlib
+  - sudo apt-get install python-tk
   - sudo apt-get install python3-pip python3-setuptools
   - pyenv install 3.6.3
   - pyenv global 3.6.3
@@ -11,7 +12,6 @@ before_install:
   - python --version
   - pip3 -V
 install:
-  - sudo apt-get install python-tk
   - sudo pip3 install numpy
   - sudo pip3 install pandas
   - sudo pip3 install matplotlib
