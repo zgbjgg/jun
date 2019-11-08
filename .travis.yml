@@ -2,14 +2,9 @@ dist: xenial
 language: erlang
 script: "make && make test"
 before_install:
-  # We need to install python-3.6 from a third party repo as it is not
-  # available as a standard package on Travis Trusty VMs.
-  - sudo add-apt-repository ppa:jonathonf/python-3.6 -y
-  - sudo apt-get update -q
-  - sudo apt-get install python3.6
-  - sudo apt-get install python3.6-dev
   - sudo apt-get install python3-pip python3-setuptools
-  - pyenv global system 3.6.8
+  - pyenv install 3.6.3
+  - pyenv global system 3.6.3
   - sudo apt-get install python-tk
   - python --version
   - pip3 -V
