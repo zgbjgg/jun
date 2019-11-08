@@ -1,10 +1,8 @@
 dist: xenial
 language: erlang
 script: "make && make test"
-python:
-  - 3.6
 before_install:
-  - python3.6 --version
+  - python --version
   - pip3 -V
 install:
   - sudo apt-get install python-tk
