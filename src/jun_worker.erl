@@ -17,6 +17,7 @@
 
 -define(JUN_PANDAS, jun_pandas).
 -define(JUN_ENC_DEC, jun_enc_dec).
+-define(JUN_DATAFRAME, jun_dataframe).
 -define(JUN_CORE, jun_core).
 -define(JUN_DATAFRAME_PLOT, jun_dataframe_plot).
 -define(JUN_PLOTLY, jun_plotly).
