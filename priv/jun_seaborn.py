@@ -7,7 +7,6 @@ import numpy as np
 import matplotlib as mpl
 import pandas as pd
 import sklearn as skl
-from erlport.erlterms import Atom
 mpl.use('Agg')
 import seaborn as sns
 
@@ -35,6 +34,6 @@ def jun_dataframe_plot(df, fn, save='None', keywords=[]):
             fig.savefig(save, bbox_inches='tight') # save contains path
             return plot_class
         else:
-            return (Atom(plot_class), plot) # this is correct? because can be confusing with opaque df
+            return (plot_class, plot) # this is correct? because can be confusing with opaque df
     else:
         return 'error_format_data_frame_invalid'
