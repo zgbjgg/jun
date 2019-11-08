@@ -9,16 +9,6 @@ using a very easy erlang syntax.
 
 <a name="description"></a>
 
-## Description ##
-
-Example of reading a csv:
-
-```erlang
-
-        {ok, Pid} = jun_worker:start_link(),
-        {ok, Dataframe} = jun_pandas:read_csv('/file/csv.txt').
-```
-
 <a name="types"></a>
 
 ## Data Types ##
@@ -32,7 +22,7 @@ jun_worker() = pid()
 ### <a name="type-jun-dataframe">jun_dataframe()</a> ###
 
 <pre><code>
-jun_dataframe() = {'pandas.core.frame.DataFrame', <a href="#type-dataframe">dataframe()</a>}
+jun_dataframe() = {<<"pandas.core.frame.DataFrame">>, <a href="#type-dataframe">dataframe()</a>}
 </code></pre>
 
 ### <a name="type-dataframe">dataframe()</a> ###
@@ -44,13 +34,13 @@ dataframe() = {'$erlport.opaque', python, binary()}
 ### <a name="type-erlang-dataframe">erlang_dataframe()</a> ###
 
 <pre><code>
-erlang_dataframe() = {'pandas.core.frame.DataFrame', [column :: binary(), ...], [[value :: any(), ...]]}
+erlang_dataframe() = {<<"pandas.core.frame.DataFrame">>, [column :: binary(), ...], [[value :: any(), ...]]}
 </code></pre>
 
 ### <a name="type-keywords">keywords()</a> ###
 
 <pre><code>
-keywords() = [{key :: atom(), value :: any()}, ...]
+keywords() = [{key :: binary(), value :: any()}, ...]
 </code></pre>
 
 ### <a name="type-jun-error">jun_error()</a> ###
@@ -68,7 +58,7 @@ jun_subplot() = <<"matplotlib.AxesSubplot">>
 ### <a name="type-jun-groupby">jun_groupby()</a> ###
 
 <pre><code>
-jun_groupby() = {'pandas.core.groupby.DataFrameGroupBy', <a href="#type-groupby">groupby()</a>}
+jun_groupby() = {<<"pandas.core.groupby.DataFrameGroupBy">>, <a href="#type-groupby">groupby()</a>}
 </code></pre>
 
 ### <a name="type-groupby">groupby()</a> ###
@@ -80,7 +70,7 @@ groupby() = {'$erlport.opaque', python, binary()}
 ### <a name="type-jun-series">jun_series()</a> ###
 
 <pre><code>
-jun_series() = {'pandas.core.frame.Series', <a href="#type-series">series()</a>}
+jun_series() = {<<"pandas.core.frame.Series">>, <a href="#type-series">series()</a>}
 </code></pre>
 
 ### <a name="type-series">series()</a> ###

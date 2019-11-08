@@ -16,8 +16,8 @@ Example of plotly from erlang:
 ```erlang
 
         {ok, Pid} = jun_worker:start_link(),
-        {ok, {_, DataFrame}} = jun_pandas:read_csv('/files/csv.txt'),
-        {ok, _} = jun_plotly:iplot(Pid, DataFrame, 'line/iplot', [{'kind', 'line'}, {'x', 'name'}, {'y', 'age'}]).
+        {ok, {_, DataFrame}} = jun_pandas:read_csv(Pid, <<"/files/csv.txt">>, []),
+        {ok, _} = jun_plotly:iplot(Pid, DataFrame, <<"line/iplot">>, [{<<"kind">>, <<"line">>}, {<<"x">>, <<"name">>}, {<<"y">>, <<"age">>}]).
 ```
 
 <a name="types"></a>
@@ -33,7 +33,7 @@ jun_worker() = pid()
 ### <a name="type-jun-dataframe">jun_dataframe()</a> ###
 
 <pre><code>
-jun_dataframe() = {'pandas.core.frame.DataFrame', <a href="#type-dataframe">dataframe()</a>}
+jun_dataframe() = {<<"pandas.core.frame.DataFrame">>, <a href="#type-dataframe">dataframe()</a>}
 </code></pre>
 
 ### <a name="type-dataframe">dataframe()</a> ###
@@ -45,13 +45,13 @@ dataframe() = {'$erlport.opaque', python, binary()}
 ### <a name="type-keywords">keywords()</a> ###
 
 <pre><code>
-keywords() = [{key :: atom(), value :: any()}, ...]
+keywords() = [{key :: binary(), value :: any()}, ...]
 </code></pre>
 
 ### <a name="type-plotly">plotly()</a> ###
 
 <pre><code>
-plotly() = {'plotly.iplot', atom()}
+plotly() = {<<"plotly.iplot">>, binary()}
 </code></pre>
 
 ## Function Index ##
@@ -84,7 +84,7 @@ plotly() = {'plotly.iplot', atom()}
 ### iplot/4 ###
 
 <pre><code>
-iplot(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, filename :: atom(), <a href="#type-keywords">keywords()</a>) -> {error, no_opaque_dataframe} | {ok, <a href="#type-plotly">plotly()</a>} 
+iplot(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, filename :: binary(), <a href="#type-keywords">keywords()</a>) -> {error, no_opaque_dataframe} | {ok, <a href="#type-plotly">plotly()</a>} 
 </code></pre>
 <br />
 
@@ -95,7 +95,7 @@ creates a new plot into plotly using a dataframe.
 ### plot/4 ###
 
 <pre><code>
-plot(<a href="#type-jun-worker">jun_worker()</a>, iplot :: atom(), filename :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, url :: string()}
+plot(<a href="#type-jun-worker">jun_worker()</a>, iplot :: binary(), filename :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, url :: string()}
 </code></pre>
 
 creates a new plot into a valid plotly url.
@@ -105,7 +105,7 @@ creates a new plot into a valid plotly url.
 ### extend/4 ###
 
 <pre><code>
-extend(<a href="#type-jun-worker">jun_worker()</a>, iplotx :: atom(), iploty :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="#type-plotly">plotly()</a>} 
+extend(<a href="#type-jun-worker">jun_worker()</a>, iplotx :: binary(), iploty :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="#type-plotly">plotly()</a>} 
 </code></pre>
 
 extends two plots into one (like merge them).
@@ -115,7 +115,7 @@ extends two plots into one (like merge them).
 ### get_figure/4 ###
 
 <pre><code>
-get_figure(<a href="#type-jun-worker">jun_worker()</a>, url :: atom(), filename :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="#type-plotly">plotly()</a>}
+get_figure(<a href="#type-jun-worker">jun_worker()</a>, url :: binary(), filename :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="#type-plotly">plotly()</a>}
 </code></pre>
 
 get the figure (data representation) from a valid plotly url.

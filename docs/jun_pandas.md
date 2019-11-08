@@ -16,7 +16,7 @@ Example of reading a csv:
 ```erlang
 
         {ok, Pid} = jun_worker:start_link(),
-        {ok, Dataframe} = jun_pandas:read_csv('/file/csv.txt').
+        {ok, Dataframe} = jun_pandas:read_csv(Pid, <<"/file/csv.txt">>, []).
 ```
 
 <a name="types"></a>
@@ -32,7 +32,7 @@ jun_worker() = pid()
 ### <a name="type-jun-dataframe">jun_dataframe()</a> ###
 
 <pre><code>
-jun_dataframe() = {'pandas.core.frame.DataFrame', <a href="#type-dataframe">dataframe()</a>}
+jun_dataframe() = {<<"pandas.core.frame.DataFrame">>, <a href="#type-dataframe">dataframe()</a>}
 </code></pre>
 
 ### <a name="type-dataframe">dataframe()</a> ###
@@ -44,13 +44,13 @@ dataframe() = {'$erlport.opaque', python, binary()}
 ### <a name="type-erlang-dataframe">erlang_dataframe()</a> ###
 
 <pre><code>
-erlang_dataframe() = {'pandas.core.frame.DataFrame', [column :: binary(), ...], [[value :: any(), ...]]}
+erlang_dataframe() = {<<"pandas.core.frame.DataFrame">>, [column :: binary(), ...], [[value :: any(), ...]]}
 </code></pre>
 
 ### <a name="type-keywords">keywords()</a> ###
 
 <pre><code>
-keywords() = [{key :: atom(), value :: any()}, ...]
+keywords() = [{key :: binary(), value :: any()}, ...]
 </code></pre>
 
 ### <a name="type-jun-error">jun_error()</a> ###
@@ -68,7 +68,7 @@ jun_subplot() = <<"matplotlib.AxesSubplot">>
 ### <a name="type-jun-groupby">jun_groupby()</a> ###
 
 <pre><code>
-jun_groupby() = {'pandas.core.groupby.DataFrameGroupBy', <a href="#type-groupby">groupby()</a>}
+jun_groupby() = {<<"pandas.core.groupby.DataFrameGroupBy">>, <a href="#type-groupby">groupby()</a>}
 </code></pre>
 
 ### <a name="type-groupby">groupby()</a> ###
@@ -80,7 +80,7 @@ groupby() = {'$erlport.opaque', python, binary()}
 ### <a name="type-jun-series">jun_series()</a> ###
 
 <pre><code>
-jun_series() = {'pandas.core.frame.Series', <a href="#type-series">series()</a>}
+jun_series() = {<<"pandas.core.frame.Series">>, <a href="#type-series">series()</a>}
 </code></pre>
 
 ### <a name="type-series">series()</a> ###
@@ -272,7 +272,7 @@ returns an opaque dataframe in erlang readable terms.
 ### max/4 ###
 
 <pre><code>
-max(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+max(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the max value of a column or in an entire grouped dataframe.
@@ -282,7 +282,7 @@ calculates the max value of a column or in an entire grouped dataframe.
 ### min/4 ###
 
 <pre><code>
-min(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+min(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the min value of a column or in an entire grouped dataframe.
@@ -292,7 +292,7 @@ calculates the min value of a column or in an entire grouped dataframe.
 ### count/4 ###
 
 <pre><code>
-count(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+count(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the count of a column or in an entire grouped dataframe.
@@ -302,7 +302,7 @@ calculates the count of a column or in an entire grouped dataframe.
 ### median/4 ###
 
 <pre><code>
-median(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+median(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the median value of a column or in an entire grouped dataframe.
@@ -312,7 +312,7 @@ calculates the median value of a column or in an entire grouped dataframe.
 ### sum/4 ###
 
 <pre><code>
-sum(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
+sum(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, number()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 calculates the sum value of a column or in an entire grouped dataframe.
@@ -322,7 +322,7 @@ calculates the sum value of a column or in an entire grouped dataframe.
 ### unique/4 ###
 
 <pre><code>
-unique(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, binary()} | <a href="#type-jun-error">jun_error()</a>
+unique(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, binary()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 return the uniques data of a column in a dataframe.
@@ -332,7 +332,7 @@ return the uniques data of a column in a dataframe.
 ### read_csv/2 ###
 
 <pre><code>
-read_csv(<a href="#type-jun-worker">jun_worker()</a>, path :: atom()) -> {ok, <a href="#type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+read_csv(<a href="#type-jun-worker">jun_worker()</a>, path :: binary()) -> {ok, <a href="#type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 read a csv and transforms into a valid dataframe.
@@ -382,7 +382,7 @@ transforms a column of dataframe into a valid datetime dtype.
 ### read_sql/2 ###
 
 <pre><code>
-read_sql(<a href="#type-jun-worker">jun_worker()</a>, sql_query :: atom()) -> {ok, <a href="#type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+read_sql(<a href="#type-jun-worker">jun_worker()</a>, sql_query :: binary()) -> {ok, <a href="#type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 read a sql query and transforms into a valid dataframe.
@@ -392,7 +392,7 @@ read a sql query and transforms into a valid dataframe.
 ### query/4 ###
 
 <pre><code>
-query(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, query :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="#type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+query(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, query :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="#type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 execute a valid query into dataframe.
@@ -473,17 +473,17 @@ gets the information of each column in a dataframe in a readable human syntax.
 ### selection/4 ###
 
 <pre><code>
-selection(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, columns :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, binary()} | <a href="#type-jun-error">jun_error()</a>
+selection(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, columns :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, binary()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
-selects only certain columns from the dataframe, you can pass the third argument as an atom separated by comma.
+selects only certain columns from the dataframe, you can pass the third argument as binary separated by comma.
 
 <a name="plot-4"></a>
 
 ### plot/4 ###
 
 <pre><code>
-plot(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, path :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, jun_subplot()} | <a href="#type-jun-error">jun_error()</a>
+plot(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, path :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, jun_subplot()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 generates a plot from dataframe using keywords to spec args for graph, it will be saved at `path` if passed otherwise just in memory.
@@ -493,7 +493,7 @@ generates a plot from dataframe using keywords to spec args for graph, it will b
 ### groupby/4 ###
 
 <pre><code>
-groupby(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, columns :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-groupby">jun_groupby()</a>} | <a href="#type-jun-error">jun_error()</a>
+groupby(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, columns :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-groupby">jun_groupby()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 groups a dataframe based on passed columns.
@@ -503,7 +503,7 @@ groups a dataframe based on passed columns.
 ### apply/4 ###
 
 <pre><code>
-apply(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-series">jun_series()</a>} | <a href="#type-jun-error">jun_error()</a>
+apply(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-series">jun_series()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 applies a function in a dataframe and return a series. see <a href="type-lambda">lambda</a> to check how to express a function in erlang.
@@ -513,7 +513,7 @@ applies a function in a dataframe and return a series. see <a href="type-lambda"
 ### sort_values/4 ###
 
 <pre><code>
-sort_values(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+sort_values(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <<"None">>, <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 sorts a dataframe by specific a column.
@@ -523,7 +523,7 @@ sorts a dataframe by specific a column.
 ### sort_index/4 ###
 
 <pre><code>
-sort_index(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+sort_index(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <<"None">>, <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 sorts a dataframe or groupby using index.
@@ -533,7 +533,7 @@ sorts a dataframe or groupby using index.
 ### legacy_query/4 ###
 
 <pre><code>
-legacy_query(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, query :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+legacy_query(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, query :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 applies a query as `query` but it can be used for more complex queries such as string comparisons.
@@ -553,7 +553,7 @@ assign a series to a new column in a dataframe.
 ### drop/4 ###
 
 <pre><code>
-drop(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+drop(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 drops a column in a dataframe.
@@ -563,7 +563,7 @@ drops a column in a dataframe.
 ### rename/4 ###
 
 <pre><code>
-rename(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+rename(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: <<"None">>, <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 renames a column in a dataframe.
@@ -599,7 +599,7 @@ updates a dataframe with another dataframe by align indexes.
 ### set_index/4 ###
 
 <pre><code>
-set_index(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: atom(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+set_index(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 sets index in a dataframe.
@@ -607,7 +607,7 @@ sets index in a dataframe.
 ### reset_index/4 ###
 
 <pre><code>
-reset_index(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+reset_index(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <<"None">>, <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 resets index in a dataframe.
@@ -623,7 +623,7 @@ drops rows duplicated in a dataframe following the criteria passed over keywords
 ### fillna/4 ###
 
 <pre><code>
-fillna(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+fillna(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <<"None">>, <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 fills na values.
@@ -631,7 +631,7 @@ fills na values.
 ### dropna/4 ###
 
 <pre><code>
-dropna(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, 'None', <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+dropna(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <<"None">>, <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
 drops na values.

@@ -19,6 +19,13 @@ Creates a new jun worker:
 	{ok, Pid} = jun_worker:start_link()
 ```
 
+Also is possible to pass the bin as a parameter so you can run the worker with a specific py version:
+
+```erlang
+
+        {ok, Pid} = jun_worker:start_link("python3.6")
+```
+
 <a name="supported-calls"></a>
 
 ## Supported calls
