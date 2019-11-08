@@ -1,4 +1,4 @@
-dist: xenial
+dist: bionic
 language: erlang
 script: "make && make test"
 before_install:
