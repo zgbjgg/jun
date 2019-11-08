@@ -8,7 +8,12 @@ before_install:
   - sudo apt-get install python3-pip
   - sudo apt-get install python3-setuptools
   - sudo apt-get install python-tk
+  - sudo apt-get install python3-numpy
+  - sudo apt-get install python3-pandas
   - sudo apt-get install python3-matplotlib
+  - sudo apt-get install python3-sklearn
+  - sudo apt-get install python3-scipy
+  - sudo apt-get install python3-seaborn
   - sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
   - sudo update-alternatives  --set python /usr/bin/python3.6
   - python --version
