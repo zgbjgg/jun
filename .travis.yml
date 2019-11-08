@@ -1,23 +1,28 @@
 dist: xenial
 language: erlang
 script: "make && make test"
-before_install:
+before_script:
   - python --version
   - pip3 -V
 install:
+  - sudo add-apt-repository ppa:jonathonf/python-3.6
+  - sudo apt-get update
+  - sudo apt-get install python3.6
+  - sudo apt-get install python3-pip python3-setuptools
+  - alias python=python3.6
   - sudo apt-get install python-tk
-  - sudo pip install numpy
-  - sudo pip install pandas
-  - sudo pip install matplotlib
-  - sudo pip install sklearn
-  - sudo pip install scipy
-  - sudo pip install chart-studio
-  - sudo pip install plotly==4.2.1
-  - sudo pip install cufflinks==0.17.0
-  - sudo pip install seaborn
-  - sudo pip install --upgrade IPython
-  - sudo pip install pyodbc
-  - sudo pip install codecov
+  - sudo pip3 install numpy
+  - sudo pip3 install pandas
+  - sudo pip3 install matplotlib
+  - sudo pip3 install sklearn
+  - sudo pip3 install scipy
+  - sudo pip3 install chart-studio
+  - sudo pip3 install plotly==4.2.1
+  - sudo pip3 install cufflinks==0.17.0
+  - sudo pip3 install seaborn
+  - sudo pip3 install --upgrade IPython
+  - sudo pip3 install pyodbc
+  - sudo pip3 install codecov
 after_success: "codecov"
 otp_release:
 - 22.0
