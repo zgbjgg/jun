@@ -4,7 +4,7 @@ script: "make && make test"
 python:
   - 3.6
 before_install:
-  - python --version
+  - python3.6 --version
   - pip3 -V
 install:
   - sudo apt-get install python-tk
