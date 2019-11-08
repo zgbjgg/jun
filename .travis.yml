@@ -2,7 +2,7 @@ dist: xenial
 language: erlang
 script: "make && make test"
 before_install:
-  - pip install --upgrade pip
+  - sudo pip install --upgrade pip
   - sudo apt-get install python3-pip python3-setuptools
   - pyenv install 3.6.3
   - pyenv global 3.6.3
