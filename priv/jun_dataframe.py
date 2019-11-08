@@ -26,7 +26,10 @@ def dtype_encoder(value):
             nvalue = nvalue + (dtype_encoder(v),)
         return nvalue
     else:
-        return value
+        try:
+            return value.encode('utf-8')
+        except:
+            return value
 
 def dtype_decoder(value):
     try:
