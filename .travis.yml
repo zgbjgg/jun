@@ -6,6 +6,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install python3.6
   - sudo apt-get install python3-pip
+  - sudo apt-get install python3-setuptools
   - sudo apt-get install python-tk
   - sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
   - sudo update-alternatives  --set python /usr/bin/python3.6
