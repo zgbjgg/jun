@@ -5,30 +5,20 @@ before_install:
   - sudo add-apt-repository ppa:jonathonf/python-3.6 -y
   - sudo apt-get update
   - sudo apt-get install python3.6
-  - sudo apt-get install python3-pip
-  - sudo apt-get install python3-setuptools
-  - sudo apt-get install python-tk
-  - sudo apt-get install python3-numpy
-  - sudo apt-get install python3-pandas
-  - sudo apt-get install python3-matplotlib
-  - sudo apt-get install python3-sklearn
-  - sudo apt-get install python3-scipy
-  - sudo apt-get install python3-seaborn
   - sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
   - sudo update-alternatives  --set python /usr/bin/python3.6
-  - python --version
 install:
-  - sudo pip3 install numpy
-  - sudo pip3 install pandas
-  - sudo pip3 install matplotlib
-  - sudo pip3 install sklearn
-  - sudo pip3 install scipy
-  - sudo pip3 install plotly==4.2.1
-  - sudo pip3 install cufflinks==0.17.0
-  - sudo pip3 install seaborn
-  - sudo pip3 install --upgrade IPython
-  - sudo pip3 install pyodbc
-  - sudo pip3 install codecov
+  - sudo python3.6 -m pip install numpy
+  - sudo python3.6 -m pip install pandas
+  - sudo python3.6 -m pip install matplotlib
+  - sudo python3.6 -m pip install sklearn
+  - sudo python3.6 -m pip install scipy
+  - sudo python3.6 -m pip install plotly==4.2.1
+  - sudo python3.6 -m pip install cufflinks==0.17.0
+  - sudo python3.6 -m pip install seaborn
+  - sudo python3.6 -m pip install --upgrade IPython
+  - sudo python3.6 -m pip install pyodbc
+  - sudo python3.6 -m pip install codecov
 after_success: "codecov"
 otp_release:
 - 22.0
