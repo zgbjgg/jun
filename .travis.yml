@@ -1,6 +1,8 @@
 dist: bionic
 language: erlang
 script: "make && make test"
+before_script:
+  - "./bootstrap_travis.sh"
 before_install:
   - sudo add-apt-repository ppa:jonathonf/python-3.6 -y
   - sudo apt-get update
