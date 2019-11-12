@@ -46,7 +46,7 @@ def jun_iplot_plot(iplot, filename, keywords=[]):
 def jun_iplot_extend(iplot_x, iplot_y, keywords=[]):
     iplot_yy = pickling[iplot_y]
     iplot_xx = pickling[iplot_x]
-    iplot_yy['data'].extend(iplot_xx['data'])
+    iplot_yy.add_trace(iplot_xx['data'][0])
     pickling[iplot_y] = iplot_yy
     return ('plotly.iplot', iplot_y)
 
