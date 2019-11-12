@@ -167,8 +167,8 @@ groupby(Pid, DataFrame, ColumnsStr, Keywords) when is_list(ColumnsStr) ->
 
 'apply'(Pid, DataFrame, Axis, Keywords) ->
     % lambda must come in keywords!
-    Lambda = proplists:get_value(lambda, Keywords, <<>>),
-    Keywords0 = proplists:delete(lambda, Keywords),
+    Lambda = proplists:get_value(<<"lambda">>, Keywords, <<>>),
+    Keywords0 = proplists:delete(<<"lambda">>, Keywords),
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, 'apply', [Lambda], Axis, Keywords0]}, infinity).
 
 %% Reshaping, Sorting, Transposing
@@ -188,7 +188,7 @@ legacy_query(Pid, DataFrame, Query, _Keywords) ->
 legacy_assignment(Pid, DataFrame, Value, Keywords) ->
     % from keywords get the column to assign
     Column = begin
-        ColumnAtom = proplists:get_value(column, Keywords, ''),
+        ColumnAtom = proplists:get_value(<<"column">>, Keywords, <<"">>),
         case ColumnAtom of
             ColumAtom when is_atom(ColumAtom) ->
                 ColumnList = atom_to_list(ColumnAtom),

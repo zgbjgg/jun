@@ -10,6 +10,8 @@
 
 'query'(Query) when is_atom(Query) ->
     'query'(atom_to_list(Query));
+'query'(Query) when is_binary(Query) ->
+    'query'(binary_to_list(Query));
 'query'(Query) when is_list(Query) ->
     Result = re:split(Query, ?REGEX, [{return, list}]),
     parse_legacy_query(Result).
@@ -19,12 +21,12 @@
 parse_legacy_query([ColumnL, X, _, Y | ValueL]) ->
     parse_legacy_query([ColumnL, X ++ Y, lists:append(ValueL)]);
 parse_legacy_query([ColumnL, OperandL, ValueL]) ->
-    Column = list_to_atom(remove_whitespaces_fl(ColumnL)),
-    Operand = list_to_atom(OperandL),
+    Column = list_to_binary(remove_whitespaces_fl(ColumnL)),
+    Operand = list_to_binary(OperandL),
     Value = dtype(remove_whitespaces_fl(ValueL)),
     [Column, Operand, Value];
 parse_legacy_query(_) ->
-    ['_', '_', '_']. % by default all to none!
+    [<<"_">>, <<"_">>, <<"_">>]. % by default all to none!
 
 % @hidden
 % remove whitespaces at first or last of column or value
@@ -45,7 +47,7 @@ dtype(T) ->
     case catch list_to_integer(T) of
         {'EXIT', _} ->
             case catch list_to_float(T) of
-                {'EXIT', _} -> list_to_atom(T);
+                {'EXIT', _} -> list_to_binary(T);
                 F           -> F
             end;
         I           -> I

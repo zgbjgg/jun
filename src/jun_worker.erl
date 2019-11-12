@@ -4,6 +4,7 @@
 
 %% API
 -export([start_link/0,
+    start_link/1,
     stop_link/1]).
 
 %% gen_server callbacks
@@ -15,6 +16,7 @@
     code_change/3]).
 
 -define(JUN_PANDAS, jun_pandas).
+-define(JUN_ENC_DEC, jun_enc_dec).
 -define(JUN_DATAFRAME, jun_dataframe).
 -define(JUN_CORE, jun_core).
 -define(JUN_DATAFRAME_PLOT, jun_dataframe_plot).
@@ -28,21 +30,28 @@
     mon_ref = undefined :: reference()}).
 
 start_link() ->
+    start_link(default).
+
+start_link(Py) ->
     % get priv path
     Path = code:priv_dir(jun),
-    gen_server:start_link(?MODULE, [Path], []).
+    gen_server:start_link(?MODULE, [Path, Py], []).
 
 stop_link(Pid) ->
     gen_server:call(Pid, stop_link).
 
-init([Path]) ->
+init([Path, Py]) ->
+    Opts = case Py of
+        default -> [{python_path, Path}];
+        _       -> [{python_path, Path}, {python, Py}]
+    end,
     % start the py process and initializes its importing modules
-    case python:start([{python_path, Path}]) of
+    case python:start(Opts) of
         {ok, PyPid} ->
             MonRef = erlang:monitor(process, PyPid),
             lager:info("initialized default modules for py pid ~p", [PyPid]),
             % load custom encoder & decoder for data frame
-            ok = python:call(PyPid, jun_dataframe, setup_dtype, []),
+            ok = python:call(PyPid, ?JUN_ENC_DEC, setup_dtype, []),
             {ok, #state{py_pid = PyPid, mon_ref = MonRef}};
         Error      ->
             lager:error("cannot initializes py due to ~p", [Error]),

@@ -3,8 +3,8 @@
 -include_lib("common_test/include/ct.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
--define(DATAFRAME, 'pandas.core.frame.DataFrame').
--define(SERIES, 'pandas.core.frame.Series').
+-define(DATAFRAME, <<"pandas.core.frame.DataFrame">>).
+-define(SERIES, <<"pandas.core.frame.Series">>).
 
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
 -export([test_jun_pandas_columns/1,
@@ -29,7 +29,7 @@ init_per_testcase(_, _Config) ->
     {ok, Pid} = jun_worker:start_link(),
     % load the default file to execute tests
     {ok, Cwd} = file:get_cwd(),
-    Path = list_to_atom(Cwd ++ "/../../lib/jun/test/files/csv.txt"),
+    Path = list_to_binary(Cwd ++ "/../../lib/jun/test/files/csv.txt"),
     [{jun_worker, Pid}, {path, Path}, {cwd, Cwd}].
 
 end_per_testcase(_, _Config) ->
@@ -56,9 +56,8 @@ test_jun_pandas_len_index([{jun_worker, Pid}, {path, Path}, _]) ->
 
 test_jun_pandas_memory_usage([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
-    {ok, MemoryUsage} = jun_pandas:memory_usage(Pid, DataFrame, []),
-    Out = <<"425.0+ bytes">>,
-    ?assertEqual(Out, MemoryUsage).
+    MemoryUsage = jun_pandas:memory_usage(Pid, DataFrame, []),
+    ?assertMatch({ok, _}, MemoryUsage).
 
 test_jun_pandas_info_columns([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
@@ -68,13 +67,13 @@ test_jun_pandas_info_columns([{jun_worker, Pid}, {path, Path}, _]) ->
 
 test_jun_pandas_selection([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
-    {ok, {?DATAFRAME, ColumnAgeDataFrame}} = jun_pandas:selection(Pid, DataFrame, 'age', []),
+    {ok, {?DATAFRAME, ColumnAgeDataFrame}} = jun_pandas:selection(Pid, DataFrame, <<"age">>, []),
     {ok, Erl} = jun_pandas:to_erl(Pid, ColumnAgeDataFrame),
-    Out = {'pandas.core.frame.DataFrame', [<<"age">>],
+    Out = {?DATAFRAME, [<<"age">>],
         [[29], [29], [30], [40], [40], [30]]},
     ?assertEqual(Out, Erl).
 
 test_jun_pandas_single_selection([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
-    {ok, Series} = jun_pandas:single_selection(Pid, DataFrame, 'age', []),
+    {ok, Series} = jun_pandas:single_selection(Pid, DataFrame, <<"age">>, []),
     ?assertMatch({?SERIES, _}, Series).

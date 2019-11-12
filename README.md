@@ -28,7 +28,7 @@ For now the only way to load a dataframe into jun is reading a csv (in later ver
 
 ```erlang
 (jun@hurakann)2> {ok, {_, DataFrame}} = jun_pandas:read_csv(Pid, '/file.csv', []).
-{ok,{'pandas.core.frame.DataFrame', {'$erlport.opaque',python,
+{ok,{<<"pandas.core.frame.DataFrame">>, {'$erlport.opaque',python,
                        <<128,2,99,112,97,110,100,97,115,46,99,111,114,101,46,
                          102,114,97,109,101,10,68,97,116,...>>}}}
 ```
@@ -53,7 +53,7 @@ All errors will raise as a python errors, describing the class and arguments:
 
 ```erlang
 (jun@hurakann)4> jun_pandas:sum(Pid, DataFrame, id, []). 
-{error,{'exceptions.KeyError',"Atom('id')"}}
+{error,{'exceptions.KeyError',"'id'"}}
 ```
 
 ### Readable Data Frames into Erlang VM
@@ -64,7 +64,7 @@ a single encoder:
 
 ```erlang
 (jun@hurakann)5> jun_pandas:to_erl(Pid, DataFrame).
-{ok,{'pandas.core.frame.DataFrame',[<<"name">>,<<"age">>],
+{ok,{<<"pandas.core.frame.DataFrame">>,[<<"name">>,<<"age">>],
                                    [[<<"A">>,1],
                                     [<<"B">>,2],
                                     [<<"C">>,3],

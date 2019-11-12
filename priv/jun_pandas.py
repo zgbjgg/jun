@@ -9,8 +9,7 @@ import pandas as pd
 import sklearn as skl
 import operator as opt
 import pyodbc as pyodbc
-from pandas.compat import StringIO
-from erlport.erlterms import Atom
+from io import StringIO
 from dateutil.parser import parse
 mpl.use('Agg')
 opers = {'<': opt.lt,
@@ -49,15 +48,15 @@ def jun_dataframe(df, fn, args, axis='None', keywords=[]):
         elif isinstance(value, np.float64):
             return np.asscalar(value)
         elif isinstance(value, pd.core.frame.DataFrame):
-            return (Atom("pandas.core.frame.DataFrame"), value)
+            return ('pandas.core.frame.DataFrame', value)
         elif isinstance(value, pd.core.groupby.DataFrameGroupBy):
-            return (Atom("pandas.core.groupby.DataFrameGroupBy"), value)
+            return ('pandas.core.groupby.DataFrameGroupBy', value)
         elif isinstance(value, pd.core.frame.Series):
-            return (Atom("pandas.core.frame.Series"), value)
+            return ('pandas.core.frame.Series', value)
         elif isinstance(value, np.ndarray):
             return ','.join(str(v) for v in value)
         elif value is None: # commonly when fun applies over callable object
-            return (Atom("pandas.core.frame.DataFrame"), df)
+            return ('pandas.core.frame.DataFrame', df)
         else:
             return value
     else:
@@ -70,7 +69,7 @@ def to_erl(value):
         # fill NaN as default since term cannot back to py
         jundataframe = value.fillna('NaN').values.tolist()
         columns = list(value)
-        return (Atom("pandas.core.frame.DataFrame"), columns, jundataframe)
+        return ('pandas.core.frame.DataFrame', columns, jundataframe)
     else:
         return 'error_formar_data_frame_invalid'
 
@@ -155,7 +154,7 @@ def jun_dataframe_plot(df, save='None', keywords=[]):
             fig.savefig(save, bbox_inches='tight') # save contains path
             return 'matplotlib.AxesSubplot'
         else:
-            return (Atom("matplotlib.AxesSubplot"), plot) # this is correct? because can be confusing with opaque df
+            return ('matplotlib.AxesSubplot', plot) # this is correct? because can be confusing with opaque df
     else:
         return 'error_format_data_frame_invalid'
 
@@ -164,7 +163,7 @@ def jun_dataframe_plot(df, save='None', keywords=[]):
 # using a single syntax such as accesing data from dataframe
 def selection(df, columns):
     if ( isinstance(df, pd.core.frame.DataFrame) ):
-        return (Atom("pandas.core.frame.DataFrame"), df[list(columns)])
+        return ('pandas.core.frame.DataFrame', df[list(columns)])
     else:
         return 'error_format_data_frame_invalid'
 
@@ -184,9 +183,9 @@ def legacy_query(df, column, operand, value):
             newdf = df[operation(df[column], value)]
 
         if isinstance(newdf, pd.core.frame.DataFrame):
-            return (Atom("pandas.core.frame.DataFrame"), newdf)
+            return ('pandas.core.frame.DataFrame', newdf)
         elif isinstance(newdf, pd.core.groupby.DataFrameGroupBy):
-            return (Atom("pandas.core.groupby.DataFrameGroupBy"), newdf)
+            return ('pandas.core.groupby.DataFrameGroupBy', newdf)
         else:
             return newdf
     else:
@@ -212,9 +211,9 @@ def legacy_assignment(df, column, value):
     if ( isinstance(df, pd.core.frame.DataFrame) | isinstance(df, pd.core.groupby.DataFrameGroupBy) ):
         df[column] = value
         if isinstance(df, pd.core.frame.DataFrame):
-            return (Atom("pandas.core.frame.DataFrame"), df)
+            return ('pandas.core.frame.DataFrame', df)
         elif isinstance(df, pd.core.groupby.DataFrameGroupBy):
-            return (Atom("pandas.core.groupby.DataFrameGroupBy"), df)
+            return ('pandas.core.groupby.DataFrameGroupBy', df)
         else:
             return df
     else:
@@ -247,7 +246,7 @@ def jun_series(series, fn, args, axis='None', keywords=[]):
         elif isinstance(value, np.float64):
             return np.asscalar(value)
         elif isinstance(value, pd.core.frame.Series):
-            return (Atom("pandas.core.frame.Series"), value)
+            return ('pandas.core.frame.Series', value)
         elif isinstance(value, np.ndarray):
             return ','.join(str(v) for v in value)
         else:
@@ -288,11 +287,11 @@ def jun_pandas(fn, args, keywords=[]):
     elif isinstance(value, np.float64):
         return np.asscalar(value)
     elif isinstance(value, pd.core.frame.DataFrame):
-       return (Atom("pandas.core.frame.DataFrame"), value)
+       return ('pandas.core.frame.DataFrame', value)
     elif isinstance(value, pd.core.groupby.DataFrameGroupBy):
-        return (Atom("pandas.core.groupby.DataFrameGroupBy"), value)
+        return ('pandas.core.groupby.DataFrameGroupBy', value)
     elif isinstance(value, pd.core.frame.Series):
-        return (Atom("pandas.core.frame.Series"), value)
+        return ('pandas.core.frame.Series', value)
     elif isinstance(value, np.ndarray):
         return ','.join(str(v) for v in value)
     else:
@@ -302,7 +301,7 @@ def jun_pandas(fn, args, keywords=[]):
 # since this are now supported by jun core
 def single_selection(df, column):
     if ( isinstance(df, pd.core.frame.DataFrame) ):
-        return (Atom("pandas.core.frame.Series"), df[column])
+        return ('pandas.core.frame.Series', df[column])
     else:
         return 'error_format_data_frame_invalid'
 
@@ -312,7 +311,7 @@ def jun_timedelta(series, fn, axis='None', keywords=[]):
         fun = getattr(series, 'dt')
         value = getattr(fun, fn)
         if isinstance(value, pd.core.frame.Series):
-            return (Atom("pandas.core.frame.Series"), value)
+            return ('pandas.core.frame.Series', value)
         else:
             return value
     else:
@@ -342,9 +341,13 @@ def conn(keywords, sql):
 # this from python is a custom code so JUN implements directly from
 # its API
 def read_string(string, keywords):
-    args = [StringIO(string.to_string())]
+    try:
+        string = string.decode('utf-8')
+    except:
+        string = string
+    args = [StringIO(string)]
     fun = getattr(pd, 'read_csv')
     kwargs = dict(keywords)
     # explicity execute the fun
     value = fun(*args, **kwargs)
-    return (Atom("pandas.core.frame.DataFrame"), value)
+    return ('pandas.core.frame.DataFrame', value)

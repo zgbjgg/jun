@@ -1,24 +1,32 @@
+dist: bionic
 language: erlang
 script: "make && make test"
+before_script:
+  - "./bootstrap_travis.sh"
+before_install:
+  - sudo add-apt-repository ppa:jonathonf/python-3.6 -y
+  - sudo apt-get update
+  - sudo apt-get install python3.6 python3-pip python3.6-dev
+  - sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
+  - sudo update-alternatives  --set python /usr/bin/python3.6
 install:
-  - sudo apt-get install python-tk
-  - sudo pip install numpy
-  - sudo pip install pandas
-  - sudo pip install matplotlib
-  - sudo pip install sklearn
-  - sudo pip install scipy
-  - sudo pip install plotly==2.7.0
-  - sudo pip install cufflinks==0.12.0
-  - sudo pip install seaborn
-  - sudo pip install --upgrade IPython
-  - sudo pip install pyodbc
-  - sudo pip install codecov
+  - sudo python3.6 -m pip install numpy
+  - sudo python3.6 -m pip install pandas
+  - sudo python3.6 -m pip install matplotlib
+  - sudo python3.6 -m pip install sklearn
+  - sudo python3.6 -m pip install scipy
+  - sudo python3.6 -m pip install plotly==4.2.1
+  - sudo python3.6 -m pip install cufflinks==0.17.0
+  - sudo python3.6 -m pip install seaborn
+  - sudo python3.6 -m pip install --upgrade IPython
+  - sudo python3.6 -m pip install pyodbc
+  - sudo python3.6 -m pip install codecov
 after_success: "codecov"
 otp_release:
+- 22.0
+- 21.0
 - 20.0
 - 19.3
-- 19.2
-- 19.1
 - 19.0
 - 18.3
 - 18.2.1
