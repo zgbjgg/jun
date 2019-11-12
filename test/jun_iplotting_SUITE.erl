@@ -16,9 +16,9 @@
 all() ->
     [test_jun_pandas_iplot,
      test_jun_pandas_iplot_error,
-     test_jun_pandas_iplot_plot,
-     test_jun_pandas_iplot_extend,
-     test_jun_pandas_iplot_get_figure].
+     % test_jun_pandas_iplot_plot,
+     % test_jun_pandas_iplot_get_figure,
+     test_jun_pandas_iplot_extend].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -50,7 +50,7 @@ test_jun_pandas_iplot_plot([{jun_worker, Pid}, {path, Path}, _]) ->
     Plot = jun_plotly:plot(Pid, IPlot, <<"plot_t1">>, []),
     % in order to pass tests in environments not configured, but in configured env with plotly
     % credentials this will be succeed with {ok, _}
-    ?assertMatch({error, {_, "Authentication credentials were not provided."}}, Plot).
+    ?assertMatch({ok, _}, Plot).
 
 test_jun_pandas_iplot_extend([{jun_worker, Pid}, {path, Path}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
@@ -70,4 +70,4 @@ test_jun_pandas_iplot_get_figure([{jun_worker, Pid}, {path, Path}, _]) ->
     IPlotX = jun_plotly:get_figure(Pid, Plot, <<"plotx">>, []),
     % in order to pass tests in environments not configured, but in configured env with plotly
     % credentials this will be succeed with {ok, {?PLOTLY, _}
-    ?assertMatch({error, {_, "Authentication credentials were not provided."}}, IPlotX).
+    ?assertMatch({ok, {?PLOTLY, _}}, IPlotX).
