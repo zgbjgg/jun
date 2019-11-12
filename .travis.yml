@@ -4,7 +4,7 @@ script: "make && make test"
 before_install:
   - sudo add-apt-repository ppa:jonathonf/python-3.6 -y
   - sudo apt-get update
-  - sudo apt-get install python3.6 python3-pip
+  - sudo apt-get install python3.6 python3-pip python3.6-dev
   - sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1
   - sudo update-alternatives  --set python /usr/bin/python3.6
 install:
