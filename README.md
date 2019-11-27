@@ -8,6 +8,8 @@
 [![Build Status](https://travis-ci.org/zgbjgg/jun.svg?branch=master)](https://travis-ci.org/zgbjgg/jun)
 [![Codecov](https://img.shields.io/codecov/c/github/zgbjgg/jun.svg)](https://codecov.io/gh/zgbjgg/jun)
 [![License: MIT](https://img.shields.io/github/license/zgbjgg/jun.svg)](https://raw.githubusercontent.com/zgbjgg/jun/master/LICENSE)
+[![Hex.pm](https://img.shields.io/hexpm/dt/jun.svg)](https://hex.pm/packages/jun)
+[![Hex.pm](https://img.shields.io/hexpm/dw/jun.svg)](https://hex.pm/packages/jun)
 
 JUN is a wrapper written in erlang to execute pandas, plotly, seaborn functions and manipuling dataframes creating an isolated environment, so you can handle multiple environments to treat dataframes in each of one them.
 
@@ -27,7 +29,7 @@ This will create and hold your environment in the `Pid` so you can start with th
 For now the only way to load a dataframe into jun is reading a csv (in later version we are planning support all methods of pandas api):
 
 ```erlang
-(jun@hurakann)2> {ok, {_, DataFrame}} = jun_pandas:read_csv(Pid, '/file.csv', []).
+(jun@hurakann)2> {ok, {_, DataFrame}} = jun_pandas:read_csv(Pid, <<"/file.csv">>, []).
 {ok,{<<"pandas.core.frame.DataFrame">>, {'$erlport.opaque',python,
                        <<128,2,99,112,97,110,100,97,115,46,99,111,114,101,46,
                          102,114,97,109,101,10,68,97,116,...>>}}}
@@ -41,7 +43,7 @@ this dataframe is stored into `DataFrame` variable, so you can use for other pur
 Now it's time to use some functions over our dataframe previously loaded, for example sum all values of *_age_* column:
 
 ```erlang
-(jun@hurakann)3> jun_pandas:sum(Pid, DataFrame, age, []).
+(jun@hurakann)3> jun_pandas:sum(Pid, DataFrame, <<"age">>, []).
 {ok,13}
 ```
 
@@ -52,7 +54,7 @@ As you can see, the functions is executed through our environment and the respon
 All errors will raise as a python errors, describing the class and arguments:
 
 ```erlang
-(jun@hurakann)4> jun_pandas:sum(Pid, DataFrame, id, []). 
+(jun@hurakann)4> jun_pandas:sum(Pid, DataFrame, <<"id">>, []). 
 {error,{'exceptions.KeyError',"'id'"}}
 ```
 
