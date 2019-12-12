@@ -54,7 +54,7 @@ def jun_dataframe(df, fn, args, axis='None', keywords=[]):
         elif isinstance(value, pd.core.frame.Series):
             return ('pandas.core.frame.Series', value)
         elif isinstance(value, np.ndarray):
-            return ','.join(str(v) for v in value)
+            return ','.join(_fix(v) for v in value)
         elif value is None: # commonly when fun applies over callable object
             return ('pandas.core.frame.DataFrame', df)
         else:
@@ -178,7 +178,7 @@ def legacy_query(df, column, operand, value):
                 parse(value, False)
                 newdf = df[operation(df[column], value)]
             except ValueError:
-                newdf = df[df[column].str.contains(value)] # since str cannot be evaluated with '=='
+                newdf = df[df[column].str.contains(value, na=False)] # since str cannot be evaluated with '=='
         else:
             newdf = df[operation(df[column], value)]
 
@@ -248,7 +248,7 @@ def jun_series(series, fn, args, axis='None', keywords=[]):
         elif isinstance(value, pd.core.frame.Series):
             return ('pandas.core.frame.Series', value)
         elif isinstance(value, np.ndarray):
-            return ','.join(str(v) for v in value)
+            return ','.join(_fix(v) for v in value)
         else:
             return value
     else:
@@ -293,7 +293,7 @@ def jun_pandas(fn, args, keywords=[]):
     elif isinstance(value, pd.core.frame.Series):
         return ('pandas.core.frame.Series', value)
     elif isinstance(value, np.ndarray):
-        return ','.join(str(v) for v in value)
+        return ','.join(_fix(v) for v in value)
     else:
         return value
 
@@ -351,3 +351,13 @@ def read_string(string, keywords):
     # explicity execute the fun
     value = fun(*args, **kwargs)
     return ('pandas.core.frame.DataFrame', value)
+
+def _fix(v):
+    if pd.isnull(v):
+        return 'nan'
+    elif isinstance(v, unicode):
+        return v.encode('utf-8')
+    elif isinstance(v, str):
+        return v
+    else:
+        return str(v)
