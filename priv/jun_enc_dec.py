@@ -17,7 +17,10 @@ def dtype_encoder(value):
     elif isinstance(value, np.float64):
         return np.asscalar(value)
     elif isinstance(value, str):
-        return value.encode() # to express as binary() instead of string() on erlang side
+        try:
+            return value.encode('utf-8') # to express as binary() instead of string() on erlang side
+        except:
+            return value
     elif isinstance(value, list):
         return [dtype_encoder(v) for v in value]
     elif isinstance(value, tuple):
