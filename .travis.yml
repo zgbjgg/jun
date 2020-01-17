@@ -20,6 +20,7 @@ install:
   - sudo python3.6 -m pip install seaborn
   - sudo python3.6 -m pip install --upgrade IPython
   - sudo python3.6 -m pip install pyodbc
+  - sudo python3.6 -m pip install tables
   - sudo python3.6 -m pip install codecov
 after_success: "codecov"
 otp_release:
