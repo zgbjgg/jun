@@ -15,7 +15,9 @@
     test_jun_pandas_bad_call/1,
     test_jun_pandas_to_datetime/1,
     test_jun_pandas_read_sql/1,
-    test_jun_pandas_read_string/1]).
+    test_jun_pandas_read_string/1,
+    test_jun_pandas_read_hdf/1,
+    test_jun_pandas_to_hdf/1]).
 
 all() ->
     [test_jun_pandas_read_csv,
@@ -26,7 +28,9 @@ all() ->
      test_jun_pandas_bad_call,
      test_jun_pandas_to_datetime,
      test_jun_pandas_read_sql,
-     test_jun_pandas_read_string].
+     test_jun_pandas_read_string,
+     test_jun_pandas_read_hdf,
+     test_jun_pandas_to_hdf].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -34,35 +38,36 @@ init_per_testcase(_, _Config) ->
     % load the default file to execute tests
     {ok, Cwd} = file:get_cwd(),
     Path = list_to_binary(Cwd ++ "/../../lib/jun/test/files/csv.txt"),
-    [{jun_worker, Pid}, {path, Path}, {cwd, Cwd}].
+    PathHDF = list_to_binary(Cwd ++ "/../../lib/jun/test/files/csv.hdf"),
+    [{jun_worker, Pid}, {path, Path}, {cwd, Cwd}, {path_hdf, PathHDF}].
 
 end_per_testcase(_, _Config) ->
     % @todo stop the worker
     ok.
 
-test_jun_pandas_read_csv([{jun_worker, Pid}, {path, Path}, _]) ->
+test_jun_pandas_read_csv([{jun_worker, Pid}, {path, Path}, _, _]) ->
     {ok, {?DATAFRAME, Opaque}} = jun_pandas:read_csv(Pid, Path, []),
     ?assertMatch({'$erlport.opaque', python, _}, Opaque).
 
-test_jun_pandas_to_csv([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}]) ->
+test_jun_pandas_to_csv([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, Csv} = jun_pandas:to_csv(Pid, DataFrame, []),
     {ok, Out} = file:read_file(Cwd ++ "/../../lib/jun/test/outputs/out.csv"),
     ?assertEqual(Out, Csv).
 
-test_jun_pandas_to_html([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}]) ->
+test_jun_pandas_to_html([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, Html} = jun_pandas:to_html(Pid, DataFrame, []),
     {ok, Out} = file:read_file(Cwd ++ "/../../lib/jun/test/outputs/out.html"),
     ?assertEqual(Out, Html).
 
-test_jun_pandas_to_json([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}]) ->
+test_jun_pandas_to_json([{jun_worker, Pid}, {path, Path}, {cwd, Cwd}, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, Json} = jun_pandas:to_json(Pid, DataFrame, [{<<"orient">>, <<"records">>}]),
     {ok, Out} = file:read_file(Cwd ++ "/../../lib/jun/test/outputs/out.json"),
     ?assertEqual(Out, Json).
 
-test_jun_pandas_to_erl([{jun_worker, Pid}, {path, Path}, _]) ->
+test_jun_pandas_to_erl([{jun_worker, Pid}, {path, Path}, _, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, Erl} = jun_pandas:to_erl(Pid, DataFrame),
     Out = {?DATAFRAME, [<<"name">>, <<"age">>],
@@ -70,12 +75,12 @@ test_jun_pandas_to_erl([{jun_worker, Pid}, {path, Path}, _]) ->
          [<<"Debbie">>,40],[<<"Bjork">>,40],[<<"Katy">>,30]]},
     ?assertEqual(Out, Erl).
 
-test_jun_pandas_bad_call([{jun_worker, Pid}, _, {cwd, Cwd}]) ->
+test_jun_pandas_bad_call([{jun_worker, Pid}, _, {cwd, Cwd}, _]) ->
     Path = list_to_binary(Cwd ++ "/../../lib/jun/test/files/enoent.txt"),
     Error = jun_pandas:read_csv(Pid, Path, []),
     ?assertMatch({error, {_, _}}, Error).
 
-test_jun_pandas_to_datetime([{jun_worker, Pid}, {path, Path}, _]) ->
+test_jun_pandas_to_datetime([{jun_worker, Pid}, {path, Path}, _, _]) ->
     {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
     {ok, {?SERIES, Series}} = jun_pandas:single_selection(Pid, DataFrame, <<"age">>, []),
     {ok, SeriesDt} = jun_pandas:to_datetime(Pid, Series, []),
@@ -91,3 +96,13 @@ test_jun_pandas_read_string([{jun_worker, Pid}, _, {cwd, Cwd} | _]) ->
     {ok, Csv} = jun_pandas:to_csv(Pid, DataFrame, []),
     {ok, Out} = file:read_file(Cwd ++ "/../../lib/jun/test/outputs/out.str"),
     ?assertEqual(Out, Csv).
+
+test_jun_pandas_read_hdf([{jun_worker, Pid}, _, _, {path_hdf, Path}]) ->
+    {ok, {?DATAFRAME, Opaque}} = jun_pandas:read_hdf(Pid, Path, []),
+    ?assertMatch({'$erlport.opaque', python, _}, Opaque).
+
+test_jun_pandas_to_hdf([{jun_worker, Pid}, _, {cwd, Cwd}, {path_hdf, Path}]) ->
+    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_hdf(Pid, Path, []),
+    {ok, {?DATAFRAME, DataFrameHDF}} = jun_pandas:to_hdf(Pid, DataFrame,
+        list_to_binary(Cwd ++ "/../../lib/jun/test/outputs/out.hdf"), [{<<"key">>, <<"df">>}]),
+    ?assertEqual(DataFrame, DataFrameHDF).
