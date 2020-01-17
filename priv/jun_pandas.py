@@ -357,7 +357,11 @@ def _fix(v):
         return 'nan'
     elif isinstance(v, str):
         return v
-    elif isinstance(v, unicode):
-        return v.encode('utf-8')
     else:
-        return str(v)
+        try:
+            if isinstance(v, unicode):
+                return v.encode('utf-8')
+            else:
+                return v
+        except:
+            return str(v)
