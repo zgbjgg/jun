@@ -355,9 +355,9 @@ def read_string(string, keywords):
 def _fix(v):
     if pd.isnull(v):
         return 'nan'
-    elif isinstance(v, unicode):
-        return v.encode('utf-8')
     elif isinstance(v, str):
         return v
+    elif isinstance(v, unicode):
+        return v.encode('utf-8')
     else:
         return str(v)
