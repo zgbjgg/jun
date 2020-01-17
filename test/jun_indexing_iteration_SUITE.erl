@@ -4,19 +4,16 @@
 -include_lib("eunit/include/eunit.hrl").
 
 -define(DATAFRAME, <<"pandas.core.frame.DataFrame">>).
--define(SERIES, <<"pandas.core.frame.Series">>).
 
 -export([all/0, init_per_testcase/2, end_per_testcase/2]).
 -export([test_jun_pandas_query/1,
     test_jun_pandas_head/1,
-    test_jun_pandas_tail/1,
-    test_jun_pandas_mask/1]).
+    test_jun_pandas_tail/1]).
 
 all() ->
     [test_jun_pandas_query,
      test_jun_pandas_head,
-     test_jun_pandas_tail,
-     test_jun_pandas_mask].
+     test_jun_pandas_tail].
 
 init_per_testcase(_, _Config) ->
     % for each case start a new worker
@@ -54,17 +51,3 @@ test_jun_pandas_tail([{jun_worker, Pid}, {path, Path}, _]) ->
     Out = {?DATAFRAME, [<<"name">>, <<"age">>],
         [[<<"Katy">>, 30]]},
     ?assertEqual(Out, Erl).
-
-test_jun_pandas_mask([{jun_worker, Pid}, {path, Path}, _]) ->
-    {ok, {?DATAFRAME, DataFrame}} = jun_pandas:read_csv(Pid, Path, []),
-    {ok, {?SERIES, Series1}} = jun_pandas:mask(Pid, DataFrame, <<"name">>, [{<<"cond">>, <<"pd.isnull">>},
-      {<<"other">>, <<"df['age']">>}]),
-    {ok, {?DATAFRAME, DataFrame1}} = jun_pandas:legacy_assignment(Pid, DataFrame,
-        Series1, [{<<"column">>, <<"masked">>}]),
-    {ok, Erl} = jun_pandas:to_erl(Pid, DataFrame1),
-    Out = {?DATAFRAME, [<<"name">>, <<"age">>, <<"masked">>],
-        [[<<"Allison">>, 29, <<"Allison">>], [<<"George">>, 29, <<"George">>],
-         [<<"Kristen">>, 30, <<"Kristen">>],
-         [<<"Debbie">>, 40, <<"Debbie">>], [<<"Bjork">>, 40, <<"Bjork">>],
-         [<<"Katy">>, 30, <<"Katy">>]]},
-    ?assertEqual(Out, Erl). 

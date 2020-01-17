@@ -23,8 +23,7 @@
 
 -export(['query'/4,
     head/4,
-    tail/4,
-    mask/4]).
+    tail/4]).
 
 -export([to_erl/2]).
 
@@ -120,9 +119,6 @@ head(Pid, DataFrame, N, Keywords) ->
 
 tail(Pid, DataFrame, N, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, tail, [N], 'None', Keywords]}, infinity).
-
-mask(Pid, DataFrame, Axis, Keywords) ->
-    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, mask, [], Axis, Keywords]}, infinity).
 
 %% Helpers
 
