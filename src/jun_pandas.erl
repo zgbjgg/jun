@@ -19,7 +19,9 @@
     to_json/3,
     to_datetime/3,
     read_sql/3,
-    read_string/3]).
+    read_string/3,
+    read_hdf/3,
+    to_hdf/4]).
 
 -export(['query'/4,
     head/4,
@@ -108,6 +110,12 @@ read_sql(Pid, Sql, Keywords) ->
 
 read_string(Pid, String, Keywords) ->
     gen_server:call(Pid, {'core.jun', read_string, [String, Keywords]}, infinity).
+
+read_hdf(Pid, Path, Keywords) ->
+    gen_server:call(Pid, {'core.jun.pandas', [read_hdf, [Path], Keywords]}, infinity).
+
+to_hdf(Pid, DataFrame, Path, Keywords) ->
+    gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, to_hdf, [Path], 'None', Keywords]}, infinity).
 
 %% Indexing / Iteration
 
