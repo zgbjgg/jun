@@ -250,6 +250,18 @@ series() = {'$erlport.opaque', python, binary()}
     <td valign="top"><a href="#dropna-4">dropna/4</a></td>
     <td>drops na values</td>
   </tr>
+  <tr>
+    <td valign="top"><a href="#read-hdf-4">read_hdf/3</a></td>
+    <td>reads an HDF file into a dataframe</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#to-hdf-4">to_hdf/4</a></td>
+    <td>writes a dataframe into a HDF file</td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="#concat-4">concat/4</a></td>
+    <td>concats dataframes into single one</td>
+  </tr>
 </table>
 
 <a name="functions"></a>
@@ -635,3 +647,27 @@ dropna(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">da
 </code></pre>
 
 drops na values.
+
+### read_hdf/4 ###
+
+<pre><code>
+read_hdf(<a href="#type-jun-worker">jun_worker()</a>, path :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+reads an HDF file into a dataframe.
+
+### to_hdf/4 ###
+
+<pre><code>
+to_hdf(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, path :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+writes a dataframe into a HDF file.
+
+### concat/4 ###
+
+<pre><code>
+concat(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-dataframe">dataframe()</a>, <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
+</code></pre>
+
+concats dataframes into single one.
