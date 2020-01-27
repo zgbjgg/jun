@@ -59,6 +59,8 @@
 -export([fillna/4,
     dropna/4]).
 
+-export([concat/4]).
+
 %% DataFrames in erlang term
 
 to_erl(Pid, {'$erlport.opaque', python, _} = OpaqueDataFrame) ->
@@ -237,3 +239,8 @@ fillna(Pid, DataFrame, _Axis, Keywords) ->
 
 dropna(Pid, DataFrame, _Axis, Keywords) ->
     gen_server:call(Pid, {'core.jun.dataframe', [DataFrame, dropna, [], 'None', Keywords]}, infinity).
+
+%% Data manipulations
+
+concat(Pid, DataFrame, DataFrameToConcat, Keywords) ->
+    gen_server:call(Pid, {'core.jun.pandas', [concat, [[DataFrame, DataFrameToConcat]], Keywords]}, infinity).
