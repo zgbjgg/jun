@@ -57,6 +57,8 @@ def jun_dataframe(df, fn, args, axis='None', keywords=[]):
             return ','.join(_fix(v) for v in value)
         elif value is None: # commonly when fun applies over callable object
             return ('pandas.core.frame.DataFrame', df)
+        elif pd.isnull(value):
+            return np.nan_to_num(value)
         else:
             return value
     else:
@@ -249,6 +251,8 @@ def jun_series(series, fn, args, axis='None', keywords=[]):
             return ('pandas.core.frame.Series', value)
         elif isinstance(value, np.ndarray):
             return ','.join(_fix(v) for v in value)
+        elif pd.isnull(value):
+            return np.nan_to_num(value)
         else:
             return value
     else:
@@ -294,6 +298,8 @@ def jun_pandas(fn, args, keywords=[]):
         return ('pandas.core.frame.Series', value)
     elif isinstance(value, np.ndarray):
         return ','.join(_fix(v) for v in value)
+    elif pd.isnull(value):
+        return np.nan_to_num(value)
     else:
         return value
 
