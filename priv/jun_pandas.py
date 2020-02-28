@@ -180,7 +180,12 @@ def legacy_query(df, column, operand, value):
                 parse(value, False)
                 newdf = df[operation(df[column], value)]
             except ValueError:
-                newdf = df[df[column].str.contains(value, na=False)] # since str cannot be evaluated with '=='
+                if operand == '!=':
+                    newdf = df[~df[column].str.contains(value, na=False)]
+                elif operand == '==':
+                    newdf = df[df[column].str.contains(value, na=False)] # since str cannot be evaluated with '=='
+                else:
+                    return 'error_string_operand_invalid'
         else:
             newdf = df[operation(df[column], value)]
 
