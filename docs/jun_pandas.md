@@ -337,7 +337,7 @@ calculates the sum value of a column or in an entire grouped dataframe.
 unique(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, column :: binary(), <a href="#type-keywords">keywords()</a>) -> {ok, binary()} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
-return the uniques data of a column in a dataframe.
+return the unique data of a column in a dataframe.
 
 <a name="read-csv-2"></a>
 
@@ -638,7 +638,7 @@ drops rows duplicated in a dataframe following the criteria passed over keywords
 fillna(<a href="#type-jun-worker">jun_worker()</a>, <a href="#type-dataframe">dataframe()</a>, <<"None">>, <a href="#type-keywords">keywords()</a>) -> {ok, <a href="type-jun-dataframe">jun_dataframe()</a>} | <a href="#type-jun-error">jun_error()</a>
 </code></pre>
 
-fills na values.
+fill na values.
 
 ### dropna/4 ###
 
